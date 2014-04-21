@@ -1,0 +1,514 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		40BC9E3D1905537100D6A792 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E3C1905537100D6A792 /* Foundation.framework */; };
+		40BC9E3F1905537100D6A792 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E3E1905537100D6A792 /* CoreGraphics.framework */; };
+		40BC9E411905537100D6A792 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E401905537100D6A792 /* UIKit.framework */; };
+		40BC9E431905537100D6A792 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E421905537100D6A792 /* CoreData.framework */; };
+		40BC9E491905537100D6A792 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E471905537100D6A792 /* InfoPlist.strings */; };
+		40BC9E4B1905537100D6A792 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E4A1905537100D6A792 /* main.m */; };
+		40BC9E4F1905537100D6A792 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E4E1905537100D6A792 /* AppDelegate.m */; };
+		40BC9E521905537100D6A792 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E501905537100D6A792 /* Main_iPhone.storyboard */; };
+		40BC9E551905537100D6A792 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E531905537100D6A792 /* Main_iPad.storyboard */; };
+		40BC9E581905537100D6A792 /* Deck.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E561905537100D6A792 /* Deck.xcdatamodeld */; };
+		40BC9E5B1905537100D6A792 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E5A1905537100D6A792 /* MasterViewController.m */; };
+		40BC9E5E1905537100D6A792 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E5D1905537100D6A792 /* DetailViewController.m */; };
+		40BC9E601905537100D6A792 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E5F1905537100D6A792 /* Images.xcassets */; };
+		40BC9E671905537100D6A792 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E661905537100D6A792 /* XCTest.framework */; };
+		40BC9E681905537100D6A792 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E3C1905537100D6A792 /* Foundation.framework */; };
+		40BC9E691905537100D6A792 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E401905537100D6A792 /* UIKit.framework */; };
+		40BC9E6A1905537100D6A792 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E421905537100D6A792 /* CoreData.framework */; };
+		40BC9E721905537100D6A792 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E701905537100D6A792 /* InfoPlist.strings */; };
+		40BC9E741905537100D6A792 /* DeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E731905537100D6A792 /* DeckTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		40BC9E6B1905537100D6A792 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 40BC9E311905537100D6A792 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 40BC9E381905537100D6A792;
+			remoteInfo = Deck;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		40BC9E391905537100D6A792 /* Deck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Deck.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		40BC9E3C1905537100D6A792 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		40BC9E3E1905537100D6A792 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		40BC9E401905537100D6A792 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		40BC9E421905537100D6A792 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		40BC9E461905537100D6A792 /* Deck-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Deck-Info.plist"; sourceTree = "<group>"; };
+		40BC9E481905537100D6A792 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		40BC9E4A1905537100D6A792 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		40BC9E4C1905537100D6A792 /* Deck-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Deck-Prefix.pch"; sourceTree = "<group>"; };
+		40BC9E4D1905537100D6A792 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		40BC9E4E1905537100D6A792 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		40BC9E511905537100D6A792 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		40BC9E541905537100D6A792 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
+		40BC9E571905537100D6A792 /* Deck.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Deck.xcdatamodel; sourceTree = "<group>"; };
+		40BC9E591905537100D6A792 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
+		40BC9E5A1905537100D6A792 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
+		40BC9E5C1905537100D6A792 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		40BC9E5D1905537100D6A792 /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		40BC9E5F1905537100D6A792 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		40BC9E651905537100D6A792 /* DeckTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DeckTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		40BC9E661905537100D6A792 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		40BC9E6F1905537100D6A792 /* DeckTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DeckTests-Info.plist"; sourceTree = "<group>"; };
+		40BC9E711905537100D6A792 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		40BC9E731905537100D6A792 /* DeckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeckTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		40BC9E361905537100D6A792 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40BC9E3F1905537100D6A792 /* CoreGraphics.framework in Frameworks */,
+				40BC9E431905537100D6A792 /* CoreData.framework in Frameworks */,
+				40BC9E411905537100D6A792 /* UIKit.framework in Frameworks */,
+				40BC9E3D1905537100D6A792 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		40BC9E621905537100D6A792 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40BC9E671905537100D6A792 /* XCTest.framework in Frameworks */,
+				40BC9E6A1905537100D6A792 /* CoreData.framework in Frameworks */,
+				40BC9E691905537100D6A792 /* UIKit.framework in Frameworks */,
+				40BC9E681905537100D6A792 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		40BC9E301905537100D6A792 = {
+			isa = PBXGroup;
+			children = (
+				40BC9E441905537100D6A792 /* Deck */,
+				40BC9E6D1905537100D6A792 /* DeckTests */,
+				40BC9E3B1905537100D6A792 /* Frameworks */,
+				40BC9E3A1905537100D6A792 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		40BC9E3A1905537100D6A792 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				40BC9E391905537100D6A792 /* Deck.app */,
+				40BC9E651905537100D6A792 /* DeckTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		40BC9E3B1905537100D6A792 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				40BC9E3C1905537100D6A792 /* Foundation.framework */,
+				40BC9E3E1905537100D6A792 /* CoreGraphics.framework */,
+				40BC9E401905537100D6A792 /* UIKit.framework */,
+				40BC9E421905537100D6A792 /* CoreData.framework */,
+				40BC9E661905537100D6A792 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		40BC9E441905537100D6A792 /* Deck */ = {
+			isa = PBXGroup;
+			children = (
+				40BC9E4D1905537100D6A792 /* AppDelegate.h */,
+				40BC9E4E1905537100D6A792 /* AppDelegate.m */,
+				40BC9E501905537100D6A792 /* Main_iPhone.storyboard */,
+				40BC9E531905537100D6A792 /* Main_iPad.storyboard */,
+				40BC9E591905537100D6A792 /* MasterViewController.h */,
+				40BC9E5A1905537100D6A792 /* MasterViewController.m */,
+				40BC9E5C1905537100D6A792 /* DetailViewController.h */,
+				40BC9E5D1905537100D6A792 /* DetailViewController.m */,
+				40BC9E5F1905537100D6A792 /* Images.xcassets */,
+				40BC9E561905537100D6A792 /* Deck.xcdatamodeld */,
+				40BC9E451905537100D6A792 /* Supporting Files */,
+			);
+			path = Deck;
+			sourceTree = "<group>";
+		};
+		40BC9E451905537100D6A792 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				40BC9E461905537100D6A792 /* Deck-Info.plist */,
+				40BC9E471905537100D6A792 /* InfoPlist.strings */,
+				40BC9E4A1905537100D6A792 /* main.m */,
+				40BC9E4C1905537100D6A792 /* Deck-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		40BC9E6D1905537100D6A792 /* DeckTests */ = {
+			isa = PBXGroup;
+			children = (
+				40BC9E731905537100D6A792 /* DeckTests.m */,
+				40BC9E6E1905537100D6A792 /* Supporting Files */,
+			);
+			path = DeckTests;
+			sourceTree = "<group>";
+		};
+		40BC9E6E1905537100D6A792 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				40BC9E6F1905537100D6A792 /* DeckTests-Info.plist */,
+				40BC9E701905537100D6A792 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		40BC9E381905537100D6A792 /* Deck */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 40BC9E771905537100D6A792 /* Build configuration list for PBXNativeTarget "Deck" */;
+			buildPhases = (
+				40BC9E351905537100D6A792 /* Sources */,
+				40BC9E361905537100D6A792 /* Frameworks */,
+				40BC9E371905537100D6A792 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Deck;
+			productName = Deck;
+			productReference = 40BC9E391905537100D6A792 /* Deck.app */;
+			productType = "com.apple.product-type.application";
+		};
+		40BC9E641905537100D6A792 /* DeckTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 40BC9E7A1905537100D6A792 /* Build configuration list for PBXNativeTarget "DeckTests" */;
+			buildPhases = (
+				40BC9E611905537100D6A792 /* Sources */,
+				40BC9E621905537100D6A792 /* Frameworks */,
+				40BC9E631905537100D6A792 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				40BC9E6C1905537100D6A792 /* PBXTargetDependency */,
+			);
+			name = DeckTests;
+			productName = DeckTests;
+			productReference = 40BC9E651905537100D6A792 /* DeckTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		40BC9E311905537100D6A792 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Ewan Leaver";
+				TargetAttributes = {
+					40BC9E641905537100D6A792 = {
+						TestTargetID = 40BC9E381905537100D6A792;
+					};
+				};
+			};
+			buildConfigurationList = 40BC9E341905537100D6A792 /* Build configuration list for PBXProject "Deck" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 40BC9E301905537100D6A792;
+			productRefGroup = 40BC9E3A1905537100D6A792 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				40BC9E381905537100D6A792 /* Deck */,
+				40BC9E641905537100D6A792 /* DeckTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		40BC9E371905537100D6A792 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40BC9E551905537100D6A792 /* Main_iPad.storyboard in Resources */,
+				40BC9E601905537100D6A792 /* Images.xcassets in Resources */,
+				40BC9E521905537100D6A792 /* Main_iPhone.storyboard in Resources */,
+				40BC9E491905537100D6A792 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		40BC9E631905537100D6A792 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40BC9E721905537100D6A792 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		40BC9E351905537100D6A792 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40BC9E5E1905537100D6A792 /* DetailViewController.m in Sources */,
+				40BC9E5B1905537100D6A792 /* MasterViewController.m in Sources */,
+				40BC9E4F1905537100D6A792 /* AppDelegate.m in Sources */,
+				40BC9E581905537100D6A792 /* Deck.xcdatamodeld in Sources */,
+				40BC9E4B1905537100D6A792 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		40BC9E611905537100D6A792 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40BC9E741905537100D6A792 /* DeckTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		40BC9E6C1905537100D6A792 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 40BC9E381905537100D6A792 /* Deck */;
+			targetProxy = 40BC9E6B1905537100D6A792 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		40BC9E471905537100D6A792 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				40BC9E481905537100D6A792 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		40BC9E501905537100D6A792 /* Main_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				40BC9E511905537100D6A792 /* Base */,
+			);
+			name = Main_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		40BC9E531905537100D6A792 /* Main_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				40BC9E541905537100D6A792 /* Base */,
+			);
+			name = Main_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		40BC9E701905537100D6A792 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				40BC9E711905537100D6A792 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		40BC9E751905537100D6A792 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		40BC9E761905537100D6A792 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		40BC9E781905537100D6A792 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Deck/Deck-Prefix.pch";
+				INFOPLIST_FILE = "Deck/Deck-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		40BC9E791905537100D6A792 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Deck/Deck-Prefix.pch";
+				INFOPLIST_FILE = "Deck/Deck-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		40BC9E7B1905537100D6A792 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Deck.app/Deck";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Deck/Deck-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "DeckTests/DeckTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		40BC9E7C1905537100D6A792 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Deck.app/Deck";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Deck/Deck-Prefix.pch";
+				INFOPLIST_FILE = "DeckTests/DeckTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		40BC9E341905537100D6A792 /* Build configuration list for PBXProject "Deck" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				40BC9E751905537100D6A792 /* Debug */,
+				40BC9E761905537100D6A792 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		40BC9E771905537100D6A792 /* Build configuration list for PBXNativeTarget "Deck" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				40BC9E781905537100D6A792 /* Debug */,
+				40BC9E791905537100D6A792 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		40BC9E7A1905537100D6A792 /* Build configuration list for PBXNativeTarget "DeckTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				40BC9E7B1905537100D6A792 /* Debug */,
+				40BC9E7C1905537100D6A792 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		40BC9E561905537100D6A792 /* Deck.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				40BC9E571905537100D6A792 /* Deck.xcdatamodel */,
+			);
+			currentVersion = 40BC9E571905537100D6A792 /* Deck.xcdatamodel */;
+			path = Deck.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 40BC9E311905537100D6A792 /* Project object */;
+}
