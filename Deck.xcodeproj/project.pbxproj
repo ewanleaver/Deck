@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		40BB524119446EC50088EC12 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BB523F19446EC50088EC12 /* MenuViewController.m */; };
+		40BB524219446EC50088EC12 /* MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40BB524019446EC50088EC12 /* MenuViewController.xib */; };
 		40BC9E3D1905537100D6A792 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E3C1905537100D6A792 /* Foundation.framework */; };
 		40BC9E3F1905537100D6A792 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E3E1905537100D6A792 /* CoreGraphics.framework */; };
 		40BC9E411905537100D6A792 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E401905537100D6A792 /* UIKit.framework */; };
@@ -17,8 +19,6 @@
 		40BC9E521905537100D6A792 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E501905537100D6A792 /* Main_iPhone.storyboard */; };
 		40BC9E551905537100D6A792 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E531905537100D6A792 /* Main_iPad.storyboard */; };
 		40BC9E581905537100D6A792 /* Deck.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E561905537100D6A792 /* Deck.xcdatamodeld */; };
-		40BC9E5B1905537100D6A792 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E5A1905537100D6A792 /* MasterViewController.m */; };
-		40BC9E5E1905537100D6A792 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E5D1905537100D6A792 /* DetailViewController.m */; };
 		40BC9E601905537100D6A792 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E5F1905537100D6A792 /* Images.xcassets */; };
 		40BC9E671905537100D6A792 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E661905537100D6A792 /* XCTest.framework */; };
 		40BC9E681905537100D6A792 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E3C1905537100D6A792 /* Foundation.framework */; };
@@ -26,6 +26,12 @@
 		40BC9E6A1905537100D6A792 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E421905537100D6A792 /* CoreData.framework */; };
 		40BC9E721905537100D6A792 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E701905537100D6A792 /* InfoPlist.strings */; };
 		40BC9E741905537100D6A792 /* DeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E731905537100D6A792 /* DeckTests.m */; };
+		40BC9E85190554F400D6A792 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E84190554F400D6A792 /* MasterViewController.m */; };
+		40E9BDF7192841A000EAFB2D /* KanjiParser.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 40E9BDF4192841A000EAFB2D /* KanjiParser.sqlite */; };
+		40E9BDF8192841A000EAFB2D /* KanjiParser.sqlite-shm in Resources */ = {isa = PBXBuildFile; fileRef = 40E9BDF5192841A000EAFB2D /* KanjiParser.sqlite-shm */; };
+		40E9BDF9192841A000EAFB2D /* KanjiParser.sqlite-wal in Resources */ = {isa = PBXBuildFile; fileRef = 40E9BDF6192841A000EAFB2D /* KanjiParser.sqlite-wal */; };
+		76A9CA9C1929FD8200E29170 /* StudyDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A9CA9B1929FD8200E29170 /* StudyDetails.m */; };
+		76A9CA9F1929FD8200E29170 /* Character.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A9CA9E1929FD8200E29170 /* Character.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +45,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		40BB523E19446EC50088EC12 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuViewController.h; path = ../MenuViewController.h; sourceTree = "<group>"; };
+		40BB523F19446EC50088EC12 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuViewController.m; path = ../MenuViewController.m; sourceTree = "<group>"; };
+		40BB524019446EC50088EC12 /* MenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MenuViewController.xib; path = ../MenuViewController.xib; sourceTree = "<group>"; };
 		40BC9E391905537100D6A792 /* Deck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Deck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40BC9E3C1905537100D6A792 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		40BC9E3E1905537100D6A792 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -53,16 +62,21 @@
 		40BC9E511905537100D6A792 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		40BC9E541905537100D6A792 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		40BC9E571905537100D6A792 /* Deck.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Deck.xcdatamodel; sourceTree = "<group>"; };
-		40BC9E591905537100D6A792 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
-		40BC9E5A1905537100D6A792 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
-		40BC9E5C1905537100D6A792 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
-		40BC9E5D1905537100D6A792 /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		40BC9E5F1905537100D6A792 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		40BC9E651905537100D6A792 /* DeckTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DeckTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		40BC9E661905537100D6A792 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		40BC9E6F1905537100D6A792 /* DeckTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DeckTests-Info.plist"; sourceTree = "<group>"; };
 		40BC9E711905537100D6A792 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		40BC9E731905537100D6A792 /* DeckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeckTests.m; sourceTree = "<group>"; };
+		40BC9E83190554F400D6A792 /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MasterViewController.h; path = ../MasterViewController.h; sourceTree = "<group>"; };
+		40BC9E84190554F400D6A792 /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MasterViewController.m; path = ../MasterViewController.m; sourceTree = "<group>"; };
+		40E9BDF4192841A000EAFB2D /* KanjiParser.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = KanjiParser.sqlite; sourceTree = "<group>"; };
+		40E9BDF5192841A000EAFB2D /* KanjiParser.sqlite-shm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "KanjiParser.sqlite-shm"; sourceTree = "<group>"; };
+		40E9BDF6192841A000EAFB2D /* KanjiParser.sqlite-wal */ = {isa = PBXFileReference; lastKnownFileType = file; path = "KanjiParser.sqlite-wal"; sourceTree = "<group>"; };
+		76A9CA9A1929FD8200E29170 /* StudyDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StudyDetails.h; sourceTree = "<group>"; };
+		76A9CA9B1929FD8200E29170 /* StudyDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StudyDetails.m; sourceTree = "<group>"; };
+		76A9CA9D1929FD8200E29170 /* Character.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Character.h; sourceTree = "<group>"; };
+		76A9CA9E1929FD8200E29170 /* Character.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Character.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,16 +139,24 @@
 		40BC9E441905537100D6A792 /* Deck */ = {
 			isa = PBXGroup;
 			children = (
+				40BB523E19446EC50088EC12 /* MenuViewController.h */,
+				40BB523F19446EC50088EC12 /* MenuViewController.m */,
+				40BB524019446EC50088EC12 /* MenuViewController.xib */,
+				40E9BDF4192841A000EAFB2D /* KanjiParser.sqlite */,
+				40E9BDF5192841A000EAFB2D /* KanjiParser.sqlite-shm */,
+				40E9BDF6192841A000EAFB2D /* KanjiParser.sqlite-wal */,
+				40BC9E83190554F400D6A792 /* MasterViewController.h */,
+				40BC9E84190554F400D6A792 /* MasterViewController.m */,
 				40BC9E4D1905537100D6A792 /* AppDelegate.h */,
 				40BC9E4E1905537100D6A792 /* AppDelegate.m */,
 				40BC9E501905537100D6A792 /* Main_iPhone.storyboard */,
 				40BC9E531905537100D6A792 /* Main_iPad.storyboard */,
-				40BC9E591905537100D6A792 /* MasterViewController.h */,
-				40BC9E5A1905537100D6A792 /* MasterViewController.m */,
-				40BC9E5C1905537100D6A792 /* DetailViewController.h */,
-				40BC9E5D1905537100D6A792 /* DetailViewController.m */,
 				40BC9E5F1905537100D6A792 /* Images.xcassets */,
 				40BC9E561905537100D6A792 /* Deck.xcdatamodeld */,
+				76A9CA9A1929FD8200E29170 /* StudyDetails.h */,
+				76A9CA9B1929FD8200E29170 /* StudyDetails.m */,
+				76A9CA9D1929FD8200E29170 /* Character.h */,
+				76A9CA9E1929FD8200E29170 /* Character.m */,
 				40BC9E451905537100D6A792 /* Supporting Files */,
 			);
 			path = Deck;
@@ -221,7 +243,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 40BC9E341905537100D6A792 /* Build configuration list for PBXProject "Deck" */;
+			buildConfigurationList = 40BC9E341905537100D6A792 /* Build configuration list for PBXProject "deck" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -248,7 +270,11 @@
 				40BC9E551905537100D6A792 /* Main_iPad.storyboard in Resources */,
 				40BC9E601905537100D6A792 /* Images.xcassets in Resources */,
 				40BC9E521905537100D6A792 /* Main_iPhone.storyboard in Resources */,
+				40BB524219446EC50088EC12 /* MenuViewController.xib in Resources */,
+				40E9BDF8192841A000EAFB2D /* KanjiParser.sqlite-shm in Resources */,
 				40BC9E491905537100D6A792 /* InfoPlist.strings in Resources */,
+				40E9BDF7192841A000EAFB2D /* KanjiParser.sqlite in Resources */,
+				40E9BDF9192841A000EAFB2D /* KanjiParser.sqlite-wal in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,11 +293,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				40BC9E5E1905537100D6A792 /* DetailViewController.m in Sources */,
-				40BC9E5B1905537100D6A792 /* MasterViewController.m in Sources */,
+				40BC9E85190554F400D6A792 /* MasterViewController.m in Sources */,
 				40BC9E4F1905537100D6A792 /* AppDelegate.m in Sources */,
+				76A9CA9C1929FD8200E29170 /* StudyDetails.m in Sources */,
 				40BC9E581905537100D6A792 /* Deck.xcdatamodeld in Sources */,
+				40BB524119446EC50088EC12 /* MenuViewController.m in Sources */,
 				40BC9E4B1905537100D6A792 /* main.m in Sources */,
+				76A9CA9F1929FD8200E29170 /* Character.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,7 +498,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		40BC9E341905537100D6A792 /* Build configuration list for PBXProject "Deck" */ = {
+		40BC9E341905537100D6A792 /* Build configuration list for PBXProject "deck" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				40BC9E751905537100D6A792 /* Debug */,
@@ -486,6 +514,7 @@
 				40BC9E791905537100D6A792 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		40BC9E7A1905537100D6A792 /* Build configuration list for PBXNativeTarget "DeckTests" */ = {
 			isa = XCConfigurationList;
@@ -494,6 +523,7 @@
 				40BC9E7C1905537100D6A792 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

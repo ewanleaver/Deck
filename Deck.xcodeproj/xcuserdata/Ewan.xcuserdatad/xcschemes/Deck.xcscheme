@@ -17,7 +17,7 @@
                BlueprintIdentifier = "40BC9E381905537100D6A792"
                BuildableName = "Deck.app"
                BlueprintName = "Deck"
-               ReferencedContainer = "container:Deck.xcodeproj">
+               ReferencedContainer = "container:deck.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "40BC9E641905537100D6A792"
                BuildableName = "DeckTests.xctest"
                BlueprintName = "DeckTests"
-               ReferencedContainer = "container:Deck.xcodeproj">
+               ReferencedContainer = "container:deck.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -45,7 +45,7 @@
             BlueprintIdentifier = "40BC9E381905537100D6A792"
             BuildableName = "Deck.app"
             BlueprintName = "Deck"
-            ReferencedContainer = "container:Deck.xcodeproj">
+            ReferencedContainer = "container:deck.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -64,7 +64,7 @@
             BlueprintIdentifier = "40BC9E381905537100D6A792"
             BuildableName = "Deck.app"
             BlueprintName = "Deck"
-            ReferencedContainer = "container:Deck.xcodeproj">
+            ReferencedContainer = "container:deck.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -82,7 +82,7 @@
             BlueprintIdentifier = "40BC9E381905537100D6A792"
             BuildableName = "Deck.app"
             BlueprintName = "Deck"
-            ReferencedContainer = "container:Deck.xcodeproj">
+            ReferencedContainer = "container:deck.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
