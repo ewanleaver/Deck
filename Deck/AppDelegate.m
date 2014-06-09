@@ -8,8 +8,8 @@
 
 #import "AppDelegate.h"
 
-//#import "MasterViewController.h"
-#import "MenuViewController.h"
+#import "ListViewController.h"
+#import "HomeViewController.h"
 #import "Character.h"
 #import "StudyDetails.h"
 
@@ -64,12 +64,16 @@
         splitViewController.delegate = (id)navigationController.topViewController;
         
         UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
-        MenuViewController *controller = (MenuViewController *)masterNavigationController.topViewController;
+        ListViewController *controller = (ListViewController *)masterNavigationController.topViewController;
         controller.managedObjectContext = self.managedObjectContext;
     } else {
+
         UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-        MenuViewController *controller = (MenuViewController *)navigationController.topViewController;
-        controller.managedObjectContext = self.managedObjectContext;
+        HomeViewController *menuViewController = (HomeViewController *)navigationController.topViewController;
+        //menuViewController.managedObjectContext = self.managedObjectContext;
+        
+        //ListViewController *controller = (ListViewController *)navigationController.topViewController;
+        //controller.managedObjectContext = self.managedObjectContext;
     }
     return YES;
 }

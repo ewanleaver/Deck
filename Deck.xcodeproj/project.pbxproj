@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		40BB524119446EC50088EC12 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BB523F19446EC50088EC12 /* MenuViewController.m */; };
-		40BB524219446EC50088EC12 /* MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40BB524019446EC50088EC12 /* MenuViewController.xib */; };
+		40BB524119446EC50088EC12 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BB523F19446EC50088EC12 /* HomeViewController.m */; };
+		40BB524219446EC50088EC12 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40BB524019446EC50088EC12 /* HomeViewController.xib */; };
 		40BC9E3D1905537100D6A792 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E3C1905537100D6A792 /* Foundation.framework */; };
 		40BC9E3F1905537100D6A792 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E3E1905537100D6A792 /* CoreGraphics.framework */; };
 		40BC9E411905537100D6A792 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E401905537100D6A792 /* UIKit.framework */; };
@@ -26,10 +26,15 @@
 		40BC9E6A1905537100D6A792 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E421905537100D6A792 /* CoreData.framework */; };
 		40BC9E721905537100D6A792 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E701905537100D6A792 /* InfoPlist.strings */; };
 		40BC9E741905537100D6A792 /* DeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E731905537100D6A792 /* DeckTests.m */; };
-		40BC9E85190554F400D6A792 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E84190554F400D6A792 /* MasterViewController.m */; };
+		40BC9E85190554F400D6A792 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E84190554F400D6A792 /* ListViewController.m */; };
 		40E9BDF7192841A000EAFB2D /* KanjiParser.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 40E9BDF4192841A000EAFB2D /* KanjiParser.sqlite */; };
 		40E9BDF8192841A000EAFB2D /* KanjiParser.sqlite-shm in Resources */ = {isa = PBXBuildFile; fileRef = 40E9BDF5192841A000EAFB2D /* KanjiParser.sqlite-shm */; };
 		40E9BDF9192841A000EAFB2D /* KanjiParser.sqlite-wal in Resources */ = {isa = PBXBuildFile; fileRef = 40E9BDF6192841A000EAFB2D /* KanjiParser.sqlite-wal */; };
+		762D45391945877F00CE422C /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 762D45361945877F00CE422C /* Card.m */; };
+		762D453A1945877F00CE422C /* Kanji.m in Sources */ = {isa = PBXBuildFile; fileRef = 762D45381945877F00CE422C /* Kanji.m */; };
+		762D453E1945878900CE422C /* StudyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 762D453C1945878800CE422C /* StudyViewController.m */; };
+		762D453F1945878900CE422C /* StudyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 762D453D1945878800CE422C /* StudyViewController.xib */; };
+		76516DFD1945B60100715D4D /* card_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 76516DFC1945B60100715D4D /* card_icon.png */; };
 		76A9CA9C1929FD8200E29170 /* StudyDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A9CA9B1929FD8200E29170 /* StudyDetails.m */; };
 		76A9CA9F1929FD8200E29170 /* Character.m in Sources */ = {isa = PBXBuildFile; fileRef = 76A9CA9E1929FD8200E29170 /* Character.m */; };
 /* End PBXBuildFile section */
@@ -45,9 +50,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		40BB523E19446EC50088EC12 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuViewController.h; path = ../MenuViewController.h; sourceTree = "<group>"; };
-		40BB523F19446EC50088EC12 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuViewController.m; path = ../MenuViewController.m; sourceTree = "<group>"; };
-		40BB524019446EC50088EC12 /* MenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MenuViewController.xib; path = ../MenuViewController.xib; sourceTree = "<group>"; };
+		40BB523E19446EC50088EC12 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeViewController.h; path = ../HomeViewController.h; sourceTree = "<group>"; };
+		40BB523F19446EC50088EC12 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeViewController.m; path = ../HomeViewController.m; sourceTree = "<group>"; };
+		40BB524019446EC50088EC12 /* HomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HomeViewController.xib; path = ../HomeViewController.xib; sourceTree = "<group>"; };
 		40BC9E391905537100D6A792 /* Deck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Deck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40BC9E3C1905537100D6A792 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		40BC9E3E1905537100D6A792 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -68,11 +73,19 @@
 		40BC9E6F1905537100D6A792 /* DeckTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DeckTests-Info.plist"; sourceTree = "<group>"; };
 		40BC9E711905537100D6A792 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		40BC9E731905537100D6A792 /* DeckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeckTests.m; sourceTree = "<group>"; };
-		40BC9E83190554F400D6A792 /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MasterViewController.h; path = ../MasterViewController.h; sourceTree = "<group>"; };
-		40BC9E84190554F400D6A792 /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MasterViewController.m; path = ../MasterViewController.m; sourceTree = "<group>"; };
+		40BC9E83190554F400D6A792 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ListViewController.h; path = ../ListViewController.h; sourceTree = "<group>"; };
+		40BC9E84190554F400D6A792 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ListViewController.m; path = ../ListViewController.m; sourceTree = "<group>"; };
 		40E9BDF4192841A000EAFB2D /* KanjiParser.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = KanjiParser.sqlite; sourceTree = "<group>"; };
 		40E9BDF5192841A000EAFB2D /* KanjiParser.sqlite-shm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "KanjiParser.sqlite-shm"; sourceTree = "<group>"; };
 		40E9BDF6192841A000EAFB2D /* KanjiParser.sqlite-wal */ = {isa = PBXFileReference; lastKnownFileType = file; path = "KanjiParser.sqlite-wal"; sourceTree = "<group>"; };
+		762D45351945877F00CE422C /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
+		762D45361945877F00CE422C /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
+		762D45371945877F00CE422C /* Kanji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kanji.h; sourceTree = "<group>"; };
+		762D45381945877F00CE422C /* Kanji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Kanji.m; sourceTree = "<group>"; };
+		762D453B1945878800CE422C /* StudyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StudyViewController.h; sourceTree = "<group>"; };
+		762D453C1945878800CE422C /* StudyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StudyViewController.m; sourceTree = "<group>"; };
+		762D453D1945878800CE422C /* StudyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StudyViewController.xib; sourceTree = "<group>"; };
+		76516DFC1945B60100715D4D /* card_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = card_icon.png; sourceTree = "<group>"; };
 		76A9CA9A1929FD8200E29170 /* StudyDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StudyDetails.h; sourceTree = "<group>"; };
 		76A9CA9B1929FD8200E29170 /* StudyDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StudyDetails.m; sourceTree = "<group>"; };
 		76A9CA9D1929FD8200E29170 /* Character.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Character.h; sourceTree = "<group>"; };
@@ -108,6 +121,11 @@
 		40BC9E301905537100D6A792 = {
 			isa = PBXGroup;
 			children = (
+				762D45351945877F00CE422C /* Card.h */,
+				762D45361945877F00CE422C /* Card.m */,
+				762D45371945877F00CE422C /* Kanji.h */,
+				762D45381945877F00CE422C /* Kanji.m */,
+				76516DFC1945B60100715D4D /* card_icon.png */,
 				40BC9E441905537100D6A792 /* Deck */,
 				40BC9E6D1905537100D6A792 /* DeckTests */,
 				40BC9E3B1905537100D6A792 /* Frameworks */,
@@ -139,14 +157,17 @@
 		40BC9E441905537100D6A792 /* Deck */ = {
 			isa = PBXGroup;
 			children = (
-				40BB523E19446EC50088EC12 /* MenuViewController.h */,
-				40BB523F19446EC50088EC12 /* MenuViewController.m */,
-				40BB524019446EC50088EC12 /* MenuViewController.xib */,
+				40BB523E19446EC50088EC12 /* HomeViewController.h */,
+				40BB523F19446EC50088EC12 /* HomeViewController.m */,
+				40BB524019446EC50088EC12 /* HomeViewController.xib */,
+				762D453B1945878800CE422C /* StudyViewController.h */,
+				762D453C1945878800CE422C /* StudyViewController.m */,
+				762D453D1945878800CE422C /* StudyViewController.xib */,
 				40E9BDF4192841A000EAFB2D /* KanjiParser.sqlite */,
 				40E9BDF5192841A000EAFB2D /* KanjiParser.sqlite-shm */,
 				40E9BDF6192841A000EAFB2D /* KanjiParser.sqlite-wal */,
-				40BC9E83190554F400D6A792 /* MasterViewController.h */,
-				40BC9E84190554F400D6A792 /* MasterViewController.m */,
+				40BC9E83190554F400D6A792 /* ListViewController.h */,
+				40BC9E84190554F400D6A792 /* ListViewController.m */,
 				40BC9E4D1905537100D6A792 /* AppDelegate.h */,
 				40BC9E4E1905537100D6A792 /* AppDelegate.m */,
 				40BC9E501905537100D6A792 /* Main_iPhone.storyboard */,
@@ -238,6 +259,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Ewan Leaver";
 				TargetAttributes = {
+					40BC9E381905537100D6A792 = {
+						DevelopmentTeam = 2V85H35D54;
+					};
 					40BC9E641905537100D6A792 = {
 						TestTargetID = 40BC9E381905537100D6A792;
 					};
@@ -268,9 +292,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				40BC9E551905537100D6A792 /* Main_iPad.storyboard in Resources */,
+				762D453F1945878900CE422C /* StudyViewController.xib in Resources */,
+				76516DFD1945B60100715D4D /* card_icon.png in Resources */,
 				40BC9E601905537100D6A792 /* Images.xcassets in Resources */,
 				40BC9E521905537100D6A792 /* Main_iPhone.storyboard in Resources */,
-				40BB524219446EC50088EC12 /* MenuViewController.xib in Resources */,
+				40BB524219446EC50088EC12 /* HomeViewController.xib in Resources */,
 				40E9BDF8192841A000EAFB2D /* KanjiParser.sqlite-shm in Resources */,
 				40BC9E491905537100D6A792 /* InfoPlist.strings in Resources */,
 				40E9BDF7192841A000EAFB2D /* KanjiParser.sqlite in Resources */,
@@ -293,11 +319,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				40BC9E85190554F400D6A792 /* MasterViewController.m in Sources */,
+				762D453A1945877F00CE422C /* Kanji.m in Sources */,
+				40BC9E85190554F400D6A792 /* ListViewController.m in Sources */,
 				40BC9E4F1905537100D6A792 /* AppDelegate.m in Sources */,
+				762D453E1945878900CE422C /* StudyViewController.m in Sources */,
 				76A9CA9C1929FD8200E29170 /* StudyDetails.m in Sources */,
+				762D45391945877F00CE422C /* Card.m in Sources */,
 				40BC9E581905537100D6A792 /* Deck.xcdatamodeld in Sources */,
-				40BB524119446EC50088EC12 /* MenuViewController.m in Sources */,
+				40BB524119446EC50088EC12 /* HomeViewController.m in Sources */,
 				40BC9E4B1905537100D6A792 /* main.m in Sources */,
 				76A9CA9F1929FD8200E29170 /* Character.m in Sources */,
 			);
@@ -434,10 +463,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Deck/Deck-Prefix.pch";
 				INFOPLIST_FILE = "Deck/Deck-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -447,10 +479,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Deck/Deck-Prefix.pch";
 				INFOPLIST_FILE = "Deck/Deck-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

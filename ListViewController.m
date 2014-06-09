@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Ewan Leaver. All rights reserved.
 //
 
-#import "MasterViewController.h"
+#import "ListViewController.h"
 #import "Character.h"
 
-@interface MasterViewController ()
+@interface ListViewController ()
 
 @end
 
-@implementation MasterViewController
+@implementation ListViewController
 
 bool readingsToggled = false;
 
@@ -32,6 +32,10 @@ bool readingsToggled = false;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    id delegate = [[UIApplication sharedApplication] delegate];
+    
+    self.managedObjectContext = [delegate managedObjectContext];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription

@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MenuViewController : UIViewController
+@interface HomeViewController : UIViewController
 
 @property (nonatomic,strong) NSManagedObjectContext* managedObjectContext;
+
+- (IBAction)StartStudy:(id)sender;
 
 @end
