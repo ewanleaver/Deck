@@ -2,7 +2,7 @@
 //  StudyDetails.m
 //  deck
 //
-//  Created by Ewan Leaver on 5/19/14.
+//  Created by Ewan Leaver on 23/10/2014.
 //  Copyright (c) 2014 Ewan Leaver. All rights reserved.
 //
 
@@ -12,8 +12,11 @@
 
 @implementation StudyDetails
 
-@dynamic userGrade;
 @dynamic lastStudied;
+@dynamic quality;
+@dynamic intervalNum;
+@dynamic interval;
+@dynamic eFactor;
 @dynamic character;
 
 @end

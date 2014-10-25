@@ -7,20 +7,32 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Card.h"
 
 @interface StudyViewController : UIViewController
 
 - (IBAction)StopStudy:(id)sender;
 - (IBAction)AddCard:(id)sender;
+//- (IBAction)AddTen:(id)sender;
 
-@property (nonatomic) int cardCount;
+@property (weak, nonatomic) IBOutlet UILabel *deckEmptyLabel;
+@property (weak, nonatomic) IBOutlet UIButton *keepStudyingButton;
 
-- (int) getCardsActive;
-- (void) decCardsActive;
+@property (nonatomic) int nextCardNo;
 
-- (void) cardRight;
-- (void) cardWrong;
+@property UIImageView *studyProgressBar;
 
-- (NSString *) selectKanji:(int)index;
+- (id) initWithDeck: (NSMutableArray *)inputDeck;
+
+- (int) getActiveCardCount;
+- (void) decActiveCardCount;
+
+- (void) handleCorrectCard;
+- (void) handleIncorrectCard;
+
+- (void) dismissTopCard: (Card*)cardView;
+- (void) shuffleCard: (Card*)cardView;
+- (void) shuffleBackCard;
+- (void) maintainDeck;
 
 @end

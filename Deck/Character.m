@@ -2,7 +2,7 @@
 //  Character.m
 //  deck
 //
-//  Created by Ewan Leaver on 5/19/14.
+//  Created by Ewan Leaver on 12/10/2014.
 //  Copyright (c) 2014 Ewan Leaver. All rights reserved.
 //
 
@@ -12,11 +12,13 @@
 
 @implementation Character
 
+@dynamic id_num;
+@dynamic jlpt;
 @dynamic literal;
+@dynamic meaning;
 @dynamic reading_kun;
 @dynamic reading_on;
 @dynamic reading_pin;
-@dynamic jlpt;
 @dynamic studyDetails;
 
 @end

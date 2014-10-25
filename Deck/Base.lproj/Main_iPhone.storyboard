@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="rS3-R9-Ivy">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="rS3-R9-Ivy">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment defaultVersion="1808" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -11,6 +12,9 @@
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="yXu-0R-QUA">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="JBf-sw-9Kd">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="CXL-m2-xk0" kind="relationship" relationship="rootViewController" id="OAs-N4-GkJ"/>
                     </connections>
@@ -19,7 +23,7 @@
             </objects>
             <point key="canvasLocation" x="-343" y="-1088"/>
         </scene>
-        <!--Home View Controller - Home-->
+        <!--Home-->
         <scene sceneID="9NM-Ia-pCd">
             <objects>
                 <viewController id="CXL-m2-xk0" customClass="HomeViewController" sceneMemberID="viewController">
@@ -31,8 +35,48 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VEg-s5-f1K">
+                            <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="4" translatesAutoresizingMaskIntoConstraints="NO" id="cxv-br-hlh">
+                                <rect key="frame" x="120" y="531" width="80" height="37"/>
+                                <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="currentPageIndicatorTintColor" red="1" green="0.058823529409999999" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="changePage" destination="CXL-m2-xk0" eventType="valueChanged" id="QPA-ud-bnJ"/>
+                                </connections>
+                            </pageControl>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cIg-Wf-T3C">
+                                <rect key="frame" x="0.0" y="84" width="320" height="340"/>
+                                <connections>
+                                    <outlet property="delegate" destination="CXL-m2-xk0" id="W25-8d-fgq"/>
+                                </connections>
+                            </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MS7-Gk-BVm" customClass="StudyButton">
+                                <rect key="frame" x="100" y="450" width="120" height="42"/>
+                                <state key="normal" title="Study">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="StartStudy:" destination="CXL-m2-xk0" eventType="touchUpInside" id="sPR-RN-jYr"/>
+                                    <action selector="studyButtonRelease:" destination="CXL-m2-xk0" eventType="touchUpInside" id="6SI-fn-70W"/>
+                                    <action selector="studyButtonRelease:" destination="CXL-m2-xk0" eventType="touchUpOutside" id="k7M-3n-bp7"/>
+                                    <action selector="studyButtonTouch:" destination="CXL-m2-xk0" eventType="touchDown" id="akl-tj-ccH"/>
+                                    <segue destination="dyL-SP-w0G" kind="modal" identifier="showStudyView" id="4t2-uF-CjC"/>
+                                </connections>
+                            </button>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Today" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Aw-zl-bsN">
+                                <rect key="frame" x="44" y="71" width="232" height="38"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Home" id="daq-wS-wTI">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="7vl-0p-YeU">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VEg-s5-f1K">
                                 <rect key="frame" x="20" y="518" width="63" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Kanji List">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -40,34 +84,13 @@
                                     <segue destination="pGg-6v-bdr" kind="push" id="zgp-1f-JHD"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Cards to study:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Aw-zl-bsN">
-                                <rect key="frame" x="44" y="82" width="232" height="24"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="card_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="MeB-m6-du2">
-                                <rect key="frame" x="85" y="114" width="150" height="150"/>
-                            </imageView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="23" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DDS-xv-ApZ">
-                                <rect key="frame" x="130" y="166" width="69" height="46"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="48"/>
-                                <color key="textColor" red="0.64351482780612246" green="0.64351482780612246" blue="0.64351482780612246" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WKd-Sa-vHL">
-                                <rect key="frame" x="130" y="272" width="60" height="30"/>
-                                <state key="normal" title="Study">
-                                    <color key="titleColor" red="0.13931100990402068" green="0.63610527564743369" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="StartStudy:" destination="CXL-m2-xk0" eventType="touchUpInside" id="MEX-pY-2mS"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" red="0.17021509821461789" green="0.28858676728839766" blue="0.63857222576530615" alpha="1" colorSpace="calibratedRGB"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Home" id="daq-wS-wTI"/>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="pageControl" destination="cxv-br-hlh" id="z8B-g7-zIB"/>
+                        <outlet property="scrollView" destination="cIg-Wf-T3C" id="YPe-Rr-HDP"/>
+                        <outlet property="studyButton" destination="MS7-Gk-BVm" id="BxV-mx-VDn"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Y2a-H7-5Qp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -76,7 +99,7 @@
         <!--Study View Controller-->
         <scene sceneID="pGA-Dr-Hoo">
             <objects>
-                <viewController id="dyL-SP-w0G" customClass="StudyViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="studyViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="dyL-SP-w0G" customClass="StudyViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3JP-b3-B3z"/>
                         <viewControllerLayoutGuide type="bottom" id="ggV-Mr-IRj"/>
@@ -92,10 +115,10 @@
             </objects>
             <point key="canvasLocation" x="818" y="-609"/>
         </scene>
-        <!--List View Controller - Master-->
+        <!--Master-->
         <scene sceneID="VgW-fR-Quf">
             <objects>
-                <tableViewController title="Master" id="pGg-6v-bdr" customClass="ListViewController" sceneMemberID="viewController">
+                <tableViewController title="Master" id="pGg-6v-bdr" customClass="KanjiListViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="mLL-gJ-YKr">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -138,6 +161,7 @@
                             <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="ESC-XN-GoY">
                                 <rect key="frame" x="255" y="6" width="51" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="onTintColor" red="0.079465100364963501" green="0.86274509803921573" blue="0.47160127737226276" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="togglePinyin:" destination="pGg-6v-bdr" eventType="valueChanged" id="XC7-8i-lkE"/>
                                 </connections>
@@ -156,9 +180,6 @@
             <point key="canvasLocation" x="609" y="-1352"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="card_icon.png" width="1200" height="1200"/>
-    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

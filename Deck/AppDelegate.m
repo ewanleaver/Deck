@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 
-#import "ListViewController.h"
+#import "KanjiListViewController.h"
 #import "HomeViewController.h"
 #import "Character.h"
 #import "StudyDetails.h"
@@ -19,9 +19,13 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+@synthesize decksManagedObjectContext = _decksManagedObjectContext;
+@synthesize decksManagedObjectModel = _decksManagedObjectModel;
+@synthesize decksPersistentStoreCoordinator = _decksPersistentStoreCoordinator;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSManagedObjectContext *context = [self managedObjectContext];
+//    NSManagedObjectContext *context = [self managedObjectContext];
 //    Character *character = [NSEntityDescription
 //                                       insertNewObjectForEntityForName:@"Character"
 //                                       inManagedObjectContext:context];
@@ -36,7 +40,7 @@
 //    [studyDetails setValue:@"N3" forKey:@"jlpt"];
 //    [studyDetails setValue:character forKey:@"character"];
 //    [character setValue:studyDetails forKey:@"studyDetails"];
-    NSError *error;
+//    NSError *error;
 //    if (![context save:&error]) {
 //        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
 //    }
@@ -64,17 +68,30 @@
         splitViewController.delegate = (id)navigationController.topViewController;
         
         UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
-        ListViewController *controller = (ListViewController *)masterNavigationController.topViewController;
+        KanjiListViewController *controller = (KanjiListViewController *)masterNavigationController.topViewController;
         controller.managedObjectContext = self.managedObjectContext;
     } else {
 
-        UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-        HomeViewController *menuViewController = (HomeViewController *)navigationController.topViewController;
+        //UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+        //HomeViewController *menuViewController = (HomeViewController *)navigationController.topViewController;
         //menuViewController.managedObjectContext = self.managedObjectContext;
         
         //ListViewController *controller = (ListViewController *)navigationController.topViewController;
         //controller.managedObjectContext = self.managedObjectContext;
     }
+    
+    [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:220.0/255.0 green:15.0/255.0 blue:40.0/255.0 alpha:1.0]];
+
+    [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:150.0/255.0 green:10.0/255.0 blue:35.0/255.0 alpha:1.0]];
+    
+    // Remember: try 255/15/40
+    
+    NSDictionary *textAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [UIColor whiteColor],NSForegroundColorAttributeName,
+                                    [UIColor whiteColor],NSBackgroundColorAttributeName,nil];
+    
+    [[UINavigationBar appearance] setTitleTextAttributes:textAttributes];
+    
     return YES;
 }
 							
@@ -145,9 +162,10 @@
     if (_managedObjectModel != nil) {
         return _managedObjectModel;
     }
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Deck" withExtension:@"momd"];
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"KanjiDB" withExtension:@"momd"];
     _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return _managedObjectModel;
+    
 }
 
 // Returns the persistent store coordinator for the application.
@@ -207,6 +225,16 @@
     }    
     
     return _persistentStoreCoordinator;
+}
+
+- (NSManagedObjectModel *)decksManagedObjectModel
+{
+    if (_decksManagedObjectModel != nil) {
+        return _decksManagedObjectModel;
+    }
+    NSURL *decksModelURL = [[NSBundle mainBundle] URLForResource:@"Decks" withExtension:@"momd"];
+    _decksManagedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:decksModelURL];
+    return _decksManagedObjectModel;
 }
 
 

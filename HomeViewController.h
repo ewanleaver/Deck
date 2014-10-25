@@ -7,11 +7,24 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "StudyButton.h"
 
-@interface HomeViewController : UIViewController
+@interface HomeViewController : UIViewController {
+    UIScrollView *scrollView;
+    UIPageControl *pageControl;
+}
 
 @property (nonatomic,strong) NSManagedObjectContext* managedObjectContext;
 
+//@property (nonatomic, strong) IBOutlet StudyButton * coolButton;
+
+@property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, retain) IBOutlet UIPageControl *pageControl;
+@property (nonatomic, retain) IBOutlet StudyButton *studyButton;
+
+- (IBAction)changePage;
 - (IBAction)StartStudy:(id)sender;
+- (IBAction)studyButtonTouch:(id)sender;
+- (IBAction)studyButtonRelease:(id)sender;
 
 @end
