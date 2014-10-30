@@ -12,6 +12,9 @@
 #import "HomePanel.h"
 #import "Bubble.h"
 #import "StudyButton.h"
+
+#import "Home.h"
+#import "Deck.h"
 #import "Character.h"
 
 @interface HomeViewController ()
@@ -20,11 +23,14 @@
 
 @implementation HomeViewController
 
+@synthesize managedObjectContext;
+
+@synthesize home;
+@synthesize myDecks;
+
 @synthesize scrollView;
 @synthesize pageControl;
 @synthesize studyButton;
-
-@synthesize managedObjectContext;
 
 bool pageControlBeingUsed;
 bool studyComplete;
@@ -102,11 +108,28 @@ int numPages = 4;
 
 - (void)prepareSubviewsNew {
     
-    decksForPages = [[NSMutableArray alloc] init];
+    id delegate = [[UIApplication sharedApplication] delegate];
+    self.managedObjectContext = [delegate managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription
+                                   entityForName:@"Home" inManagedObjectContext:managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    // SHOULD retrieve the home object
+    NSError *error;
+    NSLog(@"Number of home objects... %lu",(unsigned long)[[managedObjectContext executeFetchRequest:fetchRequest error:&error] count]);
+    //self.home = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] firstObject];
+    //self.myDecks = home.availableDecks; // Points to NSSet of decks
+    
+    
+    //decksForPages = [[NSMutableArray alloc] init];
     
 }
 
 - (void)prepareSubviews {
+    
+    [self prepareSubviewsNew];
     
     decksForPages = [[NSMutableArray alloc] init];
     

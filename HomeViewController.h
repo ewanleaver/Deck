@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Home.h"
 #import "StudyButton.h"
 
 @interface HomeViewController : UIViewController {
@@ -15,6 +16,9 @@
 }
 
 @property (nonatomic,strong) NSManagedObjectContext* managedObjectContext;
+
+@property (nonatomic,strong) Home* home;
+@property (nonatomic,strong) NSSet* myDecks;
 
 //@property (nonatomic, strong) IBOutlet StudyButton * coolButton;
 
