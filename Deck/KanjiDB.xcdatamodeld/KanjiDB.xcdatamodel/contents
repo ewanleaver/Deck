@@ -11,7 +11,7 @@
         <relationship name="decks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Deck" inverseName="cards" inverseEntity="Deck" syncable="YES"/>
         <relationship name="studyDetails" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="StudyDetails" inverseName="character" inverseEntity="StudyDetails" syncable="YES"/>
     </entity>
-    <entity name="Deck" syncable="YES">
+    <entity name="Deck" representedClassName="Deck" syncable="YES">
         <attribute name="bubbleColour" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="deckContents" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -34,9 +34,9 @@
         <relationship name="studyDetails" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="StudyDetails" inverseName="tempStudyDetails" inverseEntity="StudyDetails" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Character" positionX="-801" positionY="83" width="128" height="178"/>
+        <element name="Character" positionX="-810" positionY="81" width="128" height="178"/>
+        <element name="Deck" positionX="-1001" positionY="59" width="128" height="118"/>
         <element name="StudyDetails" positionX="-612" positionY="-9" width="128" height="148"/>
         <element name="TempStudyDetails" positionX="-576" positionY="185" width="128" height="103"/>
-        <element name="Deck" positionX="-1001" positionY="59" width="128" height="118"/>
     </elements>
 </model>

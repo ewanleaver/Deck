@@ -2,7 +2,7 @@
 //  Character.m
 //  deck
 //
-//  Created by Ewan Leaver on 12/10/2014.
+//  Created by Ewan Leaver on 30/10/2014.
 //  Copyright (c) 2014 Ewan Leaver. All rights reserved.
 //
 
@@ -19,6 +19,7 @@
 @dynamic reading_kun;
 @dynamic reading_on;
 @dynamic reading_pin;
+@dynamic decks;
 @dynamic studyDetails;
 
 @end
