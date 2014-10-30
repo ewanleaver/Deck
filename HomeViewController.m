@@ -100,6 +100,12 @@ int numPages = 4;
     pageControlBeingUsed = NO;
 }
 
+- (void)prepareSubviewsNew {
+    
+    decksForPages = [[NSMutableArray alloc] init];
+    
+}
+
 - (void)prepareSubviews {
     
     decksForPages = [[NSMutableArray alloc] init];

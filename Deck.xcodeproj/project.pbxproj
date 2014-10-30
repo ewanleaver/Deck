@@ -10,6 +10,8 @@
 		4001D13A19EB5D9500C5B688 /* Study Background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4001D13919EB5D9500C5B688 /* Study Background@2x.png */; };
 		4001D13C19EB62B000C5B688 /* Study Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 4001D13B19EB62B000C5B688 /* Study Background.png */; };
 		4007A05B19474569003292BF /* HomePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4007A05A19474569003292BF /* HomePanel.m */; };
+		402047D51A0271C900C76B7B /* Deck.m in Sources */ = {isa = PBXBuildFile; fileRef = 402047D41A0271C900C76B7B /* Deck.m */; };
+		402047D81A0271F100C76B7B /* Home.m in Sources */ = {isa = PBXBuildFile; fileRef = 402047D71A0271F100C76B7B /* Home.m */; };
 		402E71B119FC69E6003E4C86 /* TempStudyDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 402E71B019FC69E6003E4C86 /* TempStudyDetails.m */; };
 		402E71B419FC6AF7003E4C86 /* StudyDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 402E71B319FC6AF7003E4C86 /* StudyDetails.m */; };
 		40BB524119446EC50088EC12 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BB523F19446EC50088EC12 /* HomeViewController.m */; };
@@ -30,15 +32,14 @@
 		40BC9E721905537100D6A792 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E701905537100D6A792 /* InfoPlist.strings */; };
 		40BC9E741905537100D6A792 /* DeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E731905537100D6A792 /* DeckTests.m */; };
 		40BC9E85190554F400D6A792 /* KanjiListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E84190554F400D6A792 /* KanjiListViewController.m */; };
+		40E9101A1A02633900ABD58F /* Character.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E910191A02633900ABD58F /* Character.m */; };
 		40E9BDF7192841A000EAFB2D /* KanjiParser.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 40E9BDF4192841A000EAFB2D /* KanjiParser.sqlite */; };
-		761B6430195B9B74005F6746 /* Character.m in Sources */ = {isa = PBXBuildFile; fileRef = 761B642F195B9B74005F6746 /* Character.m */; };
 		762D45391945877F00CE422C /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 762D45361945877F00CE422C /* Card.m */; };
 		762D453E1945878900CE422C /* StudyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 762D453C1945878800CE422C /* StudyViewController.m */; };
 		762D453F1945878900CE422C /* StudyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 762D453D1945878800CE422C /* StudyViewController.xib */; };
 		76310F081946CA35006A329C /* Bubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 76310F071946CA35006A329C /* Bubble.m */; };
 		76310F0F1946D7E7006A329C /* StudyButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 76310F0E1946D7E7006A329C /* StudyButton.m */; };
 		764668BE196676A30033BACF /* KanjiDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 764668BC196676A30033BACF /* KanjiDB.xcdatamodeld */; };
-		76913E9319664D1F00B055EF /* Decks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 76913E9119664D1F00B055EF /* Decks.xcdatamodeld */; };
 		76AA7EBE1966868E00AB3BE0 /* CardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76AA7EBD1966868E00AB3BE0 /* CardViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +58,10 @@
 		4001D13B19EB62B000C5B688 /* Study Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Study Background.png"; sourceTree = "<group>"; };
 		4007A05919474569003292BF /* HomePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePanel.h; sourceTree = "<group>"; };
 		4007A05A19474569003292BF /* HomePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePanel.m; sourceTree = "<group>"; };
+		402047D31A0271C900C76B7B /* Deck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Deck.h; path = Deck/Deck.h; sourceTree = "<group>"; };
+		402047D41A0271C900C76B7B /* Deck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Deck.m; path = Deck/Deck.m; sourceTree = "<group>"; };
+		402047D61A0271F100C76B7B /* Home.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Home.h; path = Deck/Home.h; sourceTree = "<group>"; };
+		402047D71A0271F100C76B7B /* Home.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Home.m; path = Deck/Home.m; sourceTree = "<group>"; };
 		402E71AF19FC69E6003E4C86 /* TempStudyDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TempStudyDetails.h; path = Deck/TempStudyDetails.h; sourceTree = "<group>"; };
 		402E71B019FC69E6003E4C86 /* TempStudyDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TempStudyDetails.m; path = Deck/TempStudyDetails.m; sourceTree = "<group>"; };
 		402E71B219FC6AF7003E4C86 /* StudyDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StudyDetails.h; path = Deck/StudyDetails.h; sourceTree = "<group>"; };
@@ -84,9 +89,9 @@
 		40BC9E731905537100D6A792 /* DeckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeckTests.m; sourceTree = "<group>"; };
 		40BC9E83190554F400D6A792 /* KanjiListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KanjiListViewController.h; path = ../KanjiListViewController.h; sourceTree = "<group>"; };
 		40BC9E84190554F400D6A792 /* KanjiListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KanjiListViewController.m; path = ../KanjiListViewController.m; sourceTree = "<group>"; };
+		40E910181A02633900ABD58F /* Character.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Character.h; path = Deck/Character.h; sourceTree = "<group>"; };
+		40E910191A02633900ABD58F /* Character.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Character.m; path = Deck/Character.m; sourceTree = "<group>"; };
 		40E9BDF4192841A000EAFB2D /* KanjiParser.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = KanjiParser.sqlite; path = Deck/KanjiParser.sqlite; sourceTree = "<group>"; };
-		761B642E195B9B74005F6746 /* Character.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Character.h; path = Deck/Character.h; sourceTree = "<group>"; };
-		761B642F195B9B74005F6746 /* Character.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Character.m; path = Deck/Character.m; sourceTree = "<group>"; };
 		762D45351945877F00CE422C /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
 		762D45361945877F00CE422C /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
 		762D453B1945878800CE422C /* StudyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StudyViewController.h; sourceTree = "<group>"; };
@@ -97,7 +102,6 @@
 		76310F0D1946D7E7006A329C /* StudyButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StudyButton.h; sourceTree = "<group>"; };
 		76310F0E1946D7E7006A329C /* StudyButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StudyButton.m; sourceTree = "<group>"; };
 		764668BD196676A30033BACF /* KanjiDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KanjiDB.xcdatamodel; sourceTree = "<group>"; };
-		76913E9219664D1F00B055EF /* Decks.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Decks.xcdatamodel; sourceTree = "<group>"; };
 		76AA7EBC1966868E00AB3BE0 /* CardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardViewController.h; sourceTree = "<group>"; };
 		76AA7EBD1966868E00AB3BE0 /* CardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -238,14 +242,17 @@
 			isa = PBXGroup;
 			children = (
 				764668BC196676A30033BACF /* KanjiDB.xcdatamodeld */,
-				76913E9119664D1F00B055EF /* Decks.xcdatamodeld */,
-				40E9BDF4192841A000EAFB2D /* KanjiParser.sqlite */,
-				761B642E195B9B74005F6746 /* Character.h */,
-				761B642F195B9B74005F6746 /* Character.m */,
+				402047D61A0271F100C76B7B /* Home.h */,
+				402047D71A0271F100C76B7B /* Home.m */,
+				402047D31A0271C900C76B7B /* Deck.h */,
+				402047D41A0271C900C76B7B /* Deck.m */,
+				40E910181A02633900ABD58F /* Character.h */,
+				40E910191A02633900ABD58F /* Character.m */,
 				402E71B219FC6AF7003E4C86 /* StudyDetails.h */,
 				402E71B319FC6AF7003E4C86 /* StudyDetails.m */,
 				402E71AF19FC69E6003E4C86 /* TempStudyDetails.h */,
 				402E71B019FC69E6003E4C86 /* TempStudyDetails.m */,
+				40E9BDF4192841A000EAFB2D /* KanjiParser.sqlite */,
 			);
 			name = CoreData;
 			path = ..;
@@ -369,18 +376,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				761B6430195B9B74005F6746 /* Character.m in Sources */,
 				40BC9E85190554F400D6A792 /* KanjiListViewController.m in Sources */,
 				40BC9E4F1905537100D6A792 /* AppDelegate.m in Sources */,
 				76310F081946CA35006A329C /* Bubble.m in Sources */,
 				76AA7EBE1966868E00AB3BE0 /* CardViewController.m in Sources */,
-				76913E9319664D1F00B055EF /* Decks.xcdatamodeld in Sources */,
 				402E71B119FC69E6003E4C86 /* TempStudyDetails.m in Sources */,
 				764668BE196676A30033BACF /* KanjiDB.xcdatamodeld in Sources */,
 				76310F0F1946D7E7006A329C /* StudyButton.m in Sources */,
 				762D453E1945878900CE422C /* StudyViewController.m in Sources */,
 				762D45391945877F00CE422C /* Card.m in Sources */,
 				40BB524119446EC50088EC12 /* HomeViewController.m in Sources */,
+				402047D81A0271F100C76B7B /* Home.m in Sources */,
+				402047D51A0271C900C76B7B /* Deck.m in Sources */,
+				40E9101A1A02633900ABD58F /* Character.m in Sources */,
 				40BC9E4B1905537100D6A792 /* main.m in Sources */,
 				4007A05B19474569003292BF /* HomePanel.m in Sources */,
 				402E71B419FC6AF7003E4C86 /* StudyDetails.m in Sources */,
@@ -628,17 +636,6 @@
 			currentVersion = 764668BD196676A30033BACF /* KanjiDB.xcdatamodel */;
 			name = KanjiDB.xcdatamodeld;
 			path = Deck/KanjiDB.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-		76913E9119664D1F00B055EF /* Decks.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				76913E9219664D1F00B055EF /* Decks.xcdatamodel */,
-			);
-			currentVersion = 76913E9219664D1F00B055EF /* Decks.xcdatamodel */;
-			name = Decks.xcdatamodeld;
-			path = Deck/Decks.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

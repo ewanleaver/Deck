@@ -14,17 +14,17 @@
 @interface Deck : NSManagedObject
 
 @property (nonatomic, retain) id bubbleColour;
-@property (nonatomic, retain) id deckContents;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * numToStudy;
-@property (nonatomic, retain) NSSet *cards;
+@property (nonatomic, retain) NSSet *cardsInDeck;
+@property (nonatomic, retain) NSManagedObject *home;
 @end
 
 @interface Deck (CoreDataGeneratedAccessors)
 
-- (void)addCardsObject:(Character *)value;
-- (void)removeCardsObject:(Character *)value;
-- (void)addCards:(NSSet *)values;
-- (void)removeCards:(NSSet *)values;
+- (void)addCardsInDeckObject:(Character *)value;
+- (void)removeCardsInDeckObject:(Character *)value;
+- (void)addCardsInDeck:(NSSet *)values;
+- (void)removeCardsInDeck:(NSSet *)values;
 
 @end

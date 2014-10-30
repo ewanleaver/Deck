@@ -13,9 +13,9 @@
 @implementation Deck
 
 @dynamic bubbleColour;
-@dynamic deckContents;
 @dynamic name;
 @dynamic numToStudy;
-@dynamic cards;
+@dynamic cardsInDeck;
+@dynamic home;
 
 @end

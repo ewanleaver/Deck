@@ -8,15 +8,19 @@
         <attribute name="reading_kun" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="reading_on" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="reading_pin" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <relationship name="decks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Deck" inverseName="cards" inverseEntity="Deck" syncable="YES"/>
+        <relationship name="memberOfDecks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Deck" inverseName="cardsInDeck" inverseEntity="Deck" syncable="YES"/>
         <relationship name="studyDetails" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="StudyDetails" inverseName="character" inverseEntity="StudyDetails" syncable="YES"/>
     </entity>
     <entity name="Deck" representedClassName="Deck" syncable="YES">
         <attribute name="bubbleColour" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <attribute name="deckContents" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="numToStudy" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="cards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Character" inverseName="decks" inverseEntity="Character" syncable="YES"/>
+        <relationship name="cardsInDeck" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Character" inverseName="memberOfDecks" inverseEntity="Character" syncable="YES"/>
+        <relationship name="home" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Home" inverseName="availableDecks" inverseEntity="Home" syncable="YES"/>
+    </entity>
+    <entity name="Home" representedClassName="Home" syncable="YES">
+        <attribute name="numDecks" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="availableDecks" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="Deck" inverseName="home" inverseEntity="Deck" syncable="YES"/>
     </entity>
     <entity name="StudyDetails" representedClassName="StudyDetails" syncable="YES">
         <attribute name="eFactor" optional="YES" attributeType="Float" defaultValueString="2.5" syncable="YES"/>
@@ -34,9 +38,10 @@
         <relationship name="studyDetails" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="StudyDetails" inverseName="tempStudyDetails" inverseEntity="StudyDetails" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Character" positionX="-810" positionY="81" width="128" height="178"/>
-        <element name="Deck" positionX="-1001" positionY="59" width="128" height="118"/>
-        <element name="StudyDetails" positionX="-612" positionY="-9" width="128" height="148"/>
-        <element name="TempStudyDetails" positionX="-576" positionY="185" width="128" height="103"/>
+        <element name="Character" positionX="-864" positionY="72" width="128" height="178"/>
+        <element name="Deck" positionX="-1044" positionY="72" width="128" height="118"/>
+        <element name="StudyDetails" positionX="-675" positionY="72" width="128" height="148"/>
+        <element name="TempStudyDetails" positionX="-668" positionY="252" width="128" height="103"/>
+        <element name="Home" positionX="-1224" positionY="72" width="128" height="73"/>
     </elements>
 </model>
