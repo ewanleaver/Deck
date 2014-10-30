@@ -119,8 +119,36 @@ int numPages = 4;
     // SHOULD retrieve the home object
     NSError *error;
     NSLog(@"Number of home objects... %lu",(unsigned long)[[managedObjectContext executeFetchRequest:fetchRequest error:&error] count]);
-    //self.home = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] firstObject];
-    //self.myDecks = home.availableDecks; // Points to NSSet of decks
+    self.home = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] firstObject];
+    self.myDecks = home.availableDecks; // Points to NSSet of decks
+    
+    NSArray *myDecksArray = [myDecks allObjects];
+    
+    for (int i = 0; i < [myDecks count]; i++) {
+        
+        Deck *d = [myDecksArray objectAtIndex:i];
+        NSLog(@"Deck %i name: %@, %@ cards.",i,d.name,d.numToStudy);
+        
+        NSDictionary *colourData = [NSKeyedUnarchiver unarchiveObjectWithData:d.bubbleColour];
+        
+        int bR = [[colourData valueForKeyPath:@"r"] intValue];
+        int bG = [[colourData valueForKeyPath:@"r"] intValue];
+        int bB = [[colourData valueForKeyPath:@"r"] intValue];
+        
+        UIColor *bubbleColour = [UIColor colorWithRed:(bR /255.0) green:(bG / 255.0) blue:(bB / 255.0) alpha: 1];
+        
+        NSArray *cardsInDeck = [d.cardsInDeck allObjects];
+        NSLog(@"%lu cards in deck",(unsigned long)[cardsInDeck count]);
+    }
+    
+    
+    // Create array to hold all decks...
+    NSMutableArray *deckArray = [[NSMutableArray alloc] init];
+    
+    
+    
+    
+    
     
     
     //decksForPages = [[NSMutableArray alloc] init];
