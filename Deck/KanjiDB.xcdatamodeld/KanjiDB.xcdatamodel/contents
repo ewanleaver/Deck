@@ -15,7 +15,7 @@
         <attribute name="bubbleColour" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="deckContents" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="numToStudy" optional="YES" syncable="YES"/>
+        <attribute name="numToStudy" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="cards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Character" inverseName="decks" inverseEntity="Character" syncable="YES"/>
     </entity>
     <entity name="StudyDetails" representedClassName="StudyDetails" syncable="YES">
