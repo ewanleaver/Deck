@@ -27,8 +27,8 @@
 - (int) getActiveCardCount;
 - (void) decActiveCardCount;
 
-- (void) handleCorrectCard;
-- (void) handleIncorrectCard;
+- (void) handleCorrectCard: (Card*)cardView willExitDeck:(BOOL)willExitDeck;
+- (void) handleIncorrectCard: (Card*)cardView;
 
 - (void) dismissTopCard: (Card*)cardView;
 - (void) shuffleCard: (Card*)cardView;

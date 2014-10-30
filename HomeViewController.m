@@ -193,10 +193,15 @@ int numPages = 4;
             title = @"Hardcore Kanji";
             bubbleColor = [UIColor colorWithRed:(255.0 / 255.0) green:(83.0 / 255.0) blue:(91.0 / 255.0) alpha: 1];
 
-            for (int k=1000; k<1056; k++) {
+            for (int k=1000; k<1005; k++) {
                 [deckArray addObject:[NSNumber numberWithInt:k]];
             }
-            numToStudy = 56;
+            numToStudy = 5;
+            
+//            for (int k=1000; k<1056; k++) {
+//                [deckArray addObject:[NSNumber numberWithInt:k]];
+//            }
+//            numToStudy = 56;
             
         } else {
             title = @"Null";

@@ -14,15 +14,17 @@
 #import "StudyViewController.h"
 #import "Character.h"
 #import "StudyDetails.h"
+#import "TempStudyDetails.h"
 
 @implementation Card
 
 @synthesize managedObjectContext;
-@synthesize characters;
 
 @synthesize cardNum;
+
 @synthesize character;
 @synthesize studyDetails;
+@synthesize tempStudyDetails;
 
 @synthesize frontView;
 @synthesize readingsView;
@@ -30,8 +32,6 @@
 @synthesize originalPoint;
 
 @synthesize repQuality; // Intra-repetition quality
-@synthesize correctCount;
-@synthesize incorrectCount;
 
 int screenWidth;
 int screenHeight;
@@ -112,12 +112,8 @@ bool frontShowing;
         
         cardNum = cardNumInput;
         
-        correctCount = 0;
-        incorrectCount = 0;
-        
         // Reference to Background view controller
         //StudyBackground* controller = (StudyBackground*) [[self superview] nextResponder];
-        
         
         // Screen dimensions: 320x568
         CGRect newFrame = self.frame;
@@ -129,18 +125,40 @@ bool frontShowing;
         id delegate = [[UIApplication sharedApplication] delegate];
         self.managedObjectContext = [delegate managedObjectContext];
         
-        
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
         NSEntityDescription *entity = [NSEntityDescription
                                        entityForName:@"Character" inManagedObjectContext:managedObjectContext];
 
         [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"id_num == %d", cardNum]];
         [fetchRequest setEntity:entity];
+        
         NSError *error;
-        self.characters = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
-        character = [characters firstObject];
+        
+        character = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] objectAtIndex:0];
         studyDetails = character.studyDetails;
-        NSLog(@"Requesting card #%d - %@ (ID: %@)",cardNum,character.literal,character.id_num);
+        tempStudyDetails = studyDetails.tempStudyDetails;
+        
+//        if (character.studyDetails.tempStudyDetails.isStudying == [NSNumber numberWithBool:YES]) {
+//            NSLog(@"CARD IS ALREADY BEING STUDIED");
+//        }
+    
+        if (tempStudyDetails.isStudying.boolValue == false) {
+            [tempStudyDetails setIsStudying:[NSNumber numberWithBool:true]];
+            tempStudyDetails.numIncorrect = [NSNumber numberWithInt:0];
+            tempStudyDetails.numCorrect = [NSNumber numberWithInt:0];
+        } else {
+            NSLog(@"CARD IS ALREADY BEING STUDIED");
+        }
+        
+        // Just to prevent madness....
+        //[tempStudyDetails setIsStudying:[NSNumber numberWithBool:false]];
+        
+        NSLog(@"Card Num: %@",character.id_num);
+        NSLog(@"Studying?: %@",character.studyDetails.tempStudyDetails.isStudying);
+        NSLog(@"Num Correct?: %@",character.studyDetails.tempStudyDetails.numCorrect);
+        NSLog(@"Num Incorrect?: %@",character.studyDetails.tempStudyDetails.numIncorrect);
+
+        [self.managedObjectContext save:&error];
         
         // Unpack the character's arrays
         
@@ -486,7 +504,7 @@ bool frontShowing;
     }
 
     
-    // Does this really need to be done often?
+    // Save all new values to context
     NSError *error = nil;
     [self.managedObjectContext save:&error];
     
@@ -496,45 +514,111 @@ bool frontShowing;
     
     StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
     
-    // q (repQuality)
-    //
-    // 5 = perfect
-    // 4 = 1 wrong
-    // 3 = 2 wrong
-    // 2 = 3 wrong
-    // 1 = 4 wrong
-    // 0 = anything less
-    
-    repQuality = 5 - incorrectCount;
-    
-    if (repQuality < 0) {
-        // Ensure q lies between 0 and 5.
-        repQuality = 0;
-    }
-    
     if (isCorrect) {
-        studyDetails.quality = [NSNumber numberWithInt:5];
+        // Card marked correct
         
-        [UIView animateWithDuration:0.25f
-                              delay:0
-                            options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                         animations:^{[self setCenter:CGPointMake(160, -screenHeight*0.5)]; }
-                         completion:^(BOOL fin) { [controller dismissTopCard:self]; }  ];
+        if ((tempStudyDetails.numCorrect.intValue - tempStudyDetails.numIncorrect.intValue) < 2) {
+            // Haven't reached correct treshold. Keep studying.
+            
+            tempStudyDetails.numCorrect = [NSNumber numberWithInt:([tempStudyDetails.numCorrect intValue] + 1)];
+            
+            // Reinsert at back of back (currently - need to insert nearer the front.)
+            [UIView animateWithDuration:0.25f
+                                  delay:0
+                                options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
+                             animations:^{[self setCenter:CGPointMake(160, -screenHeight*0.35)]; }
+                             completion:^(BOOL fin) {
+                                 
+                                 [self.superview sendSubviewToBack:self ];
+                                 [UIView animateWithDuration:0.2f
+                                                       delay:0
+                                                     options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
+                                                  animations:^{[self setCenter:CGPointMake(160, self.frame.size.height/2 + 55)]; }
+                                                  completion:^(BOOL fin) {
+                                                      
+                                                      [controller handleCorrectCard:self willExitDeck:false]; }  ]; }  ];
+            
+        } else {
+            // Third correct call, can attempt to exit card
+
+            // q (repQuality)
+            //
+            // 5 = perfect
+            // 4 = 1 wrong
+            // 3 = 2 wrong
+            // 2 = 3 wrong
+            // 1 = 4 wrong
+            // 0 = anything less
+            
+            repQuality = 5 - tempStudyDetails.numIncorrect.intValue;
+            
+            if (repQuality < 0) {
+                // Ensure q lies between 0 and 5.
+                repQuality = 0;
+            }
+            
+            //studyDetails.quality = [NSNumber numberWithInt:repQuality];   //<<- Unnecessary?
+            
+            // Calc number of days until next study interation.
+            // Note: Need to keep studying card today if q < 4
+            [self calcNextRepetition];
+            
+            if (repQuality >= 4) {
+                // Card was well enough remembered that it can be removed from the deck. Animate and dismiss card.
+
+                // First reset all short-term study stats.
+                [tempStudyDetails setIsStudying:[NSNumber numberWithBool:false]];
+                tempStudyDetails.numIncorrect = [NSNumber numberWithInt:0];
+                tempStudyDetails.numCorrect = [NSNumber numberWithInt:0];
+                
+                NSError *error = nil;
+                [self.managedObjectContext save:&error];
+                
+                [UIView animateWithDuration:0.25f
+                                      delay:0
+                                    options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
+                                 animations:^{[self setCenter:CGPointMake(160, -screenHeight*0.5)]; }
+                                 completion:^(BOOL fin) {
+                                     
+                                     [controller handleCorrectCard:self willExitDeck:true]; }  ];
+                
+            } else {
+                // After each repetition session of a given day repeat again all items that scored below four in the quality assessment.
+                // Continue the repetitions until all of these items score at least four.
+                
+                NSLog(@"Sutdy quality was below 4 for card %d. Restarting short-term study.",cardNum);
+                
+                tempStudyDetails.numCorrect = [NSNumber numberWithInt:0];
+                tempStudyDetails.numIncorrect = [NSNumber numberWithInt:0];
+                
+            }
+            
+        }
         
     } else {
-        studyDetails.quality = [NSNumber numberWithInt:0];
+        // Card was marked incorrect
         
-        // SENDING TO BACK DOESN'T UPDATE DECK TRACKERS!!!
+        tempStudyDetails.numIncorrect = [NSNumber numberWithInt:([tempStudyDetails.numIncorrect intValue] + 1)];
         
+        // SENDING TO BACK DOESN'T CORRECTLY UPDATE DECK TRACKERS!!!
+        
+        // Reinsert at back of back (currently - need to insert nearer the front.)
         [UIView animateWithDuration:0.25f
                               delay:0
                             options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
                          animations:^{[self setCenter:CGPointMake(160, screenHeight*1.35)]; }
-                         completion:^(BOOL fin) { [self.superview sendSubviewToBack:self ]; [UIView animateWithDuration:0.2f
-                                                                                                                  delay:0
-                                                                                                                options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                                                                                             animations:^{[self setCenter:CGPointMake(160, self.frame.size.height/2 + 55)]; }
-                                                                                                             completion:^(BOOL fin) { [controller shuffleCard:self]; }  ]; }  ];    }
+                         completion:^(BOOL fin) { [self.superview sendSubviewToBack:self ];
+                             
+                                 [UIView animateWithDuration:0.2f
+                                                       delay:0
+                                                     options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
+                                                  animations:^{[self setCenter:CGPointMake(160, self.frame.size.height/2 + 55)]; }
+                                                  completion:^(BOOL fin) {
+                                                      
+                                                      [controller handleIncorrectCard:self]; }  ]; }  ];    }
+    
+    NSError *error = nil;
+    [self.managedObjectContext save:&error];
     
 }
 
@@ -549,58 +633,14 @@ bool frontShowing;
 - (void)handleSwipeUpFrom:(UIGestureRecognizer*)recognizer {
     
     // Card is marked as correct
-    
-    StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
-    
-    [controller handleCorrectCard];
-    
-    if ((correctCount - incorrectCount) == 2) {
-        // Third correct call, can attempt to exit card
-        [self gradeCard:true];
-        
-        // Animate and dismiss card
-        [UIView animateWithDuration:0.25f
-                              delay:0
-                            options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                         animations:^{[self setCenter:CGPointMake(160, -screenHeight*0.5)]; }
-                         completion:^(BOOL fin) { [controller dismissTopCard:self]; }  ];
-        
-    } else {
-        // Keep going
-        correctCount++;
-        
-        [UIView animateWithDuration:0.25f
-                              delay:0
-                            options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                         animations:^{[self setCenter:CGPointMake(160, -screenHeight*0.35)]; }
-                         completion:^(BOOL fin) { [self.superview sendSubviewToBack:self ];
-                             
-            [UIView animateWithDuration:0.2f
-                                  delay:0
-                                options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                             animations:^{[self setCenter:CGPointMake(160, self.frame.size.height/2 + 55)]; }
-                             completion:^(BOOL fin) { [controller shuffleCard:self]; }  ]; }  ];
-    }
+    [self gradeCard:true];
 
 }
 
 - (void)handleSwipeDownFrom:(UIGestureRecognizer*)recognizer {
     
     // Card is marked as incorrect
-    
-    StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
-    
-    [controller handleIncorrectCard];
-    
-    incorrectCount++;
-    
-    [UIView animateWithDuration:0.25f
-                          delay:0
-                        options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                     animations:^{[self setCenter:CGPointMake(160, screenHeight*1.5)]; }
-                     completion:^(BOOL fin) { [controller dismissTopCard:self]; }  ];
-
-    //[self gradeCard:false];
+    [self gradeCard:false];
     
 }
 
@@ -709,7 +749,7 @@ bool frontShowing;
                 
                 StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
                 
-                [controller handleCorrectCard];
+                [controller handleCorrectCard:self willExitDeck:false];
                 
                 [gestureRecognizer velocityInView:self];
                 
@@ -725,7 +765,7 @@ bool frontShowing;
                 
                 StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
                 
-                [controller handleIncorrectCard];
+                [controller handleIncorrectCard:self];
                 
                 [UIView animateWithDuration:duration
                                       delay:0

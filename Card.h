@@ -8,17 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import "Character.h"
+#import "StudyDetails.h"
+#import "TempStudyDetails.h"
 
 @interface Card : UIView
 
 -(id)initCard:(CGRect)frame :(int)cardNumInput fresh:(BOOL)Fresh;
 
 @property (nonatomic,strong) NSManagedObjectContext* managedObjectContext;
-@property (nonatomic, strong) NSArray *characters;
 
 @property int cardNum;
 @property Character *character;
 @property StudyDetails *studyDetails;
+@property TempStudyDetails *tempStudyDetails;
 
 @property UIView *frontView;
 @property UIImageView *readingsView;
@@ -26,7 +28,5 @@
 @property CGPoint originalPoint;
 
 @property int repQuality; // Intra-repetition quality
-@property int correctCount;
-@property int incorrectCount;
 
 @end

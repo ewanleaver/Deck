@@ -43,7 +43,7 @@ NSMutableArray *inputDeckArray;
 NSMutableArray *deckArray;
 NSMutableArray *visibleCards;
 
-int maxVisibleCards;
+int maxAllowedVisibleCards;
 
 @synthesize studyProgressBar;
 
@@ -135,23 +135,23 @@ int maxVisibleCards;
 }
 
 - (void)shuffleCard:(Card*)cardView {
-    NSLog(@"Hiding shuffled card.");
-//    NSLog(@"Shuffling card to position %d of %d.",activeCardCount-1,(int)[deckArray count] - 1);
+    NSLog(@"Moving card to back of deck.");
+    NSLog(@"Shuffling card to position %d of %d.",(int)[deckArray count]-1,(int)[deckArray count]-1);
     
-    NSLog(@"DEBUG. Active Card Count:%d, Cards in Deck:%lu",activeCardCount,(unsigned long)[deckArray count]);
+    NSLog(@"DEBUG. %d active cards, %lu cards in Deck:",activeCardCount,(unsigned long)[deckArray count]);
     
     // CAREFUL: Removing a kanji number will remove all instances of that kanji!
     [deckArray removeObject:[NSNumber numberWithInt:cardView.cardNum]];
-    [deckArray insertObject:[NSNumber numberWithInt:cardView.cardNum] atIndex:activeCardCount-1];
+    [deckArray insertObject:[NSNumber numberWithInt:cardView.cardNum] atIndex:[deckArray count]];
     
-    if (activeCardCount > maxVisibleCards) {
+    if ([deckArray count] > maxAllowedVisibleCards) {
         [visibleCards removeObject:cardView];
         [cardView removeFromSuperview];
     }
     
-//    for (int i = 0; i < activeCardCount; i++) {
-//        NSLog(@"Card at position %d: %d",i,[[deckArray objectAtIndex:i] intValue]);
-//    }
+    for (int i = 0; i < activeCardCount; i++) {
+        NSLog(@"Card at position %d: %d",i,[[deckArray objectAtIndex:i] intValue]);
+    }
     
     [self maintainDeck];
 }
@@ -207,8 +207,11 @@ int maxVisibleCards;
 
 - (void)dismissTopCard:(Card*)cardView {
     
+    // Remove both from deck array, and from array of visible cards.
     [deckArray removeObject:[NSNumber numberWithInt:cardView.cardNum]];
     [visibleCards removeObject:cardView];
+    
+    // Remove view.
     [cardView removeFromSuperview];
     
     [self maintainDeck];
@@ -216,14 +219,14 @@ int maxVisibleCards;
 
 - (void)maintainDeck {
     
-    if ([visibleCards count] > maxVisibleCards) {
+    if ([visibleCards count] > maxAllowedVisibleCards) {
         Card *cardView = [visibleCards objectAtIndex:[visibleCards count]-1]; // Remove the last card
         [visibleCards removeObject:cardView];
         [cardView removeFromSuperview];
     }
     
-    if ((activeCardCount > 1) && ([visibleCards count] < maxVisibleCards)) {
-        while (([visibleCards count] < activeCardCount) && ([visibleCards count] < maxVisibleCards)) {
+    if ((activeCardCount > 1) && ([visibleCards count] < maxAllowedVisibleCards)) {
+        while (([visibleCards count] < activeCardCount) && ([visibleCards count] < maxAllowedVisibleCards)) {
             NSLog(@"Drawing additional card");
             [self drawAdditionalCard:[[deckArray objectAtIndex:[visibleCards count]] intValue]]; // Draw the card at the second deck position (if it exists)
         }
@@ -242,39 +245,51 @@ int maxVisibleCards;
     NSLog(@"%d active cards",activeCardCount);
 }
 
+- (void) handleCorrectCard:(Card*)cardView willExitDeck:(BOOL)willExitDeck {
+    
+    if (willExitDeck) {
+        
+        // Only track perfectly remembered cards.
+        if (cardView.repQuality == 5) {
+            correctCardCount++;
+        }
+        
+        activeCardCount--;
+        activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
+        
+        correctRatio = (float)correctCardCount/totalCardCount;
+        studiedRatio = (float)(totalCardCount - activeCardCount)/totalCardCount;
+        
+        // Redraw study progress bar with new study stats
+        [self drawProgressBar];
+
+        [self dismissTopCard:cardView];
+        [self maintainDeck];
+        
+    } else {
+        
+        NSLog(@"CORRECT card shuffle. Kanji: %@ Score: %d",cardView.character.literal,(cardView.tempStudyDetails.numCorrect.intValue - cardView.tempStudyDetails.numIncorrect.intValue));
+        
+        [self shuffleCard:cardView];
+        
+    }
+
+}
+
+- (void) handleIncorrectCard:(Card*)cardView {
+    
+    NSLog(@"INCORRECT card shuffle. Kanji: %@ Score: %d",cardView.character.literal,(cardView.tempStudyDetails.numCorrect.intValue - cardView.tempStudyDetails.numIncorrect.intValue));
+    
+    [self shuffleCard:cardView];
+
+}
+
 - (int) getActiveCardCount {
     return activeCardCount;
 }
 
 - (void) decActiveCardCount {
     activeCardCount--;
-}
-
-- (void) handleCorrectCard {
-    
-    correctCardCount++;
-    correctLabel.text = [NSString stringWithFormat:@"%d", correctCardCount];
-    
-    activeCardCount--;
-    activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
-    
-    studiedRatio = (float)(totalCardCount - activeCardCount)/totalCardCount;
-    correctRatio = (float)correctCardCount/totalCardCount;
-    
-    [self drawProgressBar];
-    
-}
-- (void) handleIncorrectCard {
-    incorrectCardCount++;
-    incorrectLabel.text = [NSString stringWithFormat:@"%d", incorrectCardCount];
-    
-    activeCardCount--;
-    activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
-    
-    studiedRatio = (float)(totalCardCount - activeCardCount)/totalCardCount;
-    
-    [self drawProgressBar];
-    
 }
 
 - (void)drawProgressBar {
@@ -354,7 +369,7 @@ int maxVisibleCards;
     deckArray = [[NSMutableArray alloc] init];
     
     visibleCards = [[NSMutableArray alloc] init];
-    maxVisibleCards = 3;
+    maxAllowedVisibleCards = 3;
     
     deckArray = inputDeckArray;
     totalCardCount = (int)[inputDeckArray count];
@@ -452,8 +467,8 @@ int maxVisibleCards;
 
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
+    
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
 
@@ -465,8 +480,7 @@ int maxVisibleCards;
     [self prepDeck];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
