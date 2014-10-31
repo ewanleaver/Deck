@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Deck.h"
 #import "Bubble.h"
 
 @interface HomePanel : UIView {
@@ -20,6 +21,7 @@
     
 }
 
+- (instancetype)initWithFrameAndDeck:(CGRect)frame deck:(Deck*)d;
 - (instancetype)initWithFrameAndColour:(CGRect)frame colour:(UIColor*)inputColour numToStudy:(int)numToStudy numTotal:(int)cardsTotal;
 
 - (void)changeBubbleView;

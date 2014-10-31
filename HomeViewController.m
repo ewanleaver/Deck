@@ -39,7 +39,7 @@ NSArray *panels;
 
 NSMutableArray *decksForPages;
 
-int numPages = 4;
+int numPanels;
 
 -(IBAction)StartStudy:(id)sender {
 
@@ -99,14 +99,15 @@ int numPages = 4;
 //    ListViewController *controller;// = (MasterViewController *)navigationController.topViewController;
 //    controller.managedObjectContext = [delegate managedObjectContext];
     
-    [self prepareSubviews];
+    [self preparePanels];
+    //[self prepareSubviews];
     
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * numPages, self.scrollView.frame.size.height);
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * numPanels, self.scrollView.frame.size.height);
     
     pageControlBeingUsed = NO;
 }
 
-- (void)prepareSubviewsNew {
+- (void)preparePanels {
     
     id delegate = [[UIApplication sharedApplication] delegate];
     self.managedObjectContext = [delegate managedObjectContext];
@@ -126,42 +127,44 @@ int numPages = 4;
     
     for (int i = 0; i < [myDecks count]; i++) {
         
+        HomePanel *panel;
+        
         Deck *d = [myDecksArray objectAtIndex:i];
         NSLog(@"Deck %i name: %@, %@ cards.",i,d.name,d.numToStudy);
         
-        NSDictionary *colourData = [NSKeyedUnarchiver unarchiveObjectWithData:d.bubbleColour];
+//        NSArray *cardsInDeck = [d.cardsInDeck allObjects];
+//        NSLog(@"%lu cards in deck, %d to Study",(unsigned long)[cardsInDeck count],[d.numToStudy intValue]);
         
-        int bR = [[colourData valueForKeyPath:@"r"] intValue];
-        int bG = [[colourData valueForKeyPath:@"r"] intValue];
-        int bB = [[colourData valueForKeyPath:@"r"] intValue];
+        panel = [[HomePanel alloc] initWithFrameAndDeck:CGRectMake(self.scrollView.frame.size.width * i, 0, 320, 240) deck:d];
+        [[panel titleLabel] setText:d.name];
+        [[panel cardLabel] setText:[NSString stringWithFormat:@"%@",d.numToStudy]];
         
-        UIColor *bubbleColour = [UIColor colorWithRed:(bR /255.0) green:(bG / 255.0) blue:(bB / 255.0) alpha: 1];
-        
-        NSArray *cardsInDeck = [d.cardsInDeck allObjects];
-        NSLog(@"%lu cards in deck",(unsigned long)[cardsInDeck count]);
+        [self.scrollView addSubview:panel];
+
     }
     
+    panels = [scrollView subviews];
+    numPanels = (int)[panels count];
     
-    // Create array to hold all decks...
-    NSMutableArray *deckArray = [[NSMutableArray alloc] init];
+    if ([myDecks count] != [panels count]) {
+        NSLog(@"WARNING! There has been a terrible terrible mistake somewhere.");
+    }
     
-    
-    
-    
-    
-    
-    
-    //decksForPages = [[NSMutableArray alloc] init];
+    if ([[panels objectAtIndex:0] toStudyCount] == 0) {
+        studyComplete = YES;
+        studyButton.userInteractionEnabled = NO;
+    } else {
+        studyComplete = NO;
+        studyButton.userInteractionEnabled = YES;
+    }
     
 }
 
 - (void)prepareSubviews {
     
-    [self prepareSubviewsNew];
-    
     decksForPages = [[NSMutableArray alloc] init];
     
-    for (int i = 0; i < numPages; i++) {
+    for (int i = 0; i < numPanels; i++) {
         
         CGRect frame;
         frame.origin.x = self.scrollView.frame.size.width * i;
@@ -305,6 +308,9 @@ int numPages = 4;
 
 - (void)viewDidAppear:(BOOL)animated {
     
+    // YAY. Now page control correctly displays available decks.
+    self.pageControl.numberOfPages = numPanels;
+    
     // Animate a comment showing praise
     if ([[panels objectAtIndex:0] toStudyCount] == 0) {
         
@@ -332,8 +338,8 @@ int numPages = 4;
     
     if (page < 0) {
         page = 0;
-    } else if (page >= numPages) {
-        page = numPages - 1;
+    } else if (page >= numPanels) {
+        page = numPanels - 1;
     }
     
     if ([[panels objectAtIndex:page] toStudyCount] == 0) {
@@ -372,8 +378,8 @@ int numPages = 4;
     
     if (page < 0) {
         page = 0;
-    } else if (page > numPages) {
-        page = numPages - 1;
+    } else if (page > numPanels) {
+        page = numPanels - 1;
     }
     
     // Animate a comment showing praise

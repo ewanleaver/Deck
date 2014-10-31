@@ -8,6 +8,7 @@
 
 #import <stdlib.h>
 #import "HomePanel.h"
+#import "Deck.h"
 #import "Bubble.h"
 
 @implementation HomePanel
@@ -25,6 +26,22 @@
 Bubble *bubble;
 
 NSArray *comments;
+
+- (instancetype)initWithFrameAndDeck:(CGRect)frame deck:(Deck *)d {
+    
+    // Unarchive and create bubble colour
+    NSDictionary *colourData = [NSKeyedUnarchiver unarchiveObjectWithData:d.bubbleColour];
+    int bR = [[colourData valueForKeyPath:@"r"] intValue];
+    int bG = [[colourData valueForKeyPath:@"g"] intValue];
+    int bB = [[colourData valueForKeyPath:@"b"] intValue];
+    bubbleColour = [UIColor colorWithRed:(bR /255.0) green:(bG / 255.0) blue:(bB / 255.0) alpha: 1];
+    customColour = YES; // Override default bubble colour
+    
+    toStudyCount = [d.numToStudy intValue];
+    cardCount = [d.numToStudy intValue];
+    
+    return [self initWithFrame:frame];
+}
 
 - (instancetype)initWithFrameAndColour:(CGRect)frame colour:(UIColor *)inputColour numToStudy:(int)cardsToStudy numTotal:(int)cardsTotal {
     
