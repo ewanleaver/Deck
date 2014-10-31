@@ -22,7 +22,7 @@
 
 @synthesize cardNum;
 
-@synthesize character;
+@synthesize c;
 @synthesize studyDetails;
 @synthesize tempStudyDetails;
 
@@ -99,7 +99,7 @@ bool frontShowing;
 //    return self;
 //}
 
-- (id)initCard:(CGRect)frame :(int)cardNumInput fresh:(BOOL)fresh
+- (id)initCard:(CGRect)frame :(Character*)inputChar fresh:(BOOL)fresh
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -110,7 +110,7 @@ bool frontShowing;
         
         frontShowing = true;
         
-        cardNum = cardNumInput;
+//        cardNum = cardNumInput;
         
         // Reference to Background view controller
         //StudyBackground* controller = (StudyBackground*) [[self superview] nextResponder];
@@ -122,20 +122,21 @@ bool frontShowing;
         
         [self setFrame:newFrame];
         
-        id delegate = [[UIApplication sharedApplication] delegate];
-        self.managedObjectContext = [delegate managedObjectContext];
-        
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-        NSEntityDescription *entity = [NSEntityDescription
-                                       entityForName:@"Character" inManagedObjectContext:managedObjectContext];
-
-        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"id_num == %d", cardNum]];
-        [fetchRequest setEntity:entity];
-        
-        NSError *error;
-        
-        character = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] objectAtIndex:0];
-        studyDetails = character.studyDetails;
+//        id delegate = [[UIApplication sharedApplication] delegate];
+//        self.managedObjectContext = [delegate managedObjectContext];
+//        
+//        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//        NSEntityDescription *entity = [NSEntityDescription
+//                                       entityForName:@"Character" inManagedObjectContext:managedObjectContext];
+//
+//        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"id_num == %d", cardNum]];
+//        [fetchRequest setEntity:entity];
+//        
+//        NSError *error;
+//        
+//        character = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] objectAtIndex:0];
+        c = inputChar;
+        studyDetails = c.studyDetails;
         tempStudyDetails = studyDetails.tempStudyDetails;
         
 //        if (character.studyDetails.tempStudyDetails.isStudying == [NSNumber numberWithBool:YES]) {
@@ -153,19 +154,19 @@ bool frontShowing;
         // Just to prevent madness....
         //[tempStudyDetails setIsStudying:[NSNumber numberWithBool:false]];
         
-        NSLog(@"Card Num: %@",character.id_num);
-        NSLog(@"Studying?: %@",character.studyDetails.tempStudyDetails.isStudying);
-        NSLog(@"Num Correct?: %@",character.studyDetails.tempStudyDetails.numCorrect);
-        NSLog(@"Num Incorrect?: %@",character.studyDetails.tempStudyDetails.numIncorrect);
+        NSLog(@"Card Num: %@",c.id_num);
+        NSLog(@"Studying?: %@",c.studyDetails.tempStudyDetails.isStudying);
+        NSLog(@"Num Correct?: %@",c.studyDetails.tempStudyDetails.numCorrect);
+        NSLog(@"Num Incorrect?: %@",c.studyDetails.tempStudyDetails.numIncorrect);
 
-        [self.managedObjectContext save:&error];
+//        [self.managedObjectContext save:&error];
         
         // Unpack the character's arrays
         
-        NSMutableArray *readings_pin = [NSKeyedUnarchiver unarchiveObjectWithData:character.reading_pin];
-        NSMutableArray *readings_kun = [NSKeyedUnarchiver unarchiveObjectWithData:character.reading_kun];
-        NSMutableArray *readings_on = [NSKeyedUnarchiver unarchiveObjectWithData:character.reading_on];
-        NSMutableArray *meanings = [NSKeyedUnarchiver unarchiveObjectWithData:character.meaning];
+        NSMutableArray *readings_pin = [NSKeyedUnarchiver unarchiveObjectWithData:c.reading_pin];
+        NSMutableArray *readings_kun = [NSKeyedUnarchiver unarchiveObjectWithData:c.reading_kun];
+        NSMutableArray *readings_on = [NSKeyedUnarchiver unarchiveObjectWithData:c.reading_on];
+        NSMutableArray *meanings = [NSKeyedUnarchiver unarchiveObjectWithData:c.meaning];
         
         // Init Readings View
         
@@ -177,7 +178,7 @@ bool frontShowing;
         //
         
         UILabel *kanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_OFFSET, UPPER_OFFSET, 100, 100)];
-        kanjiLabel.text = character.literal;
+        kanjiLabel.text = c.literal;
         [kanjiLabel setTextColor:[UIColor darkGrayColor]];
         [kanjiLabel setBackgroundColor:[UIColor clearColor]];
         [kanjiLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 100.0f]];
@@ -243,8 +244,8 @@ bool frontShowing;
 
         UILabel *jlptLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_OFFSET + 0.4, self.frame.size.height - 40.8, 60, 30)];
         
-        if (![character.jlpt  isEqual: @"null"]) {
-            NSString *jlptString = jlptString = [@"N" stringByAppendingString:character.jlpt];
+        if (![c.jlpt  isEqual: @"null"]) {
+            NSString *jlptString = jlptString = [@"N" stringByAppendingString:c.jlpt];
             jlptLabel.text = jlptString;
         };
         [jlptLabel setTextColor:[UIColor colorWithRed:(170.0 / 255.0) green:(170.0 / 255.0) blue:(170.0 / 255.0) alpha: 1]];
@@ -293,7 +294,7 @@ bool frontShowing;
     [frontView setBackgroundColor:[UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 1]];
     
     UILabel *frontKanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 75, self.frame.size.height/2 - 100, 150, 150)];
-    frontKanjiLabel.text = character.literal;
+    frontKanjiLabel.text = c.literal;
     [frontKanjiLabel setTextColor:[UIColor darkGrayColor]];
     [frontKanjiLabel setBackgroundColor:[UIColor clearColor]];
     [frontKanjiLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 150.0f]];

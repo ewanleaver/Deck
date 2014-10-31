@@ -7,6 +7,8 @@
 //
 
 #import "StudyViewController.h"
+#import "Deck.h"
+#import "Character.h"
 #import "Card.h"
 
 @interface StudyViewController ()
@@ -15,8 +17,8 @@
 
 @implementation StudyViewController
 
+@synthesize studyingDeck;
 @synthesize nextCardNo;
-
 
 @synthesize deckEmptyLabel;
 @synthesize keepStudyingButton;
@@ -66,7 +68,7 @@ int maxAllowedVisibleCards;
 
 -(IBAction)AddCard:(id)sender {
     
-    Card *cardView = [[Card alloc] initCard:CGRectMake(15,525,500,500):nextCardNo fresh:YES];
+    Card *cardView = [[Card alloc] initCard:CGRectMake(15,525,500,500):[deckArray objectAtIndex:nextCardNo] fresh:YES];
     
     cardView.backgroundColor = ACTIVE_CARD_COLOUR;
     cardView.layer.borderColor = BORDER_COLOUR;
@@ -117,9 +119,9 @@ int maxAllowedVisibleCards;
 //    [self maintainDeck]; // Perform maintenance on visible cards
 //}
 
-- (void)drawAdditionalCard:(int)cardNum {
+- (void)drawAdditionalCard:(Character*)c {
     
-    Card *cardView = [[Card alloc] initCard:CGRectMake(15,55,500,500):cardNum fresh:NO];
+    Card *cardView = [[Card alloc] initCard:CGRectMake(15,55,500,500):c fresh:NO];
     
     cardView.backgroundColor = ACTIVE_CARD_COLOUR;
     cardView.layer.borderColor = BORDER_COLOUR;
@@ -160,21 +162,21 @@ int maxAllowedVisibleCards;
     
     Card *cardView;
     // Get id of back card
-    int backCardNum = [[deckArray lastObject] intValue];
+    Card *backCard = [deckArray lastObject];
     
     // Try to find back card in currently visible cards
     for (int i = 0; i < [visibleCards count]; i++) {
-        if ([[visibleCards objectAtIndex:i] cardNum] == backCardNum) {
+        if ([visibleCards objectAtIndex:i] == backCard) {
             cardView = [visibleCards objectAtIndex:i];
         }
     }
     
     // If not found, draw a new one and locate within the visible cards
     if (cardView == nil) {
-        [self drawAdditionalCard:backCardNum];
+        [self drawAdditionalCard:backCard.c];
         
         for (int i = 0; i < [visibleCards count]; i++) {
-            if ([[visibleCards objectAtIndex:i] cardNum] == backCardNum) {
+            if ([visibleCards objectAtIndex:i] == backCard) {
                 cardView = [visibleCards objectAtIndex:i];
             }
         }
@@ -185,8 +187,8 @@ int maxAllowedVisibleCards;
     [visibleCards insertObject:cardView atIndex:0];
     
     // Remove and insert at front of deck
-    [deckArray removeObject:[NSNumber numberWithInt:backCardNum]];
-    [deckArray insertObject:[NSNumber numberWithInt:backCardNum] atIndex:0];
+    [deckArray removeObject:backCard];
+    [deckArray insertObject:backCard atIndex:0];
     
     // Animate the back card
     [UIView animateWithDuration:0.25f
@@ -228,7 +230,7 @@ int maxAllowedVisibleCards;
     if ((activeCardCount > 1) && ([visibleCards count] < maxAllowedVisibleCards)) {
         while (([visibleCards count] < activeCardCount) && ([visibleCards count] < maxAllowedVisibleCards)) {
             NSLog(@"Drawing additional card");
-            [self drawAdditionalCard:[[deckArray objectAtIndex:[visibleCards count]] intValue]]; // Draw the card at the second deck position (if it exists)
+            [self drawAdditionalCard:[deckArray objectAtIndex:[visibleCards count]]]; // Draw the card at the second deck position (if it exists)
         }
         
         // Always bring the top card to the front afterwards.
@@ -268,7 +270,7 @@ int maxAllowedVisibleCards;
         
     } else {
         
-        NSLog(@"CORRECT card shuffle. Kanji: %@ Score: %d",cardView.character.literal,(cardView.tempStudyDetails.numCorrect.intValue - cardView.tempStudyDetails.numIncorrect.intValue));
+        NSLog(@"CORRECT card shuffle. Kanji: %@ Score: %d",cardView.c.literal,(cardView.tempStudyDetails.numCorrect.intValue - cardView.tempStudyDetails.numIncorrect.intValue));
         
         [self shuffleCard:cardView];
         
@@ -278,7 +280,7 @@ int maxAllowedVisibleCards;
 
 - (void) handleIncorrectCard:(Card*)cardView {
     
-    NSLog(@"INCORRECT card shuffle. Kanji: %@ Score: %d",cardView.character.literal,(cardView.tempStudyDetails.numCorrect.intValue - cardView.tempStudyDetails.numIncorrect.intValue));
+    NSLog(@"INCORRECT card shuffle. Kanji: %@ Score: %d",cardView.c.literal,(cardView.tempStudyDetails.numCorrect.intValue - cardView.tempStudyDetails.numIncorrect.intValue));
     
     [self shuffleCard:cardView];
 
@@ -350,39 +352,18 @@ int maxAllowedVisibleCards;
 - (void)prepDeck {
     
     // Initially no cards active
-    totalCardCount = 0;
-    activeCardCount = 0;
+//    totalCardCount = 0;
+//    activeCardCount = 0;
     correctCardCount = 0;
     incorrectCardCount = 0;
     
     nextCardNo = 1;
     
-    // Old init code
-//    int deckContents[20];
-//    
-//    for (int i=0;i<5;i++) {
-//        deckContents[i] = i;
-//    }
-//    
-//    deck = [[CardDeck alloc] initDeck:deckContents];
-    
-    deckArray = [[NSMutableArray alloc] init];
-    
+    deckArray = [[NSMutableArray alloc] initWithArray:[studyingDeck.cardsInDeck allObjects]];
     visibleCards = [[NSMutableArray alloc] init];
-    maxAllowedVisibleCards = 3;
     
-    deckArray = inputDeckArray;
-    totalCardCount = (int)[inputDeckArray count];
-    activeCardCount = (int)[inputDeckArray count];
-    
-//    for (int i=0; i<5; i++) {
-//        //[self addCard:deckContents[i]];
-//        [deckArray addObject:[NSNumber numberWithInt:deckContents[i]]];
-//        activeCardCount++;
-//        nextCardNo++;
-//    }
-    
-    //[self addCard:deckContents[0]];
+    totalCardCount = (int)[studyingDeck.cardsInDeck count];
+    activeCardCount = (int)[studyingDeck.cardsInDeck count];
     
     NSLog(@"Initially %d cards active.",activeCardCount);
     
@@ -396,7 +377,43 @@ int maxAllowedVisibleCards;
 //    self.view.backgroundColor = myColor;
 //}
 
-- (id)initWithDeck:(NSMutableArray *)inputDeck {
+- (id)initWithDeck:(Deck *)d {
+    NSLog(@"Deck name: %@, %@ cards.",d.name,d.numToStudy);
+
+    
+    self = [super initWithNibName:nil bundle:nil];
+    studyingDeck = d;
+    
+    // Set background
+    UIImage *image = [UIImage imageNamed:@"Study Background.png"];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:image];
+    
+    // Initially no cards active
+    totalCardCount = 0;
+    activeCardCount = 0;
+    correctCardCount = 0;
+    incorrectCardCount = 0;
+    
+    maxAllowedVisibleCards = 3;
+    
+    UIColor *activeCountColor = [UIColor colorWithRed:(160.0 / 255.0) green:(8.0 / 255.0) blue:(40.0 / 255.0) alpha: 1];
+    
+    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 22, 40, 25)];
+    activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
+    activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
+    [activeCardCountLabel setTextColor:activeCountColor];
+    [activeCardCountLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 25.0f]];
+    [self.view addSubview:activeCardCountLabel];
+    
+    studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET,SCREEN_HEIGHT-37,BAR_WIDTH,BAR_HEIGHT)];
+    [self.view addSubview:studyProgressBar];
+    [self drawProgressBar];
+    
+    return self;
+    
+}
+
+- (id)initWithDeckOld:(NSMutableArray *)inputDeck {
     
     self = [super initWithNibName:nil bundle:nil];
     

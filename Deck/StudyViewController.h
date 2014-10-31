@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Deck.h"
+#import "Character.h"
 #import "Card.h"
 
 @interface StudyViewController : UIViewController
@@ -18,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *deckEmptyLabel;
 @property (weak, nonatomic) IBOutlet UIButton *keepStudyingButton;
 
+@property (nonatomic) Deck* studyingDeck;
 @property (nonatomic) int nextCardNo;
 
 @property UIImageView *studyProgressBar;

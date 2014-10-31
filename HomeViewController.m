@@ -27,6 +27,7 @@
 
 @synthesize home;
 @synthesize myDecks;
+@synthesize myDecksArray;
 
 @synthesize scrollView;
 @synthesize pageControl;
@@ -48,7 +49,7 @@ int numPanels;
     int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     
     // Initiate StudyViewController with the appropriate deck to study
-    StudyViewController *BackgroundView = [[StudyViewController alloc] initWithDeck:[decksForPages objectAtIndex:page]];
+    StudyViewController *BackgroundView = [[StudyViewController alloc] initWithDeck:[myDecksArray objectAtIndex:pageControl.currentPage]];
     [self presentViewController:BackgroundView animated:YES completion:nil];
 
 //        [self performSegueWithIdentifier:@"showStudyView" sender:self];
@@ -123,7 +124,7 @@ int numPanels;
     self.home = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] firstObject];
     self.myDecks = home.availableDecks; // Points to NSSet of decks
     
-    NSArray *myDecksArray = [myDecks allObjects];
+    myDecksArray = [myDecks allObjects];
     
     for (int i = 0; i < [myDecks count]; i++) {
         

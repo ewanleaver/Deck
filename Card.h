@@ -13,12 +13,12 @@
 
 @interface Card : UIView
 
--(id)initCard:(CGRect)frame :(int)cardNumInput fresh:(BOOL)Fresh;
+-(id)initCard:(CGRect)frame :(Character*)inputChar fresh:(BOOL)Fresh;
 
 @property (nonatomic,strong) NSManagedObjectContext* managedObjectContext;
 
 @property int cardNum;
-@property Character *character;
+@property Character *c;
 @property StudyDetails *studyDetails;
 @property TempStudyDetails *tempStudyDetails;
 

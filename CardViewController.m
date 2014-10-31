@@ -34,53 +34,53 @@ int screenHeight;
     return self;
 }
 
-- (id)initCard:(CGRect)frame cardNum:(int)inputCardNum isFresh:(BOOL)fresh
-{
-
-    frontView = [[Card alloc] initCard:frame:inputCardNum fresh:fresh];
-    
-    NSLog(@"I'm here now everybody, everything is cool.");
-    
-    UIColor *activeCardColour = [UIColor colorWithRed:(230.0 / 255.0) green:(230.0 / 255.0) blue:(230.0 / 255.0) alpha: 1];
-    UIColor *borderColour = [UIColor colorWithRed:(190.0 / 255.0) green:(190.0 / 255.0) blue:(190.0 / 255.0) alpha: 1];
-    
-    frontView.backgroundColor = activeCardColour;
-    frontView.layer.cornerRadius = 20.0;
-    frontView.layer.masksToBounds = YES;
-    frontView.layer.borderColor = borderColour.CGColor;
-    frontView.layer.borderWidth = 2;
-    
-//    // Not used:
-//    screenWidth = [UIScreen mainScreen].bounds.size.width;
-//    screenHeight = [UIScreen mainScreen].bounds.size.height;
-//    
-//    selfCardNum = inputCardNum;
-//    
-//    // Reference to Background view controller
-//    //StudyBackground* controller = (StudyBackground*) [[self superview] nextResponder];
-//    
-//    CGRect cardFrame;
-//    cardFrame.size.width = 290;
-//    cardFrame.size.height = 458;
-//    //[self setFrame:newFrame];
+//- (id)initCard:(CGRect)frame cardNum:(int)inputCardNum isFresh:(BOOL)fresh
+//{
 //
-//    // Fetch card's character
-//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Character" inManagedObjectContext:managedObjectContext];
+//    frontView = [[Card alloc] initCard:frame :inputCardNum fresh:fresh];
 //    
-//    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"id_num == %d", selfCardNum]];
-//    [fetchRequest setEntity:entity];
+//    NSLog(@"I'm here now everybody, everything is cool.");
 //    
-//    NSError *error;
-//    self.character = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] firstObject];
+//    UIColor *activeCardColour = [UIColor colorWithRed:(230.0 / 255.0) green:(230.0 / 255.0) blue:(230.0 / 255.0) alpha: 1];
+//    UIColor *borderColour = [UIColor colorWithRed:(190.0 / 255.0) green:(190.0 / 255.0) blue:(190.0 / 255.0) alpha: 1];
 //    
-//    NSLog(@"Requesting card #%d - %@ (ID: %@)",selfCardNum,character.literal,character.id_num);
+//    frontView.backgroundColor = activeCardColour;
+//    frontView.layer.cornerRadius = 20.0;
+//    frontView.layer.masksToBounds = YES;
+//    frontView.layer.borderColor = borderColour.CGColor;
+//    frontView.layer.borderWidth = 2;
 //    
-//    CardFront *cardFront = [[CardFront alloc] initCard:cardFrame cardNum:selfCardNum isFresh:fresh];
-//
-    
-    return self;
-}
+////    // Not used:
+////    screenWidth = [UIScreen mainScreen].bounds.size.width;
+////    screenHeight = [UIScreen mainScreen].bounds.size.height;
+////    
+////    selfCardNum = inputCardNum;
+////    
+////    // Reference to Background view controller
+////    //StudyBackground* controller = (StudyBackground*) [[self superview] nextResponder];
+////    
+////    CGRect cardFrame;
+////    cardFrame.size.width = 290;
+////    cardFrame.size.height = 458;
+////    //[self setFrame:newFrame];
+////
+////    // Fetch card's character
+////    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+////    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Character" inManagedObjectContext:managedObjectContext];
+////    
+////    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"id_num == %d", selfCardNum]];
+////    [fetchRequest setEntity:entity];
+////    
+////    NSError *error;
+////    self.character = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] firstObject];
+////    
+////    NSLog(@"Requesting card #%d - %@ (ID: %@)",selfCardNum,character.literal,character.id_num);
+////    
+////    CardFront *cardFront = [[CardFront alloc] initCard:cardFrame cardNum:selfCardNum isFresh:fresh];
+////
+//    
+//    return self;
+//}
 
 - (void)viewDidLoad
 {
