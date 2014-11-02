@@ -92,7 +92,7 @@ bool frontShowing;
 //                              delay:0
 //                            options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
 //                         animations:^{[self setCenter:CGPointMake(160, 260)]; }
-//                         completion:^(BOOL fin) {NSLog(@"done");}   ];
+//                         completion:^(BOOL fin) {NSLog(@"[Card] done");}   ];
 //        
 //        //[UIView animateWithDuration:0.7f animations:^{[self setCenter:CGPointMake(160, -200)]; }];
 //    }
@@ -109,8 +109,6 @@ bool frontShowing;
         screenHeight = [UIScreen mainScreen].bounds.size.height;
         
         frontShowing = true;
-        
-//        cardNum = cardNumInput;
         
         // Reference to Background view controller
         //StudyBackground* controller = (StudyBackground*) [[self superview] nextResponder];
@@ -140,7 +138,7 @@ bool frontShowing;
         tempStudyDetails = studyDetails.tempStudyDetails;
         
 //        if (character.studyDetails.tempStudyDetails.isStudying == [NSNumber numberWithBool:YES]) {
-//            NSLog(@"CARD IS ALREADY BEING STUDIED");
+//            NSLog(@"[Card] CARD IS ALREADY BEING STUDIED");
 //        }
     
         if (tempStudyDetails.isStudying.boolValue == false) {
@@ -148,16 +146,16 @@ bool frontShowing;
             tempStudyDetails.numIncorrect = [NSNumber numberWithInt:0];
             tempStudyDetails.numCorrect = [NSNumber numberWithInt:0];
         } else {
-            NSLog(@"CARD IS ALREADY BEING STUDIED");
+            NSLog(@"[Card] CARD IS ALREADY BEING STUDIED");
         }
         
         // Just to prevent madness....
         //[tempStudyDetails setIsStudying:[NSNumber numberWithBool:false]];
         
-        NSLog(@"Card Num: %@",c.id_num);
-        NSLog(@"Studying?: %@",c.studyDetails.tempStudyDetails.isStudying);
-        NSLog(@"Num Correct?: %@",c.studyDetails.tempStudyDetails.numCorrect);
-        NSLog(@"Num Incorrect?: %@",c.studyDetails.tempStudyDetails.numIncorrect);
+//        NSLog(@"[Card] Card Num: %@",c.id_num);
+//        NSLog(@"[Card] Studying?: %@",c.studyDetails.tempStudyDetails.isStudying);
+//        NSLog(@"[Card] Num Correct?: %@",c.studyDetails.tempStudyDetails.numCorrect);
+//        NSLog(@"[Card] Num Incorrect?: %@",c.studyDetails.tempStudyDetails.numIncorrect);
 
 //        [self.managedObjectContext save:&error];
         
@@ -200,7 +198,11 @@ bool frontShowing;
         
         [self drawKunReadingLabels:readings_kun];
         
+        
+        //
         // Array to contain all meaning labels
+        //
+        
         NSMutableArray *meaningLabels = [[NSMutableArray alloc] init];
         
         for (int i = 0; i < [meanings count]; i++) {
@@ -226,21 +228,10 @@ bool frontShowing;
             }
 
         }
-        
-//        UILabel *meaningLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 210, 270, 25)];
-//        meaningLabel.text = [meanings firstObject];
-//        [meaningLabel setTextColor:[UIColor darkGrayColor]];
-//        [meaningLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 20.0f]];
-//        [self addSubview:meaningLabel];
-        
-//        UIButton *dismissButton = [[UIButton alloc] initWithFrame:CGRectMake(200, 5, 100, 30)];
-//        [dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
-//        [dismissButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-//        [dismissButton.titleLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 14.0f]];
-//        [dismissButton addTarget:self
-//                          action: @selector(buttonClicked:)
-//                forControlEvents: UIControlEventTouchDown];
-//        [self addSubview:dismissButton];
+
+        //
+        // Other informative labels
+        //
 
         UILabel *jlptLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_OFFSET + 0.4, self.frame.size.height - 40.8, 60, 30)];
         
@@ -252,16 +243,10 @@ bool frontShowing;
         [jlptLabel setBackgroundColor:[UIColor clearColor]];
         [jlptLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 20.0f]];
         [self addSubview:jlptLabel];
-//        
-//        UILabel *cardNumPrefix = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - 75, 15, 20, 30)];
-//        cardNumPrefix.text = [NSString stringWithFormat:@"#"];
-//        [cardNumPrefix setTextColor:[UIColor lightGrayColor]];
-//        //[cardNumPrefix setBackgroundColor:[UIColor clearColor]];
-//        [cardNumPrefix setFont:[UIFont fontWithName: @"Trebuchet MS" size: 20.0f]];
-//        [self addSubview:cardNumPrefix];
+        
         
         UILabel *cardNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - 80, UPPER_OFFSET, 60, 25)];
-        cardNumLabel.text = [NSString stringWithFormat:@"# %d", cardNum + 1];
+        cardNumLabel.text = [NSString stringWithFormat:@"# %@", c.id_num];
         cardNumLabel.textAlignment = NSTextAlignmentRight;
         [cardNumLabel setTextColor:[UIColor lightGrayColor]];
         [cardNumLabel setBackgroundColor:[UIColor clearColor]];
@@ -317,7 +302,7 @@ bool frontShowing;
         int newRemSpace = remSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
         
         if (newRemSpace < 0) {
-            NSLog(@"No more space available for drawing On-yomi readings.");
+            NSLog(@"[Card] No more space available for drawing On-yomi readings.");
             break;
         } else {
             remSpace = newRemSpace;
@@ -366,7 +351,7 @@ bool frontShowing;
         NSRange range = [[readings_kun objectAtIndex:i] rangeOfString:@"."];
         if (range.location != NSNotFound) {
             // Need to remove period and format
-            //NSLog(@"Period at: %lu, length of string: %lu", (unsigned long)range.location, (unsigned long)[[readings_kun objectAtIndex:i] length]);
+            //NSLog(@"[Card] Period at: %lu, length of string: %lu", (unsigned long)range.location, (unsigned long)[[readings_kun objectAtIndex:i] length]);
             
             [kunReadingLabel setTextColor:[UIColor colorWithRed:(255.0 / 255.0) green:(145.0 / 255.0) blue:(195.0 / 255.0) alpha: 1]];
             
@@ -387,7 +372,7 @@ bool frontShowing;
         int newRemSpace = remSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
         
         if (newRemSpace < 0) {
-            NSLog(@"No more space available for drawing Kun-yomi readings.");
+            NSLog(@"[Card] No more space available for drawing Kun-yomi readings.");
             break;
         } else {
             remSpace = newRemSpace;
@@ -587,7 +572,7 @@ bool frontShowing;
                 // After each repetition session of a given day repeat again all items that scored below four in the quality assessment.
                 // Continue the repetitions until all of these items score at least four.
                 
-                NSLog(@"Sutdy quality was below 4 for card %d. Restarting short-term study.",cardNum);
+                NSLog(@"[Card] Sutdy quality was below 4 for card %d. Restarting short-term study.",cardNum);
                 
                 tempStudyDetails.numCorrect = [NSNumber numberWithInt:0];
                 tempStudyDetails.numIncorrect = [NSNumber numberWithInt:0];
@@ -704,7 +689,7 @@ bool frontShowing;
     CGFloat xDistance = [gestureRecognizer translationInView:self].x;
     CGFloat yDistance = [gestureRecognizer translationInView:self].y;
     
-    NSLog(@"%f,%f,%f,%f",xDistance,yDistance,[gestureRecognizer velocityInView:self].x,[gestureRecognizer velocityInView:self].y);
+    NSLog(@"[Card] %f,%f,%f,%f",xDistance,yDistance,[gestureRecognizer velocityInView:self].x,[gestureRecognizer velocityInView:self].y);
     
     CGFloat velocityY = -1*[gestureRecognizer velocityInView:self].y;
     NSTimeInterval duration = CARD_HEIGHT / velocityY;
@@ -719,7 +704,7 @@ bool frontShowing;
     
     xDestination = ((screenHeight*0.5/draggedDistY) * draggedDistX) + screenWidth*0.5;
     
-    //NSLog(@"%f",duration);
+    //NSLog(@"[Card] %f",duration);
     
     switch (gestureRecognizer.state) {
         case UIGestureRecognizerStateBegan:{
@@ -736,7 +721,7 @@ bool frontShowing;
             CGAffineTransform scaleTransform = CGAffineTransformScale(transform, scale, scale);
             self.transform = scaleTransform;
             
-            NSLog(@"Y Dist: %f, Y Rem: %f, X Dest: %f",draggedDistY,distRemainingY,xDestination);
+            NSLog(@"[Card] Y Dist: %f, Y Rem: %f, X Dest: %f",draggedDistY,distRemainingY,xDestination);
             
             break;
         };
@@ -754,7 +739,7 @@ bool frontShowing;
                 
                 [gestureRecognizer velocityInView:self];
                 
-                NSLog(@"Y Dist: %f, Y Rem: %f, X Dest: %f",draggedDistY,distRemainingY,xDestination);
+                NSLog(@"[Card] Y Dist: %f, Y Rem: %f, X Dest: %f",draggedDistY,distRemainingY,xDestination);
                 
                 [UIView animateWithDuration:duration
                                       delay:0

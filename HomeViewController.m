@@ -124,7 +124,7 @@ int numPanels;
     self.home = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] firstObject];
     self.myDecks = home.availableDecks; // Points to NSSet of decks
     
-    myDecksArray = [myDecks allObjects];
+    myDecksArray = [myDecks sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:NO]]];
     
     for (int i = 0; i < [myDecks count]; i++) {
         

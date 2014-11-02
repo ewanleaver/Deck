@@ -17,7 +17,7 @@
 
 @implementation StudyViewController
 
-@synthesize studyingDeck;
+@synthesize deckStudying;
 @synthesize nextCardNo;
 
 @synthesize deckEmptyLabel;
@@ -42,7 +42,7 @@ NSArray *kanjiArray;
 
 NSMutableArray *inputDeckArray;
 
-NSMutableArray *deckArray;
+NSMutableArray *charsToStudy;
 NSMutableArray *visibleCards;
 
 int maxAllowedVisibleCards;
@@ -68,7 +68,7 @@ int maxAllowedVisibleCards;
 
 -(IBAction)AddCard:(id)sender {
     
-    Card *cardView = [[Card alloc] initCard:CGRectMake(15,525,500,500):[deckArray objectAtIndex:nextCardNo] fresh:YES];
+    Card *cardView = [[Card alloc] initCard:CGRectMake(15,525,500,500):[charsToStudy objectAtIndex:nextCardNo] fresh:YES];
     
     cardView.backgroundColor = ACTIVE_CARD_COLOUR;
     cardView.layer.borderColor = BORDER_COLOUR;
@@ -82,7 +82,7 @@ int maxAllowedVisibleCards;
     activeCardCount++;
     activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
 
-    [deckArray insertObject:[NSNumber numberWithInt:nextCardNo] atIndex:0]; // Track the card number in the deck (place on the top of the deck)
+    [charsToStudy insertObject:[NSNumber numberWithInt:nextCardNo] atIndex:0]; // Track the card number in the deck (place on the top of the deck)
     [visibleCards insertObject:cardView atIndex:0];
     
     [self maintainDeck]; // Perform maintenance on visible cards
@@ -91,35 +91,7 @@ int maxAllowedVisibleCards;
 
 }
 
-// No longer used.
-
-//-(IBAction)AddTen:(id)sender {
-//    for (int i = 0; i < 10; i++) {
-//        Card *cardView = [[Card alloc] initCard:CGRectMake(15,525,500,500):nextCardNo fresh:NO];
-//        
-//        UIColor *activeCardColour = [UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 1];
-//        UIColor *borderColour = [UIColor colorWithRed:(200.0 / 255.0) green:(200.0 / 255.0) blue:(200.0 / 255.0) alpha: 1];
-//        
-//        cardView.backgroundColor = activeCardColour;
-//        cardView.layer.cornerRadius = 25.0;
-//        cardView.layer.masksToBounds = YES;
-//        cardView.layer.borderColor = borderColour.CGColor;
-//        cardView.layer.borderWidth = 4;
-//        
-//        [self.view addSubview:cardView];
-//        nextCardNo++;
-//        
-//        [deckArray insertObject:[NSNumber numberWithInt:nextCardNo] atIndex:0]; // Track the card number in the deck (place on the top of the deck)
-//    };
-//    
-//    totalCardCount = totalCardCount + 10;
-//    activeCardCount = activeCardCount + 10;
-//    activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
-//    
-//    [self maintainDeck]; // Perform maintenance on visible cards
-//}
-
-- (void)drawAdditionalCard:(Character*)c {
+- (void)drawCardForChar:(Character*)c {
     
     Card *cardView = [[Card alloc] initCard:CGRectMake(15,55,500,500):c fresh:NO];
     
@@ -137,22 +109,24 @@ int maxAllowedVisibleCards;
 }
 
 - (void)shuffleCard:(Card*)cardView {
-    NSLog(@"Moving card to back of deck.");
-    NSLog(@"Shuffling card to position %d of %d.",(int)[deckArray count]-1,(int)[deckArray count]-1);
+    NSLog(@"[StudyView] Moving card to back of deck.");
+    NSLog(@"[StudyView] Shuffling card to position %d of %d.",(int)[charsToStudy count]-1,(int)[charsToStudy count]-1);
     
-    NSLog(@"DEBUG. %d active cards, %lu cards in Deck:",activeCardCount,(unsigned long)[deckArray count]);
+    NSLog(@"[StudyView] DEBUG. %d active cards, %lu cards in Deck:",activeCardCount,(unsigned long)[charsToStudy count]);
     
-    // CAREFUL: Removing a kanji number will remove all instances of that kanji!
-    [deckArray removeObject:[NSNumber numberWithInt:cardView.cardNum]];
-    [deckArray insertObject:[NSNumber numberWithInt:cardView.cardNum] atIndex:[deckArray count]];
+    // CAREFUL: Removing a character will remove all instances of that kanji!
+    [charsToStudy removeObject:cardView.c];
+    [charsToStudy insertObject:cardView.c atIndex:[charsToStudy count]];
     
-    if ([deckArray count] > maxAllowedVisibleCards) {
+    if ([charsToStudy count] > maxAllowedVisibleCards) {
         [visibleCards removeObject:cardView];
         [cardView removeFromSuperview];
     }
     
-    for (int i = 0; i < activeCardCount; i++) {
-        NSLog(@"Card at position %d: %d",i,[[deckArray objectAtIndex:i] intValue]);
+    // Print out all cards in deck
+    for (int i = 0; i < [charsToStudy count]; i++) {
+        Character *tempChar = [charsToStudy objectAtIndex:i];
+        NSLog(@"[StudyView] Card at position %d: %@",i,tempChar.literal);
     }
     
     [self maintainDeck];
@@ -160,47 +134,47 @@ int maxAllowedVisibleCards;
 
 - (void)shuffleBackCard {
     
-    Card *cardView;
     // Get id of back card
-    Card *backCard = [deckArray lastObject];
+    Character *backChar = [charsToStudy lastObject];
+    Card *backCard;
     
     // Try to find back card in currently visible cards
     for (int i = 0; i < [visibleCards count]; i++) {
-        if ([visibleCards objectAtIndex:i] == backCard) {
-            cardView = [visibleCards objectAtIndex:i];
+        if ([charsToStudy objectAtIndex:i] == backChar) {
+            backCard = [visibleCards objectAtIndex:i];
         }
     }
     
-    // If not found, draw a new one and locate within the visible cards
-    if (cardView == nil) {
-        [self drawAdditionalCard:backCard.c];
+    // If not found (if not visible), draw a new one and locate within the visible cards
+    if (backCard == nil) {
+        [self drawCardForChar:backChar];
         
         for (int i = 0; i < [visibleCards count]; i++) {
             if ([visibleCards objectAtIndex:i] == backCard) {
-                cardView = [visibleCards objectAtIndex:i];
+                backCard = [visibleCards objectAtIndex:i];
             }
         }
     }
     
     // Move card to the front of the visible cards
-    [visibleCards removeObject:cardView];
-    [visibleCards insertObject:cardView atIndex:0];
+    [visibleCards removeObject:backCard];
+    [visibleCards insertObject:backCard atIndex:0];
     
-    // Remove and insert at front of deck
-    [deckArray removeObject:backCard];
-    [deckArray insertObject:backCard atIndex:0];
+    // Remove and insert character at front of deck
+    [charsToStudy removeObject:backChar];
+    [charsToStudy insertObject:backChar atIndex:0];
     
     // Animate the back card
     [UIView animateWithDuration:0.25f
                           delay:0
                         options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                     animations:^{[cardView setCenter:CGPointMake(-137, cardView.frame.size.height/2 + 55)]; }
-                     completion:^(BOOL fin) { [self.view bringSubviewToFront:cardView];
+                     animations:^{[backCard setCenter:CGPointMake(-137, backCard.frame.size.height/2 + 55)]; }
+                     completion:^(BOOL fin) { [self.view bringSubviewToFront:backCard];
                          
         [UIView animateWithDuration:0.2f
                               delay:0
                             options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                         animations:^{[cardView setCenter:CGPointMake(160, cardView.frame.size.height/2 + 55)]; }
+                         animations:^{[backCard setCenter:CGPointMake(160, backCard.frame.size.height/2 + 55)]; }
                          completion:^(BOOL fin) { }  ]; }  ];
     
     [self maintainDeck];
@@ -210,17 +184,28 @@ int maxAllowedVisibleCards;
 - (void)dismissTopCard:(Card*)cardView {
     
     // Remove both from deck array, and from array of visible cards.
-    [deckArray removeObject:[NSNumber numberWithInt:cardView.cardNum]];
+    [charsToStudy removeObject:cardView.c];
     [visibleCards removeObject:cardView];
     
     // Remove view.
     [cardView removeFromSuperview];
+    
+    // Print out all cards in deck
+    for (int i = 0; i < [charsToStudy count]; i++) {
+        Character *tempChar = [charsToStudy objectAtIndex:i];
+        NSLog(@"[StudyView] Card at position %d: %@",i,tempChar.literal);
+    }
     
     [self maintainDeck];
 }
 
 - (void)maintainDeck {
     
+    // NOTE:
+    // charsToStudy tracks all CHARACTERS
+    // visibleCards tracks top ~3 CARDS
+    
+    // Deal with case that there are more cards visible than permitted (otherwise could build up)
     if ([visibleCards count] > maxAllowedVisibleCards) {
         Card *cardView = [visibleCards objectAtIndex:[visibleCards count]-1]; // Remove the last card
         [visibleCards removeObject:cardView];
@@ -229,8 +214,11 @@ int maxAllowedVisibleCards;
     
     if ((activeCardCount > 1) && ([visibleCards count] < maxAllowedVisibleCards)) {
         while (([visibleCards count] < activeCardCount) && ([visibleCards count] < maxAllowedVisibleCards)) {
-            NSLog(@"Drawing additional card");
-            [self drawAdditionalCard:[deckArray objectAtIndex:[visibleCards count]]]; // Draw the card at the second deck position (if it exists)
+            
+            Character *nextChar = [charsToStudy objectAtIndex:[visibleCards count]];
+            
+            NSLog(@"[StudyView] Drawing card: %@",nextChar.literal);
+            [self drawCardForChar:nextChar]; // Draw the card at the next deck position
         }
         
         // Always bring the top card to the front afterwards.
@@ -238,13 +226,13 @@ int maxAllowedVisibleCards;
         [self.view bringSubviewToFront:cardView];
     }
     
-    [self.view sendSubviewToBack:deckEmptyLabel];
-    [self.view sendSubviewToBack:keepStudyingButton];
+//    [self.view sendSubviewToBack:deckEmptyLabel];
+//    [self.view sendSubviewToBack:keepStudyingButton];
     
     activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
     
-    NSLog(@"Deck maintenance complete. %lu visible cards.", (unsigned long)[visibleCards count]);
-    NSLog(@"%d active cards",activeCardCount);
+    NSLog(@"[StudyView] Deck maintenance complete. %lu visible cards.", (unsigned long)[visibleCards count]);
+    NSLog(@"[StudyView] %d active cards",activeCardCount);
 }
 
 - (void) handleCorrectCard:(Card*)cardView willExitDeck:(BOOL)willExitDeck {
@@ -266,11 +254,10 @@ int maxAllowedVisibleCards;
         [self drawProgressBar];
 
         [self dismissTopCard:cardView];
-        [self maintainDeck];
         
     } else {
         
-        NSLog(@"CORRECT card shuffle. Kanji: %@ Score: %d",cardView.c.literal,(cardView.tempStudyDetails.numCorrect.intValue - cardView.tempStudyDetails.numIncorrect.intValue));
+        NSLog(@"[StudyView] CORRECT card shuffle. Kanji: %@ Score: %d",cardView.c.literal,(cardView.tempStudyDetails.numCorrect.intValue - cardView.tempStudyDetails.numIncorrect.intValue));
         
         [self shuffleCard:cardView];
         
@@ -280,7 +267,7 @@ int maxAllowedVisibleCards;
 
 - (void) handleIncorrectCard:(Card*)cardView {
     
-    NSLog(@"INCORRECT card shuffle. Kanji: %@ Score: %d",cardView.c.literal,(cardView.tempStudyDetails.numCorrect.intValue - cardView.tempStudyDetails.numIncorrect.intValue));
+    NSLog(@"[StudyView] INCORRECT card shuffle. Kanji: %@ Score: %d",cardView.c.literal,(cardView.tempStudyDetails.numCorrect.intValue - cardView.tempStudyDetails.numIncorrect.intValue));
     
     [self shuffleCard:cardView];
 
@@ -359,13 +346,13 @@ int maxAllowedVisibleCards;
     
     nextCardNo = 1;
     
-    deckArray = [[NSMutableArray alloc] initWithArray:[studyingDeck.cardsInDeck allObjects]];
+    charsToStudy = [[NSMutableArray alloc] initWithArray:[deckStudying.cardsInDeck allObjects]];
     visibleCards = [[NSMutableArray alloc] init];
     
-    totalCardCount = (int)[studyingDeck.cardsInDeck count];
-    activeCardCount = (int)[studyingDeck.cardsInDeck count];
+    totalCardCount = (int)[deckStudying.cardsInDeck count];
+    activeCardCount = (int)[deckStudying.cardsInDeck count];
     
-    NSLog(@"Initially %d cards active.",activeCardCount);
+    NSLog(@"[StudyView] Initially %d cards active.",activeCardCount);
     
     [self maintainDeck];
     
@@ -378,11 +365,11 @@ int maxAllowedVisibleCards;
 //}
 
 - (id)initWithDeck:(Deck *)d {
-    NSLog(@"Deck name: %@, %@ cards.",d.name,d.numToStudy);
+    NSLog(@"[StudyView] Studying deck '%@': %@ cards.",d.name,d.numToStudy);
 
     
     self = [super initWithNibName:nil bundle:nil];
-    studyingDeck = d;
+    deckStudying = d;
     
     // Set background
     UIImage *image = [UIImage imageNamed:@"Study Background.png"];
@@ -413,76 +400,76 @@ int maxAllowedVisibleCards;
     
 }
 
-- (id)initWithDeckOld:(NSMutableArray *)inputDeck {
-    
-    self = [super initWithNibName:nil bundle:nil];
-    
-    inputDeckArray = inputDeck;
-    
-    // Custom initialization
-    //    UIColor *backColor = [UIColor colorWithRed:(80.0 / 255.0) green:(80.0 / 255.0) blue:(130.0 / 255.0) alpha: 1];
-    //    self.view.backgroundColor = backColor;
-    UIImage *image = [UIImage imageNamed:@"Study Background.png"];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:image];
-    
-    // Initially no cards active
-    totalCardCount = 0;
-    activeCardCount = 0;
-    correctCardCount = 0;
-    incorrectCardCount = 0;
-    
-    [UIBezierPath bezierPathWithRoundedRect:CGRectMake(15,25,100,100) cornerRadius:15];
-    
-    //kanjiArray = @[@"一", @"二", @"三", @"四", @"五", @"六", @"七", @"八", @"九", @"十", @"零", @"江", @"里", @"菜", @"駒"];
-    
-//    UILabel *incorrectDescLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 100, [UIScreen mainScreen].bounds.size.height - 20, 80, 15)];
-//    incorrectDescLabel.text = [NSString stringWithFormat:@"Incorrect"];
-//    incorrectDescLabel.textAlignment = NSTextAlignmentCenter;
-//    myColor = [UIColor colorWithRed:(235.0 / 255.0) green:(10.0 / 255.0) blue:(65.0 / 255.0) alpha: 1];
-//    [incorrectDescLabel setTextColor:myColor];
-//    [incorrectDescLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 15.0f]];
-//    [self.view addSubview:incorrectDescLabel];
+//- (id)initWithDeckOld:(NSMutableArray *)inputDeck {
 //    
-//    incorrectLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 100, [UIScreen mainScreen].bounds.size.height - 48, 80, 25)];
-//    incorrectLabel.text = [NSString stringWithFormat:@"%d", incorrectCardCount];
-//    incorrectLabel.textAlignment = NSTextAlignmentCenter;
-//    myColor = [UIColor colorWithRed:(235.0 / 255.0) green:(10.0 / 255.0) blue:(65.0 / 255.0) alpha: 1];
-//    [incorrectLabel setTextColor:myColor];
-//    [incorrectLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 30.0f]];
-//    [self.view addSubview:incorrectLabel];
+//    self = [super initWithNibName:nil bundle:nil];
 //    
-//    UILabel *correctDescLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 + 20, [UIScreen mainScreen].bounds.size.height - 20, 80, 15)];
-//    correctDescLabel.text = [NSString stringWithFormat:@"Correct"];
-//    correctDescLabel.textAlignment = NSTextAlignmentCenter;
-//    myColor = [UIColor colorWithRed:(200.0 / 255.0) green:(200.0 / 255.0) blue:(200.0 / 255.0) alpha: 1];
-//    [correctDescLabel setTextColor:myColor];
-//    [correctDescLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 15.0f]];
-//    [self.view addSubview:correctDescLabel];
+//    inputDeckArray = inputDeck;
 //    
-//    correctLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 + 20, [UIScreen mainScreen].bounds.size.height - 48, 80, 25)];
-//    correctLabel.text = [NSString stringWithFormat:@"%d", correctCardCount];
-//    correctLabel.textAlignment = NSTextAlignmentCenter;
-//    myColor = [UIColor colorWithRed:(200.0 / 255.0) green:(200.0 / 255.0) blue:(200.0 / 255.0) alpha: 1];
-//    [correctLabel setTextColor:myColor];
-//    [correctLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 25.0f]];
-//    [self.view addSubview:correctLabel];
-    
-    UIColor *activeCountColor = [UIColor colorWithRed:(160.0 / 255.0) green:(8.0 / 255.0) blue:(40.0 / 255.0) alpha: 1];
-    
-    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 22, 40, 25)];
-    activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
-    activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
-    [activeCardCountLabel setTextColor:activeCountColor];
-    [activeCardCountLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 25.0f]];
-    [self.view addSubview:activeCardCountLabel];
-    
-    studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET,SCREEN_HEIGHT-37,BAR_WIDTH,BAR_HEIGHT)];
-    [self.view addSubview:studyProgressBar];
-    [self drawProgressBar];
-    
-    return self;
-
-}
+//    // Custom initialization
+//    //    UIColor *backColor = [UIColor colorWithRed:(80.0 / 255.0) green:(80.0 / 255.0) blue:(130.0 / 255.0) alpha: 1];
+//    //    self.view.backgroundColor = backColor;
+//    UIImage *image = [UIImage imageNamed:@"Study Background.png"];
+//    self.view.backgroundColor = [UIColor colorWithPatternImage:image];
+//    
+//    // Initially no cards active
+//    totalCardCount = 0;
+//    activeCardCount = 0;
+//    correctCardCount = 0;
+//    incorrectCardCount = 0;
+//    
+//    [UIBezierPath bezierPathWithRoundedRect:CGRectMake(15,25,100,100) cornerRadius:15];
+//    
+//    //kanjiArray = @[@"一", @"二", @"三", @"四", @"五", @"六", @"七", @"八", @"九", @"十", @"零", @"江", @"里", @"菜", @"駒"];
+//    
+////    UILabel *incorrectDescLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 100, [UIScreen mainScreen].bounds.size.height - 20, 80, 15)];
+////    incorrectDescLabel.text = [NSString stringWithFormat:@"Incorrect"];
+////    incorrectDescLabel.textAlignment = NSTextAlignmentCenter;
+////    myColor = [UIColor colorWithRed:(235.0 / 255.0) green:(10.0 / 255.0) blue:(65.0 / 255.0) alpha: 1];
+////    [incorrectDescLabel setTextColor:myColor];
+////    [incorrectDescLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 15.0f]];
+////    [self.view addSubview:incorrectDescLabel];
+////    
+////    incorrectLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 100, [UIScreen mainScreen].bounds.size.height - 48, 80, 25)];
+////    incorrectLabel.text = [NSString stringWithFormat:@"%d", incorrectCardCount];
+////    incorrectLabel.textAlignment = NSTextAlignmentCenter;
+////    myColor = [UIColor colorWithRed:(235.0 / 255.0) green:(10.0 / 255.0) blue:(65.0 / 255.0) alpha: 1];
+////    [incorrectLabel setTextColor:myColor];
+////    [incorrectLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 30.0f]];
+////    [self.view addSubview:incorrectLabel];
+////    
+////    UILabel *correctDescLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 + 20, [UIScreen mainScreen].bounds.size.height - 20, 80, 15)];
+////    correctDescLabel.text = [NSString stringWithFormat:@"Correct"];
+////    correctDescLabel.textAlignment = NSTextAlignmentCenter;
+////    myColor = [UIColor colorWithRed:(200.0 / 255.0) green:(200.0 / 255.0) blue:(200.0 / 255.0) alpha: 1];
+////    [correctDescLabel setTextColor:myColor];
+////    [correctDescLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 15.0f]];
+////    [self.view addSubview:correctDescLabel];
+////    
+////    correctLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 + 20, [UIScreen mainScreen].bounds.size.height - 48, 80, 25)];
+////    correctLabel.text = [NSString stringWithFormat:@"%d", correctCardCount];
+////    correctLabel.textAlignment = NSTextAlignmentCenter;
+////    myColor = [UIColor colorWithRed:(200.0 / 255.0) green:(200.0 / 255.0) blue:(200.0 / 255.0) alpha: 1];
+////    [correctLabel setTextColor:myColor];
+////    [correctLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 25.0f]];
+////    [self.view addSubview:correctLabel];
+//    
+//    UIColor *activeCountColor = [UIColor colorWithRed:(160.0 / 255.0) green:(8.0 / 255.0) blue:(40.0 / 255.0) alpha: 1];
+//    
+//    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 22, 40, 25)];
+//    activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
+//    activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
+//    [activeCardCountLabel setTextColor:activeCountColor];
+//    [activeCardCountLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 25.0f]];
+//    [self.view addSubview:activeCardCountLabel];
+//    
+//    studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET,SCREEN_HEIGHT-37,BAR_WIDTH,BAR_HEIGHT)];
+//    [self.view addSubview:studyProgressBar];
+//    [self drawProgressBar];
+//    
+//    return self;
+//
+//}
 
 - (void)viewDidLoad {
     
