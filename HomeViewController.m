@@ -47,8 +47,14 @@ int numPanels;
     
     // Initiate StudyViewController with the appropriate deck to study
     StudyViewController *studyView = [[StudyViewController alloc] initWithDeck:[myDecksArray objectAtIndex:pageControl.currentPage]];
+    
+    ContainerViewController* rootView = (ContainerViewController*)self.parentViewController;
+    
+    if ([rootView.delegate respondsToSelector:@selector (containerViewController:didSelectViewController:)]) {
+        [rootView.delegate containerViewController:rootView didSelectViewController:studyView];
+    }
 
-    [(ContainerViewController*)self.parentViewController setSelectedViewController:studyView];
+    //[(ContainerViewController*)self.parentViewController setSelectedViewController:studyView];
     
 }
 

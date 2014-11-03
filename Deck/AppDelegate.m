@@ -11,10 +11,12 @@
 #import "ContainerViewController.h"
 #import "HomeViewController.h"
 #import "StudyViewController.h"
+#import "Animator.h"
+
 #import "Character.h"
 #import "StudyDetails.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () <ContainerViewControllerDelegate>
 @property (nonatomic, strong) UIWindow *privateWindow;
 @end
 
@@ -30,25 +32,6 @@
     self.privateWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.privateWindow.rootViewController = [self _configuredRootViewController];
     [self.privateWindow makeKeyAndVisible];
-
-//    // Override point for customization after application launch.
-//    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-//        UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-//        UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
-//        splitViewController.delegate = (id)navigationController.topViewController;
-//        
-//        UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
-//        KanjiListViewController *controller = (KanjiListViewController *)masterNavigationController.topViewController;
-//        controller.managedObjectContext = self.managedObjectContext;
-//    } else {
-//
-//        //UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-//        //HomeViewController *menuViewController = (HomeViewController *)navigationController.topViewController;
-//        //menuViewController.managedObjectContext = self.managedObjectContext;
-//        
-//        //ListViewController *controller = (ListViewController *)navigationController.topViewController;
-//        //controller.managedObjectContext = self.managedObjectContext;
-//    }
     
     [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:220.0/255.0 green:15.0/255.0 blue:40.0/255.0 alpha:1.0]];
 
@@ -107,12 +90,20 @@
     }
 }
 
+#pragma mark - ContainerViewControllerDelegate Protocol
+
+- (id<UIViewControllerAnimatedTransitioning>)containerViewController:(ContainerViewController *)containerViewController animationControllerForTransitionFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController {
+    	return [[Animator alloc] init];
+    }
+
+
 #pragma mark - Private Methods
 
 - (UIViewController *)_configuredRootViewController {
     
     NSArray *childViewControllers = [self _configuredChildViewControllers];
     ContainerViewController *rootViewController = [[ContainerViewController alloc] initWithViewControllers:childViewControllers];
+    //	rootViewController.delegate = self;
     
     return rootViewController;
 }
@@ -120,12 +111,12 @@
 - (NSArray *)_configuredChildViewControllers {
     
     HomeViewController *homeViewController = [[HomeViewController alloc] init];
-    //StudyViewController *studyViewController = [[StudyViewController alloc] init];
+    StudyViewController *studyViewController = [[StudyViewController alloc] init];
     
     NSMutableArray *childViewControllers = [[NSMutableArray alloc] initWithCapacity:2];
     
     [childViewControllers addObject:homeViewController];
-    //[childViewControllers addObject:studyViewController];
+    [childViewControllers addObject:studyViewController];
     
     return childViewControllers;
 }

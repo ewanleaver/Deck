@@ -7,23 +7,28 @@
 //
 
 #import "ContainerViewController.h"
-#import "Animator.h"
 
 /** A private UIViewControllerContextTransitioning class to be provided transitioning delegates.
  @discussion Because we are a custom UIViewController class, with our own containment implementation, we have to provide an object conforming to the UIViewControllerContextTransitioning protocol. The system view controllers use one provided by the framework, which we cannot configure, let alone create. This class will be used even if the developer provides their own transitioning objects.
  @note The only methods that will be called on objects of this class are the ones defined in the UIViewControllerContextTransitioning protocol. The rest is our own private implementation.
  */
 @interface PrivateTransitionContext : NSObject <UIViewControllerContextTransitioning>
-- (instancetype)initWithFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController goingUp:(BOOL)goingUp; /// Designated initializer.
+- (instancetype)initWithFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController goingRight:(BOOL)goingRight; /// Designated initializer.
 @property (nonatomic, copy) void (^completionBlock)(BOOL didComplete); /// A block of code we can set to execute after having received the completeTransition: message.
 @property (nonatomic, assign, getter=isAnimated) BOOL animated; /// Private setter for the animated property.
 @property (nonatomic, assign, getter=isInteractive) BOOL interactive; /// Private setter for the interactive property.
 @end
 
+/** Instances of this private class perform the default transition animation which is to slide child views vertically.
+ @note The class only supports UIViewControllerAnimatedTransitioning at this point. Not UIViewControllerInteractiveTransitioning.
+ */
+@interface PrivateAnimatedTransition : NSObject <UIViewControllerAnimatedTransitioning>
+@end
+
 #pragma mark -
 
 @interface ContainerViewController ()
-@property (nonatomic, copy, readwrite) NSArray *viewControllers;
+//@property (nonatomic, copy, readwrite) NSMutableArray *viewControllers;
 @property (nonatomic, strong) UIView *privateContainerView; /// The view hosting the child view controllers views.
 @end
 
@@ -39,7 +44,7 @@
 
 - (void)loadView {
     
-    // Add container and buttons views.
+    // Add container view.
     
     UIView *rootView = [[UIView alloc] init];
     rootView.backgroundColor = [UIColor blackColor];
@@ -110,14 +115,18 @@
         return;
     }
     
-    // Animate the transition by calling the animator with our private transition context.
+    // Animate the transition by calling the animator with our private transition context.  If we don't have a delegate, or if it doesn't return an animated transitioning object, we will use our own, private animator.
     
-    Animator *animator = [[Animator alloc] init];
+    id<UIViewControllerAnimatedTransitioning>animator = nil;
+    if ([self.delegate respondsToSelector:@selector (containerViewController:animationControllerForTransitionFromViewController:toViewController:)]) {
+        animator = [self.delegate containerViewController:self animationControllerForTransitionFromViewController:fromViewController toViewController:toViewController];
+    }
+    animator = (animator ?: [[PrivateAnimatedTransition alloc] init]);
     
     // Because of the nature of our view controller, with horizontally arranged buttons, we instantiate our private transition context with information about whether this is a left-to-right or right-to-left transition. The animator can use this information if it wants.
     NSUInteger fromIndex = [self.viewControllers indexOfObject:fromViewController];
     NSUInteger toIndex = [self.viewControllers indexOfObject:toViewController];
-    PrivateTransitionContext *transitionContext = [[PrivateTransitionContext alloc] initWithFromViewController:fromViewController toViewController:toViewController goingUp:toIndex > fromIndex];
+    PrivateTransitionContext *transitionContext = [[PrivateTransitionContext alloc] initWithFromViewController:fromViewController toViewController:toViewController goingRight:toIndex > fromIndex];
     
     transitionContext.animated = YES;
     transitionContext.interactive = NO;
@@ -153,7 +162,7 @@
 
 @implementation PrivateTransitionContext
 
-- (instancetype)initWithFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController goingUp:(BOOL)goingUp {
+- (instancetype)initWithFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController goingRight:(BOOL)goingRight {
     NSAssert ([fromViewController isViewLoaded] && fromViewController.view.superview, @"The fromViewController view must reside in the container view upon initializing the transition context.");
     
     if ((self = [super init])) {
@@ -165,7 +174,7 @@
                                         };
         
         // Set the view frame properties which make sense in our specialized ContainerViewController context. Views appear from and disappear to the sides, corresponding to where the icon buttons are positioned. So tapping a button to the right of the currently selected, makes the view disappear to the left and the new view appear from the right. The animator object can choose to use this to determine whether the transition should be going left to right, or right to left, for example.
-        CGFloat travelDistance = (goingUp ? -self.containerView.bounds.size.width : self.containerView.bounds.size.width);
+        CGFloat travelDistance = (goingRight ? -self.containerView.bounds.size.width : self.containerView.bounds.size.width);
         self.privateDisappearingFromRect = self.privateAppearingToRect = self.containerView.bounds;
         self.privateDisappearingToRect = CGRectOffset (self.containerView.bounds, travelDistance, 0);
         self.privateAppearingFromRect = CGRectOffset (self.containerView.bounds, -travelDistance, 0);
@@ -208,5 +217,43 @@
 - (void)finishInteractiveTransition {}
 - (void)cancelInteractiveTransition {}
 
+
+@end
+
+@implementation PrivateAnimatedTransition
+
+static CGFloat const kChildViewPadding = 16;
+static CGFloat const kDamping = 0.75;
+static CGFloat const kInitialSpringVelocity = 0.5;
+
+- (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
+    return 1;
+}
+
+/// Slide views horizontally, with a bit of space between, while fading out and in.
+- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
+    
+    UIViewController* toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    UIViewController* fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    
+    // When sliding the views horizontally in and out, figure out whether we are going left or right.
+    BOOL goingRight = ([transitionContext initialFrameForViewController:toViewController].origin.x < [transitionContext finalFrameForViewController:toViewController].origin.x);
+    CGFloat travelDistance = [transitionContext containerView].bounds.size.width + kChildViewPadding;
+    CGAffineTransform travel = CGAffineTransformMakeTranslation (goingRight ? travelDistance : -travelDistance, 0);
+    
+    [[transitionContext containerView] addSubview:toViewController.view];
+    toViewController.view.alpha = 0;
+    toViewController.view.transform = CGAffineTransformInvert (travel);
+    
+    [UIView animateWithDuration:[self transitionDuration:transitionContext] delay:0 usingSpringWithDamping:kDamping initialSpringVelocity:kInitialSpringVelocity options:0x00 animations:^{
+        fromViewController.view.transform = travel;
+        fromViewController.view.alpha = 0;
+        toViewController.view.transform = CGAffineTransformIdentity;
+        toViewController.view.alpha = 1;
+    } completion:^(BOOL finished) {
+        fromViewController.view.transform = CGAffineTransformIdentity;
+        [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+    }];
+}
 
 @end
