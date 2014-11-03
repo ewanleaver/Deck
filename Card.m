@@ -644,7 +644,7 @@ bool frontShowing;
                                                                                                                   delay:0
                                                                                                                 options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
                                                                                                              animations:^{[self setCenter:CGPointMake(160, self.frame.size.height/2 + 55)]; }
-                                                                                                             completion:^(BOOL fin) { [controller shuffleCard:self]; }  ]; }  ];
+                                                                                                             completion:^(BOOL fin) { [controller moveCardToBack:self]; }  ]; }  ];
     };
     
 }
@@ -654,7 +654,7 @@ bool frontShowing;
     StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
     
     if ([controller getActiveCardCount] > 1) {
-        [controller shuffleBackCard];
+        [controller moveBackCardToFront];
     }
     
 //    if ([controller getCardsActive] > 1) {

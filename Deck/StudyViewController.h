@@ -35,7 +35,8 @@
 
 - (void) dismissTopCard: (Card*)cardView;
 - (void) shuffleCard: (Card*)cardView;
-- (void) shuffleBackCard;
+- (void) moveCardToBack: (Card*)cardView;
+- (void) moveBackCardToFront;
 - (void) maintainDeck;
 
 @end

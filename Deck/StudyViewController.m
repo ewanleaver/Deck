@@ -109,6 +109,42 @@ int maxAllowedVisibleCards;
 }
 
 - (void)shuffleCard:(Card*)cardView {
+    NSLog(@"[StudyView] Shuffling card.");
+    
+    // Calc new position for card
+    
+    float low_bound = 2;
+    float range = 10;
+
+    int newPos = arc4random_uniform(range) + low_bound;
+
+    if (newPos > [charsToStudy count] - 1) {
+        newPos = (int)[charsToStudy count] - 1;
+    }
+    
+    NSLog(@"[StudyView] Shuffling card to position %d of %d.",newPos,(int)[charsToStudy count]-1);
+    
+    NSLog(@"[StudyView] DEBUG. %d active cards, %lu cards in Deck:",activeCardCount,(unsigned long)[charsToStudy count]);
+    
+    // CAREFUL: Removing a character will remove all instances of that kanji!
+    [charsToStudy removeObject:cardView.c];
+    [charsToStudy insertObject:cardView.c atIndex:newPos];
+    
+    if ([charsToStudy count] > maxAllowedVisibleCards) {
+        [visibleCards removeObject:cardView];
+        [cardView removeFromSuperview];
+    }
+    
+    // Print out all cards in deck
+    for (int i = 0; i < [charsToStudy count]; i++) {
+        Character *tempChar = [charsToStudy objectAtIndex:i];
+        NSLog(@"[StudyView] Card at position %d: %@",i,tempChar.literal);
+    }
+    
+    [self maintainDeck];
+}
+
+- (void)moveCardToBack:(Card*)cardView {
     NSLog(@"[StudyView] Moving card to back of deck.");
     NSLog(@"[StudyView] Shuffling card to position %d of %d.",(int)[charsToStudy count]-1,(int)[charsToStudy count]-1);
     
@@ -132,7 +168,7 @@ int maxAllowedVisibleCards;
     [self maintainDeck];
 }
 
-- (void)shuffleBackCard {
+- (void)moveBackCardToFront {
     
     // Get id of back card
     Character *backChar = [charsToStudy lastObject];
@@ -314,7 +350,7 @@ int maxAllowedVisibleCards;
     CAShapeLayer *barProgressLayer = [[CAShapeLayer alloc] init];
     barProgressLayer.strokeColor = nil;
     barProgressLayer.lineWidth = 0;
-    barProgressLayer.fillColor = [[UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7] CGColor];
+    barProgressLayer.fillColor = [[UIColor colorWithRed:(235.0 / 255.0) green:(10.0 / 255.0) blue:(55.0 / 255.0) alpha: 0.7] CGColor];
     barProgressLayer.lineJoin = kCALineJoinBevel;
     barProgressLayer.path = path.CGPath;
     
@@ -328,7 +364,7 @@ int maxAllowedVisibleCards;
     CAShapeLayer *barCorrectLayer = [[CAShapeLayer alloc] init];
     barCorrectLayer.strokeColor = nil;
     barCorrectLayer.lineWidth = 0;
-    barCorrectLayer.fillColor = [[UIColor colorWithRed:(235.0 / 255.0) green:(10.0 / 255.0) blue:(55.0 / 255.0) alpha: 0.7] CGColor];
+    barCorrectLayer.fillColor = [[UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7] CGColor];
     barCorrectLayer.lineJoin = kCALineJoinBevel;
     barCorrectLayer.path = path.CGPath;
     
