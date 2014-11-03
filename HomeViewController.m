@@ -42,11 +42,11 @@ NSMutableArray *decksForPages;
 
 int numPanels;
 
--(IBAction)StartStudy:(id)sender {
+-(void)StartStudy:(id)sender {
 
     // Get current page
-    CGFloat pageWidth = self.scrollView.frame.size.width;
-    //int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+//    CGFloat pageWidth = self.scrollView.frame.size.width;
+//    int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     
     // Initiate StudyViewController with the appropriate deck to study
     StudyViewController *BackgroundView = [[StudyViewController alloc] initWithDeck:[myDecksArray objectAtIndex:pageControl.currentPage]];
@@ -61,7 +61,7 @@ int numPanels;
     
 }
 
-- (IBAction)studyButtonTouch:(id)sender {
+- (void)studyButtonTouched:(id)sender {
     if (!studyComplete) {
         [UIView animateWithDuration:0.1 animations:^{
             [studyButton.layer setBackgroundColor:[UIColor colorWithRed:(20.0 / 255.0) green:(150.0 / 255.0) blue:(80.0 / 255.0) alpha: 1.0].CGColor];
@@ -69,7 +69,7 @@ int numPanels;
     }
 }
 
-- (IBAction)studyButtonRelease:(id)sender {
+- (void)studyButtonReleased:(id)sender {
     if (!studyComplete) {
         [UIView animateWithDuration:0.1 animations:^{
             [studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 1.0].CGColor];
@@ -90,15 +90,29 @@ int numPanels;
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    //[[segue destinationViewController] setManagedObjectContext:self.managedObjectContext];
+    self.view.backgroundColor = [UIColor whiteColor];
     
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 84, 320, 340)];
+    scrollView.showsHorizontalScrollIndicator = NO;
+    scrollView.pagingEnabled = YES;
+    scrollView.bounces = YES;
+    scrollView.delegate = self;
+    [self.view addSubview:scrollView];
     
-    //self.managedObjectContext = [delegate managedObjectContext];
+    pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, 531, 80, 37)];
+    pageControl.numberOfPages = 2;
+    pageControl.currentPage = 0;
+    pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
+    pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:(255.0/255.0) green:(15.0/255.0) blue:(40.0/255.0) alpha:1.0];
+    [pageControl addTarget:self action:@selector(changePage) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:pageControl];
     
-//    id delegate = [[UIApplication sharedApplication] delegate];
-//    
-//    ListViewController *controller;// = (MasterViewController *)navigationController.topViewController;
-//    controller.managedObjectContext = [delegate managedObjectContext];
+    studyButton = [[StudyButton alloc] initWithFrame:CGRectMake(100, 450, 120, 42)];
+    [studyButton addTarget:self action:@selector(studyButtonTouched:) forControlEvents:UIControlEventTouchDown];
+    [studyButton addTarget:self action:@selector(studyButtonReleased:) forControlEvents:UIControlEventTouchUpInside];
+    [studyButton addTarget:self action:@selector(studyButtonReleased:) forControlEvents:UIControlEventTouchUpOutside];
+    [studyButton addTarget:self action:@selector(StartStudy:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:studyButton];
     
     [self preparePanels];
     //[self prepareSubviews];
@@ -335,7 +349,7 @@ int numPanels;
     // Update the page when more than 50% of the previous/next page is visible
     CGFloat pageWidth = self.scrollView.frame.size.width;
     int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-    self.pageControl.currentPage = page;
+    pageControl.currentPage = page;
     
     if (page < 0) {
         page = 0;
@@ -389,7 +403,7 @@ int numPanels;
     }
 }
 
-- (IBAction)changePage {
+- (void)changePage {
     // update the scroll view to the appropriate page
     CGRect frame;
     frame.origin.x = self.scrollView.frame.size.width * self.pageControl.currentPage;

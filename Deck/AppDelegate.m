@@ -8,10 +8,15 @@
 
 #import "AppDelegate.h"
 
-#import "KanjiListViewController.h"
+#import "ContainerViewController.h"
 #import "HomeViewController.h"
+#import "StudyViewController.h"
 #import "Character.h"
 #import "StudyDetails.h"
+
+@interface AppDelegate ()
+@property (nonatomic, strong) UIWindow *privateWindow;
+@end
 
 @implementation AppDelegate
 
@@ -19,66 +24,31 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-@synthesize decksManagedObjectContext = _decksManagedObjectContext;
-@synthesize decksManagedObjectModel = _decksManagedObjectModel;
-@synthesize decksPersistentStoreCoordinator = _decksPersistentStoreCoordinator;
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-//    NSManagedObjectContext *context = [self managedObjectContext];
-//    Character *character = [NSEntityDescription
-//                                       insertNewObjectForEntityForName:@"Character"
-//                                       inManagedObjectContext:context];
-//    [character setValue:@"机" forKey:@"literal"];
-//    [character setValue:@"キ" forKey:@"reading_on"];
-//    [character setValue:@"つくえ" forKey:@"reading_kun"];
-//    
-//    StudyDetails *studyDetails = [NSEntityDescription
-//                                          insertNewObjectForEntityForName:@"StudyDetails"
-//                                          inManagedObjectContext:context];
-//    [studyDetails setValue:[NSDate date] forKey:@"lastStudied"];
-//    [studyDetails setValue:@"N3" forKey:@"jlpt"];
-//    [studyDetails setValue:character forKey:@"character"];
-//    [character setValue:studyDetails forKey:@"studyDetails"];
-//    NSError *error;
-//    if (![context save:&error]) {
-//        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
-//    }
     
-    // Test listing all characters from the store
-//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//    NSEntityDescription *entity = [NSEntityDescription
-//                                   entityForName:@"Character" inManagedObjectContext:context];
-//    [fetchRequest setEntity:entity];
-//    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
-//    for (Character *character in fetchedObjects) {
-//        NSLog(@"Literal: %@", [character valueForKey:@"literal"]);
-//        StudyDetails *studyDetails = [character valueForKey:@"studyDetails"];
-//        NSLog(@"JLPT: %@", [studyDetails valueForKey:@"jlpt"]);
-//    }
-    
-    
-    
-    
-    
-    // Override point for customization after application launch.
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-        UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
-        splitViewController.delegate = (id)navigationController.topViewController;
-        
-        UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
-        KanjiListViewController *controller = (KanjiListViewController *)masterNavigationController.topViewController;
-        controller.managedObjectContext = self.managedObjectContext;
-    } else {
+    self.privateWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.privateWindow.rootViewController = [self _configuredRootViewController];
+    [self.privateWindow makeKeyAndVisible];
 
-        //UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-        //HomeViewController *menuViewController = (HomeViewController *)navigationController.topViewController;
-        //menuViewController.managedObjectContext = self.managedObjectContext;
-        
-        //ListViewController *controller = (ListViewController *)navigationController.topViewController;
-        //controller.managedObjectContext = self.managedObjectContext;
-    }
+//    // Override point for customization after application launch.
+//    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+//        UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
+//        UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
+//        splitViewController.delegate = (id)navigationController.topViewController;
+//        
+//        UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
+//        KanjiListViewController *controller = (KanjiListViewController *)masterNavigationController.topViewController;
+//        controller.managedObjectContext = self.managedObjectContext;
+//    } else {
+//
+//        //UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+//        //HomeViewController *menuViewController = (HomeViewController *)navigationController.topViewController;
+//        //menuViewController.managedObjectContext = self.managedObjectContext;
+//        
+//        //ListViewController *controller = (ListViewController *)navigationController.topViewController;
+//        //controller.managedObjectContext = self.managedObjectContext;
+//    }
     
     [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:220.0/255.0 green:15.0/255.0 blue:40.0/255.0 alpha:1.0]];
 
@@ -136,6 +106,30 @@
         } 
     }
 }
+
+#pragma mark - Private Methods
+
+- (UIViewController *)_configuredRootViewController {
+    
+    NSArray *childViewControllers = [self _configuredChildViewControllers];
+    ContainerViewController *rootViewController = [[ContainerViewController alloc] initWithViewControllers:childViewControllers];
+    
+    return rootViewController;
+}
+
+- (NSArray *)_configuredChildViewControllers {
+    
+    HomeViewController *homeViewController = [[HomeViewController alloc] init];
+    StudyViewController *studyViewController = [[StudyViewController alloc] init];
+    
+    NSMutableArray *childViewControllers = [[NSMutableArray alloc] initWithCapacity:2];
+    
+    [childViewControllers addObject:homeViewController];
+    [childViewControllers addObject:studyViewController];
+    
+    return childViewControllers;
+}
+
 
 #pragma mark - Core Data stack
 
@@ -226,17 +220,6 @@
     
     return _persistentStoreCoordinator;
 }
-
-- (NSManagedObjectModel *)decksManagedObjectModel
-{
-    if (_decksManagedObjectModel != nil) {
-        return _decksManagedObjectModel;
-    }
-    NSURL *decksModelURL = [[NSBundle mainBundle] URLForResource:@"Decks" withExtension:@"momd"];
-    _decksManagedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:decksModelURL];
-    return _decksManagedObjectModel;
-}
-
 
 #pragma mark - Application's Documents directory
 

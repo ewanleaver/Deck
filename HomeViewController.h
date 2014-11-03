@@ -10,7 +10,7 @@
 #import "Home.h"
 #import "StudyButton.h"
 
-@interface HomeViewController : UIViewController {
+@interface HomeViewController : UIViewController <UIScrollViewDelegate> {
     UIScrollView *scrollView;
     UIPageControl *pageControl;
 }
@@ -23,13 +23,13 @@
 
 //@property (nonatomic, strong) IBOutlet StudyButton * coolButton;
 
-@property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, retain) IBOutlet UIPageControl *pageControl;
-@property (nonatomic, retain) IBOutlet StudyButton *studyButton;
+@property (nonatomic, retain) UIScrollView *scrollView;
+@property (nonatomic, retain) UIPageControl *pageControl;
+@property (nonatomic, retain) StudyButton *studyButton;
 
-- (IBAction)changePage;
-- (IBAction)StartStudy:(id)sender;
-- (IBAction)studyButtonTouch:(id)sender;
-- (IBAction)studyButtonRelease:(id)sender;
+- (void)changePage;
+- (void)StartStudy:(id)sender;
+- (void)studyButtonTouched:(id)sender;
+- (void)studyButtonReleased:(id)sender;
 
 @end
