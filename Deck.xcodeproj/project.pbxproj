@@ -38,7 +38,7 @@
 		762D453E1945878900CE422C /* StudyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 762D453C1945878800CE422C /* StudyViewController.m */; };
 		762D453F1945878900CE422C /* StudyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 762D453D1945878800CE422C /* StudyViewController.xib */; };
 		76310F081946CA35006A329C /* Bubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 76310F071946CA35006A329C /* Bubble.m */; };
-		76310F0F1946D7E7006A329C /* StudyButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 76310F0E1946D7E7006A329C /* StudyButton.m */; };
+		76310F0F1946D7E7006A329C /* RoundedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 76310F0E1946D7E7006A329C /* RoundedButton.m */; };
 		764668BE196676A30033BACF /* KanjiDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 764668BC196676A30033BACF /* KanjiDB.xcdatamodeld */; };
 		76AA7EBE1966868E00AB3BE0 /* CardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76AA7EBD1966868E00AB3BE0 /* CardViewController.m */; };
 /* End PBXBuildFile section */
@@ -101,8 +101,8 @@
 		762D453D1945878800CE422C /* StudyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StudyViewController.xib; sourceTree = "<group>"; };
 		76310F061946CA35006A329C /* Bubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bubble.h; sourceTree = "<group>"; };
 		76310F071946CA35006A329C /* Bubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bubble.m; sourceTree = "<group>"; };
-		76310F0D1946D7E7006A329C /* StudyButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StudyButton.h; sourceTree = "<group>"; };
-		76310F0E1946D7E7006A329C /* StudyButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StudyButton.m; sourceTree = "<group>"; };
+		76310F0D1946D7E7006A329C /* RoundedButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoundedButton.h; sourceTree = "<group>"; };
+		76310F0E1946D7E7006A329C /* RoundedButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoundedButton.m; sourceTree = "<group>"; };
 		764668BD196676A30033BACF /* KanjiDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KanjiDB.xcdatamodel; sourceTree = "<group>"; };
 		76AA7EBC1966868E00AB3BE0 /* CardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardViewController.h; sourceTree = "<group>"; };
 		76AA7EBD1966868E00AB3BE0 /* CardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardViewController.m; sourceTree = "<group>"; };
@@ -222,8 +222,8 @@
 				4007A05A19474569003292BF /* HomePanel.m */,
 				76310F061946CA35006A329C /* Bubble.h */,
 				76310F071946CA35006A329C /* Bubble.m */,
-				76310F0D1946D7E7006A329C /* StudyButton.h */,
-				76310F0E1946D7E7006A329C /* StudyButton.m */,
+				76310F0D1946D7E7006A329C /* RoundedButton.h */,
+				76310F0E1946D7E7006A329C /* RoundedButton.m */,
 				404250681A0705490055F97C /* Animator.h */,
 				404250691A0705490055F97C /* Animator.m */,
 			);
@@ -385,7 +385,7 @@
 				76AA7EBE1966868E00AB3BE0 /* CardViewController.m in Sources */,
 				402E71B119FC69E6003E4C86 /* TempStudyDetails.m in Sources */,
 				764668BE196676A30033BACF /* KanjiDB.xcdatamodeld in Sources */,
-				76310F0F1946D7E7006A329C /* StudyButton.m in Sources */,
+				76310F0F1946D7E7006A329C /* RoundedButton.m in Sources */,
 				762D453E1945878900CE422C /* StudyViewController.m in Sources */,
 				762D45391945877F00CE422C /* Card.m in Sources */,
 				4042506A1A0705490055F97C /* Animator.m in Sources */,

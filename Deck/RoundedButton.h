@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface StudyButton : UIButton
+@interface RoundedButton : UIButton
 
 @end

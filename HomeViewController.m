@@ -12,7 +12,7 @@
 #import "KanjiListViewController.h"
 #import "HomePanel.h"
 #import "Bubble.h"
-#import "StudyButton.h"
+#import "RoundedButton.h"
 
 #import "Home.h"
 #import "Deck.h"
@@ -31,6 +31,7 @@
 @synthesize myDecksArray;
 
 @synthesize titleBar;
+@synthesize titleLabel;
 @synthesize scrollView;
 @synthesize pageControl;
 @synthesize studyButton;
@@ -113,6 +114,13 @@ int numPanels;
     titleBar.backgroundColor = [UIColor colorWithRed:245.0/255.0 green:30.0/255.0 blue:70.0/255.0 alpha:1.0];
     [self.view addSubview:titleBar];
     
+    titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 44)];
+    titleLabel.text = @"Home";
+    titleLabel.font = [UIFont systemFontOfSize:25.0f];
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:titleLabel];
+    
     scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 84, 320, 340)];
     scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.pagingEnabled = YES;
@@ -128,7 +136,9 @@ int numPanels;
     [pageControl addTarget:self action:@selector(changePage) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:pageControl];
     
-    studyButton = [[StudyButton alloc] initWithFrame:CGRectMake(100, 450, 120, 42)];
+    studyButton = [[RoundedButton alloc] initWithFrame:CGRectMake(100, 450, 120, 42)];
+    [studyButton setTitle:@"Study" forState:UIControlStateNormal];
+    [studyButton.titleLabel setFont:[UIFont systemFontOfSize:20.0f]];
     [studyButton addTarget:self action:@selector(studyButtonTouched:) forControlEvents:UIControlEventTouchDown];
     [studyButton addTarget:self action:@selector(studyButtonReleased:) forControlEvents:UIControlEventTouchUpInside];
     [studyButton addTarget:self action:@selector(studyButtonReleased:) forControlEvents:UIControlEventTouchUpOutside];

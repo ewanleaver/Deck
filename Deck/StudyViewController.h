@@ -11,13 +11,15 @@
 #import "Character.h"
 #import "Card.h"
 
+#import "RoundedButton.h"
+
 @interface StudyViewController : UIViewController
 
 - (IBAction)StopStudy:(id)sender;
 - (IBAction)AddCard:(id)sender;
 //- (IBAction)AddTen:(id)sender;
 
-@property (nonatomic, retain) UIButton *homeButton;
+@property (nonatomic, retain) RoundedButton *homeButton;
 
 @property (weak, nonatomic) IBOutlet UILabel *deckEmptyLabel;
 @property (weak, nonatomic) IBOutlet UIButton *keepStudyingButton;

@@ -6,16 +6,16 @@
 //  Copyright (c) 2014 Ewan Leaver. All rights reserved.
 //
 
-#import "StudyButton.h"
+#import "RoundedButton.h"
 #import <QuartzCore/QuartzCore.h>
 
-@implementation StudyButton
+@implementation RoundedButton
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+        
     }
     return self;
 }
@@ -61,10 +61,6 @@
     [self.layer setMasksToBounds:YES];
     
     self.layer.backgroundColor = [UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 1.0].CGColor;
-    
-    [self.titleLabel setTextColor:[UIColor whiteColor]];
-    [self.titleLabel setText:@"Study"];
-    [self.titleLabel setFont:[UIFont systemFontOfSize:20.0f]];
     
 //    CGContextRef context = UIGraphicsGetCurrentContext();
 //    
