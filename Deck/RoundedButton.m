@@ -11,11 +11,11 @@
 
 @implementation RoundedButton
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrameAndColour:(CGRect)frame buttonColour:(UIColor*)buttonColour
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        _backColour = buttonColour;
     }
     return self;
 }
@@ -60,7 +60,7 @@
     self.layer.cornerRadius = self.frame.size.height/2;
     [self.layer setMasksToBounds:YES];
     
-    self.layer.backgroundColor = [UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 1.0].CGColor;
+    self.layer.backgroundColor = _backColour.CGColor;
     
 //    CGContextRef context = UIGraphicsGetCurrentContext();
 //    

@@ -136,7 +136,7 @@ int numPanels;
     [pageControl addTarget:self action:@selector(changePage) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:pageControl];
     
-    studyButton = [[RoundedButton alloc] initWithFrame:CGRectMake(100, 450, 120, 42)];
+    studyButton = [[RoundedButton alloc] initWithFrameAndColour:CGRectMake(100, 450, 120, 42) buttonColour:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 1.0]];
     [studyButton setTitle:@"Study" forState:UIControlStateNormal];
     [studyButton.titleLabel setFont:[UIFont systemFontOfSize:20.0f]];
     [studyButton addTarget:self action:@selector(studyButtonTouched:) forControlEvents:UIControlEventTouchDown];

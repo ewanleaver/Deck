@@ -21,9 +21,6 @@
 
 @property (nonatomic, retain) RoundedButton *homeButton;
 
-@property (weak, nonatomic) IBOutlet UILabel *deckEmptyLabel;
-@property (weak, nonatomic) IBOutlet UIButton *keepStudyingButton;
-
 @property (nonatomic) Deck* deckStudying;
 @property (nonatomic) int nextCardNo;
 

@@ -10,4 +10,8 @@
 
 @interface RoundedButton : UIButton
 
+- (instancetype)initWithFrameAndColour:(CGRect)frame buttonColour:(UIColor*)buttonColour;
+
+@property UIColor* backColour;
+
 @end

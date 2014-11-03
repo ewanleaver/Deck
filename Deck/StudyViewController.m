@@ -23,9 +23,6 @@
 @synthesize deckStudying;
 @synthesize nextCardNo;
 
-@synthesize deckEmptyLabel;
-@synthesize keepStudyingButton;
-
 int totalCardCount;
 
 int activeCardCount;
@@ -516,9 +513,9 @@ int maxAllowedVisibleCards;
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    
-    homeButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 15, 59, 36)];
-    [homeButton.titleLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 20.0f]];
+    homeButton = [[RoundedButton alloc] initWithFrameAndColour:CGRectMake(20, 22, 65, 25) buttonColour:[UIColor colorWithRed:(180.0 / 255.0) green:(15.0 / 255.0) blue:(55.0 / 255.0) alpha: 1]];
+    [homeButton.titleLabel setFont:[UIFont systemFontOfSize: 18.0f]];
+    [homeButton setTitleColor:[UIColor colorWithRed:(120.0 / 255.0) green:(8.0 / 255.0) blue:(25.0 / 255.0) alpha: 1] forState:UIControlStateNormal];
     [homeButton setTitle:@"Home" forState:UIControlStateNormal];
     [homeButton addTarget:self action:@selector(StopStudy:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:homeButton];
