@@ -99,6 +99,8 @@ bool frontShowing;
 //    return self;
 //}
 
+#pragma mark - Init and Drawing
+
 - (id)initCard:(CGRect)frame :(Character*)inputChar fresh:(BOOL)fresh
 {
     self = [super initWithFrame:frame];
@@ -401,20 +403,52 @@ bool frontShowing;
     }
 }
 
-
-- (void) buttonClicked: (id)sender
-{
-    [UIView animateWithDuration:0.25f
-                          delay:0
-                        options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                     animations:^{[self setCenter:CGPointMake(160, -200)]; }
-                     completion:^(BOOL fin) { [self removeFromSuperview]; }  ];
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
     
-    // Decrease the number of tracked active cards
-    StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
-    [controller decActiveCardCount];
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextSetLineWidth(context, 4.0);
+    CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:(225.0 / 255.0) green:(225.0 / 255.0) blue:(225.0 / 255.0) alpha: 1].CGColor);
+    
+    CGRect rectangle = CGRectMake(READ_BOX_LEFT,READ_BOX_UPPER,READ_BOX_WIDTH,READ_BOX_HEIGHT);
+    CGContextAddRect(context, rectangle);
+    
+    CGContextStrokePath(context);
+    
+    CGContextAddRect(context, rectangle);
+    
+    CGContextSetFillColorWithColor(context, [UIColor colorWithRed:(245.0 / 255.0) green:(245.0 / 255.0) blue:(245.0 / 255.0) alpha: 1].CGColor);
+    CGContextFillPath(context);
+    
+    // Draw bubble for JLPT level
+    
+    CGContextSetLineWidth(context, 2.0);
+    self.transform = CGAffineTransformIdentity;
+    rectangle = CGRectMake(9.1,self.frame.size.height - 43.2,35,35);
+    CGContextAddEllipseInRect(context, rectangle);
+    //CGContextStrokePath(context);
+    
+    CGContextSetFillColorWithColor(context, [UIColor colorWithRed:(230.0 / 255.0) green:(230.0 / 255.0) blue:(230.0 / 255.0) alpha: 1].CGColor);
+    CGContextFillPath(context);
     
 }
+
+
+//- (void) buttonClicked: (id)sender
+//{
+//    [UIView animateWithDuration:0.25f
+//                          delay:0
+//                        options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
+//                     animations:^{[self setCenter:CGPointMake(160, -200)]; }
+//                     completion:^(BOOL fin) { [self removeFromSuperview]; }  ];
+//    
+//    // Decrease the number of tracked active cards
+//    StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
+//    [controller decActiveCardCount];
+//    
+//}
 
 //// Respond to a swipe gesture
 //- (IBAction)showGestureForSwipeRecognizer:(UISwipeGestureRecognizer *)recognizer {
@@ -440,14 +474,7 @@ bool frontShowing;
 //}
 
 
-
-
-
-//
-//
-// SRS Logic
-//
-//
+#pragma mark - SRS Logic
 
 // Calc time until next repetition, attempt to exit card from deck
 - (void)calcNextRepetition {
@@ -610,11 +637,7 @@ bool frontShowing;
 
 
 
-//
-//
-// Gesture recognisers
-//
-//
+#pragma mark - Gesture Recognisers
 
 - (void)handleSwipeUpFrom:(UIGestureRecognizer*)recognizer {
     
@@ -809,48 +832,6 @@ bool frontShowing;
     [self addGestureRecognizer:swipeLeftGestureRecognizer];
     
     [self addGestureRecognizer:tapGestureRecognizer];
-    
-}
-
-
-
-
-
-
-
-
-
-
-
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSetLineWidth(context, 4.0);
-    CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:(225.0 / 255.0) green:(225.0 / 255.0) blue:(225.0 / 255.0) alpha: 1].CGColor);
-    
-    CGRect rectangle = CGRectMake(READ_BOX_LEFT,READ_BOX_UPPER,READ_BOX_WIDTH,READ_BOX_HEIGHT);
-    CGContextAddRect(context, rectangle);
-    
-    CGContextStrokePath(context);
-    
-    CGContextAddRect(context, rectangle);
-    
-    CGContextSetFillColorWithColor(context, [UIColor colorWithRed:(245.0 / 255.0) green:(245.0 / 255.0) blue:(245.0 / 255.0) alpha: 1].CGColor);
-    CGContextFillPath(context);
-    
-    // Draw bubble for JLPT level
-    
-    CGContextSetLineWidth(context, 2.0);
-    self.transform = CGAffineTransformIdentity;
-    rectangle = CGRectMake(9.1,self.frame.size.height - 43.2,35,35);
-    CGContextAddEllipseInRect(context, rectangle);
-    //CGContextStrokePath(context);
-    
-    CGContextSetFillColorWithColor(context, [UIColor colorWithRed:(230.0 / 255.0) green:(230.0 / 255.0) blue:(230.0 / 255.0) alpha: 1].CGColor);
-    CGContextFillPath(context);
     
 }
 

@@ -12,7 +12,7 @@
 
 @interface CardViewController : UIViewController
 
-- (id)initCard:(CGRect)frame cardNum:(int)inputCardNum isFresh:(BOOL)fresh;
+//- (id)initCard:(CGRect)frame cardNum:(int)inputCardNum isFresh:(BOOL)fresh;
 
 @property (nonatomic,strong) NSManagedObjectContext* managedObjectContext;
 @property (nonatomic, strong) Character *character;
