@@ -13,7 +13,7 @@
  @note The only methods that will be called on objects of this class are the ones defined in the UIViewControllerContextTransitioning protocol. The rest is our own private implementation.
  */
 @interface PrivateTransitionContext : NSObject <UIViewControllerContextTransitioning>
-- (instancetype)initWithFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController goingRight:(BOOL)goingRight; /// Designated initializer.
+- (instancetype)initWithFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController goingUp:(BOOL)goingUp; /// Designated initializer.
 @property (nonatomic, copy) void (^completionBlock)(BOOL didComplete); /// A block of code we can set to execute after having received the completeTransition: message.
 @property (nonatomic, assign, getter=isAnimated) BOOL animated; /// Private setter for the animated property.
 @property (nonatomic, assign, getter=isInteractive) BOOL interactive; /// Private setter for the interactive property.
@@ -123,10 +123,10 @@
     }
     animator = (animator ?: [[PrivateAnimatedTransition alloc] init]);
     
-    // Because of the nature of our view controller, with horizontally arranged buttons, we instantiate our private transition context with information about whether this is a left-to-right or right-to-left transition. The animator can use this information if it wants.
+    // Because of the nature of our view controller, with vertically arranged buttons, we instantiate our private transition context with information about whether this is a left-to-right or right-to-left transition. The animator can use this information if it wants.
     NSUInteger fromIndex = [self.viewControllers indexOfObject:fromViewController];
     NSUInteger toIndex = [self.viewControllers indexOfObject:toViewController];
-    PrivateTransitionContext *transitionContext = [[PrivateTransitionContext alloc] initWithFromViewController:fromViewController toViewController:toViewController goingRight:toIndex > fromIndex];
+    PrivateTransitionContext *transitionContext = [[PrivateTransitionContext alloc] initWithFromViewController:fromViewController toViewController:toViewController goingUp:toIndex > fromIndex];
     
     transitionContext.animated = YES;
     transitionContext.interactive = NO;
@@ -162,7 +162,7 @@
 
 @implementation PrivateTransitionContext
 
-- (instancetype)initWithFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController goingRight:(BOOL)goingRight {
+- (instancetype)initWithFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController goingUp:(BOOL)goingUp {
     NSAssert ([fromViewController isViewLoaded] && fromViewController.view.superview, @"The fromViewController view must reside in the container view upon initializing the transition context.");
     
     if ((self = [super init])) {
@@ -174,7 +174,7 @@
                                         };
         
         // Set the view frame properties which make sense in our specialized ContainerViewController context. Views appear from and disappear to the sides, corresponding to where the icon buttons are positioned. So tapping a button to the right of the currently selected, makes the view disappear to the left and the new view appear from the right. The animator object can choose to use this to determine whether the transition should be going left to right, or right to left, for example.
-        CGFloat travelDistance = (goingRight ? -self.containerView.bounds.size.width : self.containerView.bounds.size.width);
+        CGFloat travelDistance = (goingUp ? -self.containerView.bounds.size.width : self.containerView.bounds.size.width);
         self.privateDisappearingFromRect = self.privateAppearingToRect = self.containerView.bounds;
         self.privateDisappearingToRect = CGRectOffset (self.containerView.bounds, travelDistance, 0);
         self.privateAppearingFromRect = CGRectOffset (self.containerView.bounds, -travelDistance, 0);
@@ -230,16 +230,16 @@ static CGFloat const kInitialSpringVelocity = 0.5;
     return 1;
 }
 
-/// Slide views horizontally, with a bit of space between, while fading out and in.
+/// Slide views vertically, with a bit of space between, while fading out and in.
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     
     UIViewController* toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIViewController* fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     
-    // When sliding the views horizontally in and out, figure out whether we are going left or right.
-    BOOL goingRight = ([transitionContext initialFrameForViewController:toViewController].origin.x < [transitionContext finalFrameForViewController:toViewController].origin.x);
-    CGFloat travelDistance = [transitionContext containerView].bounds.size.width + kChildViewPadding;
-    CGAffineTransform travel = CGAffineTransformMakeTranslation (goingRight ? travelDistance : -travelDistance, 0);
+    // When sliding the views vertically in and out, figure out whether we are going left or right.
+    BOOL goingUp = ([transitionContext initialFrameForViewController:toViewController].origin.x < [transitionContext finalFrameForViewController:toViewController].origin.x);
+    CGFloat travelDistance = [transitionContext containerView].bounds.size.height + kChildViewPadding;
+    CGAffineTransform travel = CGAffineTransformMakeTranslation (0, goingUp ? -travelDistance : travelDistance);
     
     [[transitionContext containerView] addSubview:toViewController.view];
     toViewController.view.alpha = 0;

@@ -21,6 +21,7 @@
 @property (nonatomic,strong) NSSet* myDecks;
 @property (nonatomic,strong) NSArray* myDecksArray;
 
+@property (nonatomic, retain) UIView *titleBar;
 @property (nonatomic, retain) UIScrollView *scrollView;
 @property (nonatomic, retain) UIPageControl *pageControl;
 @property (nonatomic, retain) StudyButton *studyButton;

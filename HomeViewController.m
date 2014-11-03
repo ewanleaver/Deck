@@ -30,6 +30,7 @@
 @synthesize myDecks;
 @synthesize myDecksArray;
 
+@synthesize titleBar;
 @synthesize scrollView;
 @synthesize pageControl;
 @synthesize studyButton;
@@ -50,11 +51,11 @@ int numPanels;
     
     ContainerViewController* rootView = (ContainerViewController*)self.parentViewController;
     
-    if ([rootView.delegate respondsToSelector:@selector (containerViewController:didSelectViewController:)]) {
-        [rootView.delegate containerViewController:rootView didSelectViewController:studyView];
-    }
-
-    //[(ContainerViewController*)self.parentViewController setSelectedViewController:studyView];
+    [rootView setSelectedViewController:studyView];
+//    if ([rootView.delegate respondsToSelector:@selector (containerViewController:didSelectViewController:)]) {
+//        [rootView.delegate containerViewController:rootView didSelectViewController:studyView];
+//        NSLog(@"Hmm");
+//    }
     
 }
 
@@ -108,6 +109,10 @@ int numPanels;
     // Do any additional setup after loading the view from its nib.
     self.view.backgroundColor = [UIColor whiteColor];
     
+    titleBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
+    titleBar.backgroundColor = [UIColor colorWithRed:245.0/255.0 green:30.0/255.0 blue:70.0/255.0 alpha:1.0];
+    [self.view addSubview:titleBar];
+    
     scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 84, 320, 340)];
     scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.pagingEnabled = YES;
@@ -150,7 +155,7 @@ int numPanels;
     
     // SHOULD retrieve the home object
     NSError *error;
-    NSLog(@"Number of home objects... %lu",(unsigned long)[[managedObjectContext executeFetchRequest:fetchRequest error:&error] count]);
+//    NSLog(@"Number of home objects... %lu",(unsigned long)[[managedObjectContext executeFetchRequest:fetchRequest error:&error] count]);
     self.home = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] firstObject];
     self.myDecks = home.availableDecks; // Points to NSSet of decks
     
