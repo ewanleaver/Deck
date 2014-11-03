@@ -7,6 +7,7 @@
 //
 
 #import "HomeViewController.h"
+#import "ContainerViewController.h"
 #import "StudyViewController.h"
 #import "KanjiListViewController.h"
 #import "HomePanel.h"
@@ -43,23 +44,32 @@ NSMutableArray *decksForPages;
 int numPanels;
 
 -(void)StartStudy:(id)sender {
-
-    // Get current page
-//    CGFloat pageWidth = self.scrollView.frame.size.width;
-//    int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     
     // Initiate StudyViewController with the appropriate deck to study
-    StudyViewController *BackgroundView = [[StudyViewController alloc] initWithDeck:[myDecksArray objectAtIndex:pageControl.currentPage]];
-    [self presentViewController:BackgroundView animated:YES completion:nil];
+    StudyViewController *studyView = [[StudyViewController alloc] initWithDeck:[myDecksArray objectAtIndex:pageControl.currentPage]];
 
-//        [self performSegueWithIdentifier:@"showStudyView" sender:self];
-        
-//        UIStoryboard *storyboard = self.storyboard;
-//        StudyViewController *controller = [storyboard
-//                                        instantiateViewControllerWithIdentifier:@"studyViewController"];
-//        [self.navigationController pushViewController:controller animated:YES];
+    [(ContainerViewController*)self.parentViewController setSelectedViewController:studyView];
     
 }
+
+//-(void)StartStudy:(id)sender {
+//    
+//    // Get current page
+//    //    CGFloat pageWidth = self.scrollView.frame.size.width;
+//    //    int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+//    
+//    // Initiate StudyViewController with the appropriate deck to study
+//    StudyViewController *BackgroundView = [[StudyViewController alloc] initWithDeck:[myDecksArray objectAtIndex:pageControl.currentPage]];
+//    [self presentViewController:BackgroundView animated:YES completion:nil];
+//    
+//    //        [self performSegueWithIdentifier:@"showStudyView" sender:self];
+//    
+//    //        UIStoryboard *storyboard = self.storyboard;
+//    //        StudyViewController *controller = [storyboard
+//    //                                        instantiateViewControllerWithIdentifier:@"studyViewController"];
+//    //        [self.navigationController pushViewController:controller animated:YES];
+//    
+//}
 
 - (void)studyButtonTouched:(id)sender {
     if (!studyComplete) {

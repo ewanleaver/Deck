@@ -17,6 +17,8 @@
 - (IBAction)AddCard:(id)sender;
 //- (IBAction)AddTen:(id)sender;
 
+@property (nonatomic, retain) UIButton *homeButton;
+
 @property (weak, nonatomic) IBOutlet UILabel *deckEmptyLabel;
 @property (weak, nonatomic) IBOutlet UIButton *keepStudyingButton;
 

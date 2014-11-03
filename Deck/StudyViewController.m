@@ -7,6 +7,7 @@
 //
 
 #import "StudyViewController.h"
+#import "ContainerViewController.h"
 #import "Deck.h"
 #import "Character.h"
 #import "Card.h"
@@ -16,6 +17,8 @@
 @end
 
 @implementation StudyViewController
+
+@synthesize homeButton;
 
 @synthesize deckStudying;
 @synthesize nextCardNo;
@@ -63,7 +66,10 @@ int maxAllowedVisibleCards;
 #define CORNER_RADIUS 25
 
 -(IBAction)StopStudy:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    //[self dismissViewControllerAnimated:YES completion:nil];
+    NSLog(@"doing stuff.");
+    ContainerViewController* rootView = (ContainerViewController*)self.parentViewController;
+    [(ContainerViewController*)self.parentViewController setSelectedViewController:rootView.viewControllers[0]];
 }
 
 -(IBAction)AddCard:(id)sender {
@@ -510,8 +516,13 @@ int maxAllowedVisibleCards;
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-
+    
+    homeButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 15, 59, 36)];
+    [homeButton.titleLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 20.0f]];
+    [homeButton setTitle:@"Home" forState:UIControlStateNormal];
+    [homeButton addTarget:self action:@selector(StopStudy:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:homeButton];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {

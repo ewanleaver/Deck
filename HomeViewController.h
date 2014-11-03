@@ -21,8 +21,6 @@
 @property (nonatomic,strong) NSSet* myDecks;
 @property (nonatomic,strong) NSArray* myDecksArray;
 
-//@property (nonatomic, strong) IBOutlet StudyButton * coolButton;
-
 @property (nonatomic, retain) UIScrollView *scrollView;
 @property (nonatomic, retain) UIPageControl *pageControl;
 @property (nonatomic, retain) StudyButton *studyButton;

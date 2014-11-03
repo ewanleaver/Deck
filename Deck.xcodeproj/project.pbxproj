@@ -14,6 +14,8 @@
 		402047D81A0271F100C76B7B /* Home.m in Sources */ = {isa = PBXBuildFile; fileRef = 402047D71A0271F100C76B7B /* Home.m */; };
 		402E71B119FC69E6003E4C86 /* TempStudyDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 402E71B019FC69E6003E4C86 /* TempStudyDetails.m */; };
 		402E71B419FC6AF7003E4C86 /* StudyDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 402E71B319FC6AF7003E4C86 /* StudyDetails.m */; };
+		4042506A1A0705490055F97C /* Animator.m in Sources */ = {isa = PBXBuildFile; fileRef = 404250691A0705490055F97C /* Animator.m */; };
+		4042506D1A07065F0055F97C /* ContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4042506C1A07065F0055F97C /* ContainerViewController.m */; };
 		40BB524119446EC50088EC12 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BB523F19446EC50088EC12 /* HomeViewController.m */; };
 		40BC9E3D1905537100D6A792 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E3C1905537100D6A792 /* Foundation.framework */; };
 		40BC9E3F1905537100D6A792 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E3E1905537100D6A792 /* CoreGraphics.framework */; };
@@ -22,8 +24,6 @@
 		40BC9E491905537100D6A792 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E471905537100D6A792 /* InfoPlist.strings */; };
 		40BC9E4B1905537100D6A792 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E4A1905537100D6A792 /* main.m */; };
 		40BC9E4F1905537100D6A792 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E4E1905537100D6A792 /* AppDelegate.m */; };
-		40BC9E521905537100D6A792 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E501905537100D6A792 /* Main_iPhone.storyboard */; };
-		40BC9E551905537100D6A792 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E531905537100D6A792 /* Main_iPad.storyboard */; };
 		40BC9E601905537100D6A792 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E5F1905537100D6A792 /* Images.xcassets */; };
 		40BC9E671905537100D6A792 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E661905537100D6A792 /* XCTest.framework */; };
 		40BC9E681905537100D6A792 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E3C1905537100D6A792 /* Foundation.framework */; };
@@ -66,6 +66,10 @@
 		402E71B019FC69E6003E4C86 /* TempStudyDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TempStudyDetails.m; path = Deck/TempStudyDetails.m; sourceTree = "<group>"; };
 		402E71B219FC6AF7003E4C86 /* StudyDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StudyDetails.h; path = Deck/StudyDetails.h; sourceTree = "<group>"; };
 		402E71B319FC6AF7003E4C86 /* StudyDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StudyDetails.m; path = Deck/StudyDetails.m; sourceTree = "<group>"; };
+		404250681A0705490055F97C /* Animator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Animator.h; sourceTree = "<group>"; };
+		404250691A0705490055F97C /* Animator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Animator.m; sourceTree = "<group>"; };
+		4042506B1A07065F0055F97C /* ContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContainerViewController.h; sourceTree = "<group>"; };
+		4042506C1A07065F0055F97C /* ContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContainerViewController.m; sourceTree = "<group>"; };
 		40BB523E19446EC50088EC12 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeViewController.h; path = ../HomeViewController.h; sourceTree = "<group>"; };
 		40BB523F19446EC50088EC12 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeViewController.m; path = ../HomeViewController.m; sourceTree = "<group>"; };
 		40BC9E391905537100D6A792 /* Deck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Deck.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,8 +83,6 @@
 		40BC9E4C1905537100D6A792 /* Deck-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Deck-Prefix.pch"; sourceTree = "<group>"; };
 		40BC9E4D1905537100D6A792 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		40BC9E4E1905537100D6A792 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		40BC9E511905537100D6A792 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		40BC9E541905537100D6A792 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		40BC9E5F1905537100D6A792 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		40BC9E651905537100D6A792 /* DeckTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DeckTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		40BC9E661905537100D6A792 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -172,8 +174,6 @@
 				76AA7EC41966888E00AB3BE0 /* Study UI */,
 				40BC9E83190554F400D6A792 /* KanjiListViewController.h */,
 				40BC9E84190554F400D6A792 /* KanjiListViewController.m */,
-				40BC9E501905537100D6A792 /* Main_iPhone.storyboard */,
-				40BC9E531905537100D6A792 /* Main_iPad.storyboard */,
 				76AA7EC31966875E00AB3BE0 /* CoreData */,
 				40BC9E5F1905537100D6A792 /* Images.xcassets */,
 				40BC9E451905537100D6A792 /* Supporting Files */,
@@ -214,6 +214,8 @@
 		76310F0C1946D6AD006A329C /* Home UI */ = {
 			isa = PBXGroup;
 			children = (
+				4042506B1A07065F0055F97C /* ContainerViewController.h */,
+				4042506C1A07065F0055F97C /* ContainerViewController.m */,
 				40BB523E19446EC50088EC12 /* HomeViewController.h */,
 				40BB523F19446EC50088EC12 /* HomeViewController.m */,
 				4007A05919474569003292BF /* HomePanel.h */,
@@ -222,6 +224,8 @@
 				76310F071946CA35006A329C /* Bubble.m */,
 				76310F0D1946D7E7006A329C /* StudyButton.h */,
 				76310F0E1946D7E7006A329C /* StudyButton.m */,
+				404250681A0705490055F97C /* Animator.h */,
+				404250691A0705490055F97C /* Animator.m */,
 			);
 			name = "Home UI";
 			sourceTree = "<group>";
@@ -351,11 +355,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4001D13C19EB62B000C5B688 /* Study Background.png in Resources */,
-				40BC9E551905537100D6A792 /* Main_iPad.storyboard in Resources */,
 				4001D13A19EB5D9500C5B688 /* Study Background@2x.png in Resources */,
 				762D453F1945878900CE422C /* StudyViewController.xib in Resources */,
 				40BC9E601905537100D6A792 /* Images.xcassets in Resources */,
-				40BC9E521905537100D6A792 /* Main_iPhone.storyboard in Resources */,
 				40BC9E491905537100D6A792 /* InfoPlist.strings in Resources */,
 				40E9BDF7192841A000EAFB2D /* KanjiParser.sqlite in Resources */,
 			);
@@ -378,6 +380,7 @@
 			files = (
 				40BC9E85190554F400D6A792 /* KanjiListViewController.m in Sources */,
 				40BC9E4F1905537100D6A792 /* AppDelegate.m in Sources */,
+				4042506D1A07065F0055F97C /* ContainerViewController.m in Sources */,
 				76310F081946CA35006A329C /* Bubble.m in Sources */,
 				76AA7EBE1966868E00AB3BE0 /* CardViewController.m in Sources */,
 				402E71B119FC69E6003E4C86 /* TempStudyDetails.m in Sources */,
@@ -385,6 +388,7 @@
 				76310F0F1946D7E7006A329C /* StudyButton.m in Sources */,
 				762D453E1945878900CE422C /* StudyViewController.m in Sources */,
 				762D45391945877F00CE422C /* Card.m in Sources */,
+				4042506A1A0705490055F97C /* Animator.m in Sources */,
 				40BB524119446EC50088EC12 /* HomeViewController.m in Sources */,
 				402047D81A0271F100C76B7B /* Home.m in Sources */,
 				402047D51A0271C900C76B7B /* Deck.m in Sources */,
@@ -420,22 +424,6 @@
 				40BC9E481905537100D6A792 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		40BC9E501905537100D6A792 /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				40BC9E511905537100D6A792 /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		40BC9E531905537100D6A792 /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				40BC9E541905537100D6A792 /* Base */,
-			);
-			name = Main_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 		40BC9E701905537100D6A792 /* InfoPlist.strings */ = {

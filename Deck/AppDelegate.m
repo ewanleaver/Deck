@@ -120,12 +120,12 @@
 - (NSArray *)_configuredChildViewControllers {
     
     HomeViewController *homeViewController = [[HomeViewController alloc] init];
-    StudyViewController *studyViewController = [[StudyViewController alloc] init];
+    //StudyViewController *studyViewController = [[StudyViewController alloc] init];
     
     NSMutableArray *childViewControllers = [[NSMutableArray alloc] initWithCapacity:2];
     
     [childViewControllers addObject:homeViewController];
-    [childViewControllers addObject:studyViewController];
+    //[childViewControllers addObject:studyViewController];
     
     return childViewControllers;
 }
