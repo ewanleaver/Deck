@@ -10,6 +10,7 @@
 
 #import "ContainerViewController.h"
 #import "HomeViewController.h"
+#import "DeckContentViewController.h"
 #import "StudyViewController.h"
 #import "Animator.h"
 
@@ -110,13 +111,15 @@
 
 - (NSArray *)_configuredChildViewControllers {
     
-    HomeViewController *homeViewController = [[HomeViewController alloc] init];
     StudyViewController *studyViewController = [[StudyViewController alloc] init];
+    HomeViewController *homeViewController = [[HomeViewController alloc] init];
+    DeckContentViewController *deckContentViewController = [[DeckContentViewController alloc] init];
     
-    NSMutableArray *childViewControllers = [[NSMutableArray alloc] initWithCapacity:2];
+    NSMutableArray *childViewControllers = [[NSMutableArray alloc] initWithCapacity:3];
     
-    [childViewControllers addObject:homeViewController];
     [childViewControllers addObject:studyViewController];
+    [childViewControllers addObject:homeViewController];
+    [childViewControllers addObject:deckContentViewController];
     
     return childViewControllers;
 }

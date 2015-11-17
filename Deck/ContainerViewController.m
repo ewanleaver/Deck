@@ -69,7 +69,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.selectedViewController = (self.selectedViewController ?: self.viewControllers[0]);
+    self.selectedViewController = (self.selectedViewController ?: self.viewControllers[1]);
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
