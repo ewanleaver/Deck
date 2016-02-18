@@ -9,9 +9,9 @@
 #import "Bubble.h"
 #import "HomePanel.h"
 
-@interface Bubble ()
+#define MAX_BUBBLE_SIZE 120
 
-@property (nonatomic, assign) int maxSize;
+@interface Bubble ()
 
 @end
 
@@ -21,11 +21,10 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+
         bubbleColour = [UIColor redColor];
         [self setBackgroundColor:[UIColor clearColor]];
         
-        self.maxSize = 120;
     }
     return self;
 }
@@ -34,13 +33,11 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+
         inputSize = bubbleSize;
         totalCards = totalSize;
         bubbleColour = inputColor;
         [self setBackgroundColor:[UIColor clearColor]];
-        
-        self.maxSize = 120;
     }
     
     // Add the tap gesture recognizer to the view
@@ -58,13 +55,12 @@
     //[numToStudyLabel setText:@"Test Label"];
     
     // Max value to add to base value (of 100) is currently 120.
-    
     float temp = pow(inputSize,0.5);
 
-    actualSize = (temp/20) * self.maxSize; // Maxes out at 400 cards to study
+    actualSize = (temp/20) * MAX_BUBBLE_SIZE; // Currently maxes out at 400 cards to study
     
-    if (actualSize > self.maxSize) {
-        actualSize = self.maxSize;
+    if (actualSize > MAX_BUBBLE_SIZE) {
+        actualSize = MAX_BUBBLE_SIZE;
     }
     
     float diameter = 100 + actualSize;
@@ -73,10 +69,10 @@
     // Calc ratio
     temp = pow(totalCards,0.5);
     
-    int temp2 = (temp/20) * self.maxSize;
+    int temp2 = (temp/20) * MAX_BUBBLE_SIZE;
     
-    if (temp2 > self.maxSize) {
-        temp2 = self.maxSize;
+    if (temp2 > MAX_BUBBLE_SIZE) {
+        temp2 = MAX_BUBBLE_SIZE;
     }
     
     float diameter2 = temp2 + 100;
