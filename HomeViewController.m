@@ -46,8 +46,7 @@ NSMutableArray *decksForPages;
 int numPanels;
 
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.delegate = [[UIApplication sharedApplication] delegate];
@@ -69,9 +68,6 @@ int numPanels;
 }
 
 - (void)preparePanels {
-    
-    
-    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription
                                    entityForName:@"Home" inManagedObjectContext:managedObjectContext];
@@ -120,7 +116,6 @@ int numPanels;
 }
 
 - (void)prepareSubviews {
-    
     decksForPages = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < numPanels; i++) {
@@ -256,11 +251,9 @@ int numPanels;
         studyComplete = NO;
         studyButton.userInteractionEnabled = YES;
     }
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    
     // YAY. Now page control correctly displays available decks.
     self.pageControl.numberOfPages = numPanels;
     
@@ -278,9 +271,7 @@ int numPanels;
             [NSThread sleepForTimeInterval:0.1f];
             [[panels objectAtIndex:page] showComment];
         }
-        
     }
-    
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
@@ -352,8 +343,7 @@ int numPanels;
     pageControlBeingUsed = YES; // To prevent flashing
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated
 }
