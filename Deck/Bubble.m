@@ -9,10 +9,15 @@
 #import "Bubble.h"
 #import "HomePanel.h"
 
+@interface Bubble ()
+
+@property (nonatomic, assign) int maxSize;
+
+@end
+
 @implementation Bubble
 
 @synthesize numToStudyLabel;
-@synthesize bubbleToggled;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -21,9 +26,10 @@
         // Initialization code
         bubbleColour = [UIColor redColor];
         [self setBackgroundColor:[UIColor clearColor]];
+        
+        self.maxSize = 120;
     }
     return self;
-
 }
 
 - (instancetype)initBubbleWithFrame:(CGRect)frame colour:(UIColor*)inputColor size:(int)bubbleSize totalSize:(int)totalSize
@@ -35,16 +41,17 @@
         totalCards = totalSize;
         bubbleColour = inputColor;
         [self setBackgroundColor:[UIColor clearColor]];
+        
+        self.maxSize = 120;
     }
     
     // Add the tap gesture recognizer to the view
     UITapGestureRecognizer* tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)];
     [self addGestureRecognizer:tapGestureRecognizer];
     
-    bubbleToggled = false;
+    self.bubbleToggled = false;
     
     return self;
-    
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -56,10 +63,10 @@
     
     float temp = pow(inputSize,0.5);
 
-    actualSize = (temp/20) * 120; // Maxes out at 400 cards to study
+    actualSize = (temp/20) * self.maxSize; // Maxes out at 400 cards to study
     
-    if (actualSize > 120) {
-        actualSize = 120;
+    if (actualSize > self.maxSize) {
+        actualSize = self.maxSize;
     }
     
     float diameter = 100 + actualSize;
@@ -68,10 +75,10 @@
     // Calc ratio
     temp = pow(totalCards,0.5);
     
-    int temp2 = (temp/20) * 120;
+    int temp2 = (temp/20) * self.maxSize;
     
-    if (temp2 > 120) {
-        temp2 = 120;
+    if (temp2 > self.maxSize) {
+        temp2 = self.maxSize;
     }
     
     float diameter2 = temp2 + 100;
@@ -95,19 +102,17 @@
     } else {
         CGContextSetFillColorWithColor(context, bubbleColour.CGColor);
         CGContextFillPath(context);
-    } 
-
- }
+    }
+}
 
 - (void)handleTapFrom:(UIGestureRecognizer*)recognizer {
     
     if (inputSize != 0) {
         
         HomePanel* controller = (HomePanel*) [self superview];
-        
         [controller changeBubbleView];
     
-        if (!bubbleToggled) {
+        if (!self.bubbleToggled) {
             
             // Grow
             [UIView animateWithDuration:0.09f
@@ -141,7 +146,7 @@
                                  completion:^(BOOL fin) { }  ]; }]; }]; }]; }];
             
         } else {
-            // Revert
+            // Shrink
             
             [UIView animateWithDuration:0.09f
                                   delay:0
@@ -175,8 +180,7 @@
         }
         
         // Flip the toggle
-        bubbleToggled = !bubbleToggled;
-    
+        self.bubbleToggled = !self.bubbleToggled;
     }
 }
 

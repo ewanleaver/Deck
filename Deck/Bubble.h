@@ -17,8 +17,8 @@
     float ratio;    // Make this more descriptive
 }
 
-@property (nonatomic,strong) UILabel* numToStudyLabel;
-@property bool bubbleToggled;
+@property (nonatomic, strong) UILabel* numToStudyLabel;
+@property (nonatomic, assign) bool bubbleToggled;
 
 - (instancetype)initBubbleWithFrame:(CGRect)frame colour:(UIColor*)bubbleColor size:(int)bubbleSize totalSize:(int)totalSize;
 
