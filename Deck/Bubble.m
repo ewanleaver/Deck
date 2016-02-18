@@ -17,8 +17,6 @@
 
 @implementation Bubble
 
-@synthesize numToStudyLabel;
-
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
