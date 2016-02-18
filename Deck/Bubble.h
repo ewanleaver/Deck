@@ -14,15 +14,13 @@
     int actualSize;
     
     int totalCards;
-    
-    float ratio;
-
+    float ratio;    // Make this more descriptive
 }
 
 @property (nonatomic,strong) UILabel* numToStudyLabel;
 @property bool bubbleToggled;
 
-- (instancetype)initBubble:(CGRect)frame colour:(UIColor*)bubbleColor size:(int)bubbleSize totalSize:(int)totalSize;
+- (instancetype)initBubbleWithFrame:(CGRect)frame colour:(UIColor*)bubbleColor size:(int)bubbleSize totalSize:(int)totalSize;
 
 - (void)handleTapFrom:(UIGestureRecognizer*)recognizer;
 

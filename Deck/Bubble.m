@@ -26,7 +26,7 @@
 
 }
 
-- (instancetype)initBubble:(CGRect)frame colour:(UIColor*)inputColor size:(int)bubbleSize totalSize:(int)totalSize
+- (instancetype)initBubbleWithFrame:(CGRect)frame colour:(UIColor*)inputColor size:(int)bubbleSize totalSize:(int)totalSize
 {
     self = [super initWithFrame:frame];
     if (self) {
