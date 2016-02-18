@@ -19,6 +19,8 @@
 
 @interface HomeViewController ()
 
+@property (nonatomic, weak) id delegate;
+
 @end
 
 @implementation HomeViewController
@@ -43,29 +45,20 @@ NSArray *panels;
 NSMutableArray *decksForPages;
 int numPanels;
 
-// Consider deleting this:
-//- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-//{
-//    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-//    if (self) {
-//        // Custom initialization
-//    }
-//    return self;
-//}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.delegate = [[UIApplication sharedApplication] delegate];
+    self.managedObjectContext = [self.delegate managedObjectContext];
+    
     // Do any additional setup after loading the view from its nib.
     //[[segue destinationViewController] setManagedObjectContext:self.managedObjectContext];
     
-    // This doesn't belong here I think...
-    //self.managedObjectContext = [delegate managedObjectContext];
-    
-//    id delegate = [[UIApplication sharedApplication] delegate];
-//    
 //    ListViewController *controller;// = (MasterViewController *)navigationController.topViewController;
 //    controller.managedObjectContext = [delegate managedObjectContext];
+
     
     [self preparePanels];
     //[self prepareSubviews];
@@ -77,8 +70,7 @@ int numPanels;
 
 - (void)preparePanels {
     
-    id delegate = [[UIApplication sharedApplication] delegate];
-    self.managedObjectContext = [delegate managedObjectContext];
+    
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription
@@ -170,9 +162,6 @@ int numPanels;
             title = @"JLPT N3";
             bubbleColor = [UIColor colorWithRed:(100.0 / 255.0) green:(240.0 / 255.0) blue:(120.0 / 255.0) alpha: 1.0];
             
-            id delegate = [[UIApplication sharedApplication] delegate];
-            self.managedObjectContext = [delegate managedObjectContext];
-            
             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
             NSEntityDescription *entity = [NSEntityDescription
                                            entityForName:@"Character" inManagedObjectContext:managedObjectContext];
@@ -194,9 +183,6 @@ int numPanels;
         } else if (i == 2) {
             title = @"JLPT N2";
             bubbleColor = [UIColor colorWithRed:(255.0 / 255.0) green:(139.0 / 255.0) blue:(88.0 / 255.0) alpha: 1];
-            
-            id delegate = [[UIApplication sharedApplication] delegate];
-            self.managedObjectContext = [delegate managedObjectContext];
             
             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
             NSEntityDescription *entity = [NSEntityDescription
