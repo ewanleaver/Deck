@@ -13,9 +13,9 @@
 
 @interface Character : NSManagedObject
 
-@property (nonatomic, retain) NSString * id_num;
-@property (nonatomic, retain) NSString * jlpt;
-@property (nonatomic, retain) NSString * literal;
+@property (nonatomic, retain) NSString *id_num;
+@property (nonatomic, retain) NSString *jlpt;
+@property (nonatomic, retain) NSString *literal;
 @property (nonatomic, retain) id meaning;
 @property (nonatomic, retain) id reading_kun;
 @property (nonatomic, retain) id reading_on;

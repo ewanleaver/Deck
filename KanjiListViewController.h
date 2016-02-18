@@ -15,7 +15,7 @@
 }
 
 
-@property (nonatomic,strong) NSManagedObjectContext* managedObjectContext;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 @property (nonatomic, strong) NSArray *characters;
 

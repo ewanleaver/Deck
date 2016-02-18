@@ -13,7 +13,7 @@
 
 @interface Home : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * numDecks;
+@property (nonatomic, retain) NSNumber *numDecks;
 @property (nonatomic, retain) NSSet *availableDecks;
 @end
 

@@ -18,11 +18,10 @@
     UILabel *comment;
     
     bool bubbleToggled;
-    
 }
 
-- (instancetype)initWithFrameAndDeck:(CGRect)frame deck:(Deck*)d;
-- (instancetype)initWithFrameAndColour:(CGRect)frame colour:(UIColor*)inputColour numToStudy:(int)numToStudy numTotal:(int)cardsTotal;
+- (instancetype)initWithFrame:(CGRect)frame deck:(Deck*)d;
+- (instancetype)initWithFrame:(CGRect)frame colour:(UIColor*)inputColour numToStudy:(int)numToStudy numTotal:(int)cardsTotal;
 
 - (void)changeBubbleView;
 

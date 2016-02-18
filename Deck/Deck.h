@@ -14,8 +14,8 @@
 @interface Deck : NSManagedObject
 
 @property (nonatomic, retain) id bubbleColour;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * numToStudy;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSNumber *numToStudy;
 @property (nonatomic, retain) NSSet *cardsInDeck;
 @property (nonatomic, retain) NSManagedObject *home;
 @end

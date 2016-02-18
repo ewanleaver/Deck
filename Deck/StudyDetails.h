@@ -13,11 +13,11 @@
 
 @interface StudyDetails : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * eFactor;
-@property (nonatomic, retain) NSNumber * interval;
-@property (nonatomic, retain) NSNumber * intervalNum;
-@property (nonatomic, retain) NSDate * lastStudied;
-@property (nonatomic, retain) NSNumber * quality;
+@property (nonatomic, retain) NSNumber *eFactor;
+@property (nonatomic, retain) NSNumber *interval;
+@property (nonatomic, retain) NSNumber *intervalNum;
+@property (nonatomic, retain) NSDate *lastStudied;
+@property (nonatomic, retain) NSNumber *quality;
 @property (nonatomic, retain) Character *character;
 @property (nonatomic, retain) TempStudyDetails *tempStudyDetails;
 

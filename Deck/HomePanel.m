@@ -27,7 +27,7 @@ Bubble *bubble;
 
 NSArray *comments;
 
-- (instancetype)initWithFrameAndDeck:(CGRect)frame deck:(Deck *)d {
+- (instancetype)initWithFrame:(CGRect)frame deck:(Deck *)d {
     
     // Unarchive and create bubble colour
     NSDictionary *colourData = [NSKeyedUnarchiver unarchiveObjectWithData:d.bubbleColour];
@@ -43,7 +43,7 @@ NSArray *comments;
     return [self initWithFrame:frame];
 }
 
-- (instancetype)initWithFrameAndColour:(CGRect)frame colour:(UIColor *)inputColour numToStudy:(int)cardsToStudy numTotal:(int)cardsTotal {
+- (instancetype)initWithFrame:(CGRect)frame colour:(UIColor *)inputColour numToStudy:(int)cardsToStudy numTotal:(int)cardsTotal {
     
     bubbleColour = inputColour;
     customColour = YES; // Override default bubble colour

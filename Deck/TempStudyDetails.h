@@ -13,9 +13,9 @@
 
 @interface TempStudyDetails : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * numCorrect;
-@property (nonatomic, retain) NSNumber * numIncorrect;
-@property (nonatomic, retain) NSNumber * isStudying;
+@property (nonatomic, retain) NSNumber *numCorrect;
+@property (nonatomic, retain) NSNumber *numIncorrect;
+@property (nonatomic, retain) NSNumber *isStudying;
 @property (nonatomic, retain) StudyDetails *studyDetails;
 
 @end
