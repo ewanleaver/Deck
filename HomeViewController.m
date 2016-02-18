@@ -36,55 +36,22 @@
 bool pageControlBeingUsed;
 bool studyComplete;
 
+
+// These are class variables?
+// Consider making these private variables
 NSArray *panels;
-
 NSMutableArray *decksForPages;
-
 int numPanels;
 
--(IBAction)StartStudy:(id)sender {
-
-    // Get current page
-    CGFloat pageWidth = self.scrollView.frame.size.width;
-    //int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-    
-    // Initiate StudyViewController with the appropriate deck to study
-    StudyViewController *BackgroundView = [[StudyViewController alloc] initWithDeck:[myDecksArray objectAtIndex:pageControl.currentPage]];
-    [self presentViewController:BackgroundView animated:YES completion:nil];
-
-//        [self performSegueWithIdentifier:@"showStudyView" sender:self];
-        
-//        UIStoryboard *storyboard = self.storyboard;
-//        StudyViewController *controller = [storyboard
-//                                        instantiateViewControllerWithIdentifier:@"studyViewController"];
-//        [self.navigationController pushViewController:controller animated:YES];
-    
-}
-
-- (IBAction)studyButtonTouch:(id)sender {
-    if (!studyComplete) {
-        [UIView animateWithDuration:0.1 animations:^{
-            [studyButton.layer setBackgroundColor:[UIColor colorWithRed:(20.0 / 255.0) green:(150.0 / 255.0) blue:(80.0 / 255.0) alpha: 1.0].CGColor];
-        } completion:NULL];
-    }
-}
-
-- (IBAction)studyButtonRelease:(id)sender {
-    if (!studyComplete) {
-        [UIView animateWithDuration:0.1 animations:^{
-            [studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 1.0].CGColor];
-        } completion:NULL];
-    }
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+// Consider deleting this:
+//- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+//{
+//    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+//    if (self) {
+//        // Custom initialization
+//    }
+//    return self;
+//}
 
 - (void)viewDidLoad
 {
@@ -92,7 +59,7 @@ int numPanels;
     // Do any additional setup after loading the view from its nib.
     //[[segue destinationViewController] setManagedObjectContext:self.managedObjectContext];
     
-    
+    // This doesn't belong here I think...
     //self.managedObjectContext = [delegate managedObjectContext];
     
 //    id delegate = [[UIApplication sharedApplication] delegate];
@@ -122,12 +89,12 @@ int numPanels;
     NSError *error;
     NSLog(@"Number of home objects... %lu",(unsigned long)[[managedObjectContext executeFetchRequest:fetchRequest error:&error] count]);
     self.home = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] firstObject];
-    self.myDecks = home.availableDecks; // Points to NSSet of decks
+    self.myDecks = home.availableDecks; // Points to NSSet of decks (property of Deck Entity)
     
+    // Sort decks by name and store in NSArray
     myDecksArray = [myDecks sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:NO]]];
     
     for (int i = 0; i < [myDecks count]; i++) {
-        
         HomePanel *panel;
         
         Deck *d = [myDecksArray objectAtIndex:i];
@@ -141,16 +108,16 @@ int numPanels;
         [[panel cardLabel] setText:[NSString stringWithFormat:@"%@",d.numToStudy]];
         
         [self.scrollView addSubview:panel];
-
     }
     
     panels = [scrollView subviews];
     numPanels = (int)[panels count];
     
     if ([myDecks count] != [panels count]) {
-        NSLog(@"WARNING! There has been a terrible terrible mistake somewhere.");
+        NSLog(@"WARNING! Number of decks does not match number of panels.");
     }
     
+    // Check if intial deck has no cards left to study
     if ([[panels objectAtIndex:0] toStudyCount] == 0) {
         studyComplete = YES;
         studyButton.userInteractionEnabled = NO;
@@ -158,7 +125,6 @@ int numPanels;
         studyComplete = NO;
         studyButton.userInteractionEnabled = YES;
     }
-    
 }
 
 - (void)prepareSubviews {
@@ -405,5 +371,43 @@ int numPanels;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated
 }
+
+#pragma mark - IBActions
+
+-(IBAction)StartStudy:(id)sender {
+    
+    // Get current page
+    CGFloat pageWidth = self.scrollView.frame.size.width;
+    //int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+    
+    // Initiate StudyViewController with the appropriate deck to study
+    StudyViewController *BackgroundView = [[StudyViewController alloc] initWithDeck:[myDecksArray objectAtIndex:pageControl.currentPage]];
+    [self presentViewController:BackgroundView animated:YES completion:nil];
+    
+    //        [self performSegueWithIdentifier:@"showStudyView" sender:self];
+    
+    //        UIStoryboard *storyboard = self.storyboard;
+    //        StudyViewController *controller = [storyboard
+    //                                        instantiateViewControllerWithIdentifier:@"studyViewController"];
+    //        [self.navigationController pushViewController:controller animated:YES];
+    
+}
+
+- (IBAction)studyButtonTouch:(id)sender {
+    if (!studyComplete) {
+        [UIView animateWithDuration:0.1 animations:^{
+            [studyButton.layer setBackgroundColor:[UIColor colorWithRed:(20.0 / 255.0) green:(150.0 / 255.0) blue:(80.0 / 255.0) alpha: 1.0].CGColor];
+        } completion:NULL];
+    }
+}
+
+- (IBAction)studyButtonRelease:(id)sender {
+    if (!studyComplete) {
+        [UIView animateWithDuration:0.1 animations:^{
+            [studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 1.0].CGColor];
+        } completion:NULL];
+    }
+}
+
 
 @end

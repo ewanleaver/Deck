@@ -13,7 +13,7 @@
 @interface HomePanel : UIView {
     
     UIColor *bubbleColour; // Put variables here to make them INSTANCE variables!
-    bool customColour;     // Putting them in the .m file makes them class vairables...
+    bool customColour;     // Putting them in the .m file makes them class variables...
     
     UILabel *comment;
     

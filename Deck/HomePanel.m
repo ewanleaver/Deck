@@ -59,7 +59,6 @@ NSArray *comments;
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        
         titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 120,20,240,50)];
         [titleLabel setTextAlignment:NSTextAlignmentCenter];
         [titleLabel setFont:[UIFont systemFontOfSize:35.0f]];
