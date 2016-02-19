@@ -84,7 +84,7 @@ NSArray *comments;
         }
         
         if (customColour) {
-            bubble = [[Bubble alloc] initBubbleWithFrame:CGRectMake(self.frame.size.width/2 - 110,100,220,220) colour:bubbleColour size:toStudyCount  totalSize:cardCount];
+            bubble = [[Bubble alloc] initBubbleWithFrame:CGRectMake(self.frame.size.width/2 - 110,100,220,220) colour:bubbleColour regularSize:toStudyCount  inflatedSize:cardCount];
             //bubble = [[Bubble alloc] init:CGRectMake(self.frame.size.width/2 - 90,40,180,180) colour:bubbleColour];
         } else {
             bubble = [[Bubble alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 110,100,220,220)];

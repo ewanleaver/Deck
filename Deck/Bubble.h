@@ -9,18 +9,19 @@
 #import <UIKit/UIKit.h>
 
 @interface Bubble : UIView {
-    UIColor *bubbleColour;
-    int inputSize;
-    int actualSize;
+    int inputRegularSize;
+    int normalisedRegularSize;
     
-    int totalCards;
-    float ratio;    // Make this more descriptive
+    int inputInflatedSize;
+    int normalisedInflatedSize;
+    float diameterRatio;
 }
 
-@property (nonatomic, strong) UILabel* numToStudyLabel;
+@property (nonatomic, strong) UIColor *colour;
+@property (nonatomic, strong) UILabel *numToStudyLabel;
 @property (nonatomic, assign) bool bubbleToggled;
 
-- (instancetype)initBubbleWithFrame:(CGRect)frame colour:(UIColor*)bubbleColor size:(int)bubbleSize totalSize:(int)totalSize;
+- (instancetype)initBubbleWithFrame:(CGRect)frame colour:(UIColor*)colour regularSize:(int)regularSize inflatedSize:(int)inflatedSize;
 
 - (void)handleTapFrom:(UIGestureRecognizer*)recognizer;
 

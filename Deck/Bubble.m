@@ -9,7 +9,8 @@
 #import "Bubble.h"
 #import "HomePanel.h"
 
-#define MAX_BUBBLE_SIZE 120
+#define BUBBLE_MAX_SIZE 120
+#define BUBBLE_BASE_DIAMETER 100
 
 @interface Bubble ()
 
@@ -22,26 +23,26 @@
     self = [super initWithFrame:frame];
     if (self) {
 
-        bubbleColour = [UIColor redColor];
+        self.colour = [UIColor redColor];
         [self setBackgroundColor:[UIColor clearColor]];
         
     }
     return self;
 }
 
-- (instancetype)initBubbleWithFrame:(CGRect)frame colour:(UIColor*)inputColor size:(int)bubbleSize totalSize:(int)totalSize
+- (instancetype)initBubbleWithFrame:(CGRect)frame colour:(UIColor*)colour regularSize:(int)regularSize inflatedSize:(int)inflatedSize
 {
     self = [super initWithFrame:frame];
     if (self) {
 
-        inputSize = bubbleSize;
-        totalCards = totalSize;
-        bubbleColour = inputColor;
+        inputRegularSize = regularSize;
+        inputInflatedSize = inflatedSize;
+        self.colour = colour;
         [self setBackgroundColor:[UIColor clearColor]];
     }
     
     // Add the tap gesture recognizer to the view
-    UITapGestureRecognizer* tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)];
     [self addGestureRecognizer:tapGestureRecognizer];
     
     self.bubbleToggled = false;
@@ -55,53 +56,50 @@
     //[numToStudyLabel setText:@"Test Label"];
     
     // Max value to add to base value (of 100) is currently 120.
-    float temp = pow(inputSize,0.5);
+    float temp = pow(inputRegularSize,0.5);
 
-    actualSize = (temp/20) * MAX_BUBBLE_SIZE; // Currently maxes out at 400 cards to study
-    
-    if (actualSize > MAX_BUBBLE_SIZE) {
-        actualSize = MAX_BUBBLE_SIZE;
+    normalisedRegularSize = (temp/20) * BUBBLE_MAX_SIZE; // Currently maxes out at 400 cards to study
+    if (normalisedRegularSize > BUBBLE_MAX_SIZE) {
+        normalisedRegularSize = BUBBLE_MAX_SIZE;
     }
+    float deflatedDiameter = normalisedRegularSize + BUBBLE_BASE_DIAMETER;
     
-    float diameter = 100 + actualSize;
     
+    // Calc deflated/inflated diameter ratio
+    temp = pow(inputInflatedSize,0.5);
     
-    // Calc ratio
-    temp = pow(totalCards,0.5);
-    
-    int temp2 = (temp/20) * MAX_BUBBLE_SIZE;
-    
-    if (temp2 > MAX_BUBBLE_SIZE) {
-        temp2 = MAX_BUBBLE_SIZE;
+    normalisedInflatedSize = (temp/20) * BUBBLE_MAX_SIZE;
+    if (normalisedInflatedSize > BUBBLE_MAX_SIZE) {
+        normalisedInflatedSize = BUBBLE_MAX_SIZE;
     }
+    float inflatedDiameter = normalisedInflatedSize + BUBBLE_BASE_DIAMETER;
     
-    float diameter2 = temp2 + 100;
-    
-    ratio = diameter2/diameter;
-    
+    diameterRatio = inflatedDiameter/deflatedDiameter;
     //NSLog(@"Cards: %d, Diameter: %d",inputSize,diameter);
     
-    CGFloat dashLengths[] = {8, 7.7};
+    
+    // Draw the bubble
+    CGFloat dashLengths[] = {8, 7.7};  // For empty deck case, we are drawing a dashed "empty" bubble
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, 2.0);
     CGContextSetLineDash(context, 0, dashLengths, 2);
     self.transform = CGAffineTransformIdentity;
-    CGRect rectangle = CGRectMake(self.frame.size.width/2 - diameter/2,self.frame.size.height/2 - diameter/2,diameter,diameter);
+    CGRect rectangle = CGRectMake(self.frame.size.width/2 - deflatedDiameter/2,self.frame.size.height/2 - deflatedDiameter/2,deflatedDiameter,deflatedDiameter);
     CGContextAddEllipseInRect(context, rectangle);
     
-    if (inputSize == 0) {
+    if (inputRegularSize == 0) {
         CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:(200.0 / 255.0) green:(200.0 / 255.0) blue:(200.0 / 255.0) alpha: 1].CGColor);
         CGContextStrokePath(UIGraphicsGetCurrentContext());
     } else {
-        CGContextSetFillColorWithColor(context, bubbleColour.CGColor);
+        CGContextSetFillColorWithColor(context, self.colour.CGColor);
         CGContextFillPath(context);
     }
 }
 
 - (void)handleTapFrom:(UIGestureRecognizer*)recognizer {
     
-    if (inputSize != 0) {
+    if (inputRegularSize != 0) {
         
         HomePanel* controller = (HomePanel*) [self superview];
         [controller changeBubbleView];
@@ -112,31 +110,31 @@
             [UIView animateWithDuration:0.09f
                                   delay:0
                                 options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                             animations:^{self.transform = CGAffineTransformMakeScale(ratio*1.08,ratio*1.08);self.alpha = 0.7;}
+                             animations:^{self.transform = CGAffineTransformMakeScale(diameterRatio*1.08,diameterRatio*1.08);self.alpha = 0.7;}
                              completion:^(BOOL fin) {
                                      
              [UIView animateWithDuration:0.08f
                                    delay:0
                                  options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                              animations:^{self.transform = CGAffineTransformMakeScale(ratio*0.95,ratio*0.95);}
+                              animations:^{self.transform = CGAffineTransformMakeScale(diameterRatio*0.95,diameterRatio*0.95);}
                               completion:^(BOOL fin) {
                               
               [UIView animateWithDuration:0.07f
                                     delay:0
                                   options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                               animations:^{self.transform = CGAffineTransformMakeScale(ratio*1.04,ratio*1.04);}
+                               animations:^{self.transform = CGAffineTransformMakeScale(diameterRatio*1.04,diameterRatio*1.04);}
                                completion:^(BOOL fin) {
                                    
                [UIView animateWithDuration:0.06f
                                      delay:0
                                    options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                animations:^{self.transform = CGAffineTransformMakeScale(ratio*0.975,ratio*0.975);}
+                                animations:^{self.transform = CGAffineTransformMakeScale(diameterRatio*0.975,diameterRatio*0.975);}
                                 completion:^(BOOL fin) {
                                 
                 [UIView animateWithDuration:0.05f
                                       delay:0
                                     options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                 animations:^{self.transform = CGAffineTransformMakeScale(ratio,ratio);}
+                                 animations:^{self.transform = CGAffineTransformMakeScale(diameterRatio,diameterRatio);}
                                  completion:^(BOOL fin) { }  ]; }]; }]; }]; }];
             
         } else {
