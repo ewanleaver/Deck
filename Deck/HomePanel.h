@@ -28,14 +28,12 @@
 - (void)showComment;
 - (void)hideComment;
 
-@property UILabel *titleLabel;
-
-@property int cardCount;
-@property UILabel *cardLabel;
-
-@property int toStudyCount;
-@property UILabel *toStudyLabel;
-
-@property UILabel *descLabel;
+// Consider whether these should be made private
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, assign) int cardCount;
+@property (nonatomic, strong) UILabel *cardLabel;
+@property (nonatomic, assign) int toStudyCount;
+@property (nonatomic, strong) UILabel *toStudyLabel;
+@property (nonatomic, strong) UILabel *descLabel;
 
 @end
