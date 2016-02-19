@@ -8,14 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface Bubble : UIView {
-    int inputRegularSize;
-    int normalisedRegularSize;
-    
-    int inputInflatedSize;
-    int normalisedInflatedSize;
-    float diameterRatio;
-}
+@interface Bubble : UIView 
 
 @property (nonatomic, strong) UIColor *colour;
 @property (nonatomic, strong) UILabel *numToStudyLabel;

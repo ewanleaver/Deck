@@ -14,6 +14,13 @@
 
 @interface Bubble ()
 
+@property (nonatomic, assign) int inputRegularSize;
+@property (nonatomic, assign) int inputInflatedSize;
+@property (nonatomic, assign) int normalisedRegularSize;
+@property (nonatomic, assign) int normalisedInflatedSize;
+
+@property (nonatomic, assign) float diameterRatio;
+
 @end
 
 @implementation Bubble
@@ -35,8 +42,8 @@
     self = [super initWithFrame:frame];
     if (self) {
 
-        inputRegularSize = regularSize;
-        inputInflatedSize = inflatedSize;
+        self.inputRegularSize = regularSize;
+        self.inputInflatedSize = inflatedSize;
         self.colour = colour;
         [self setBackgroundColor:[UIColor clearColor]];
     }
@@ -56,25 +63,25 @@
     //[numToStudyLabel setText:@"Test Label"];
     
     // Max value to add to base value (of 100) is currently 120.
-    float temp = pow(inputRegularSize,0.5);
+    float temp = pow(self.inputRegularSize,0.5);
 
-    normalisedRegularSize = (temp/20) * BUBBLE_MAX_SIZE; // Currently maxes out at 400 cards to study
-    if (normalisedRegularSize > BUBBLE_MAX_SIZE) {
-        normalisedRegularSize = BUBBLE_MAX_SIZE;
+    self.normalisedRegularSize = (temp/20) * BUBBLE_MAX_SIZE; // Currently maxes out at 400 cards to study
+    if (self.normalisedRegularSize > BUBBLE_MAX_SIZE) {
+        self.normalisedRegularSize = BUBBLE_MAX_SIZE;
     }
-    float deflatedDiameter = normalisedRegularSize + BUBBLE_BASE_DIAMETER;
+    float deflatedDiameter = self.normalisedRegularSize + BUBBLE_BASE_DIAMETER;
     
     
     // Calc deflated/inflated diameter ratio
-    temp = pow(inputInflatedSize,0.5);
+    temp = pow(self.inputInflatedSize,0.5);
     
-    normalisedInflatedSize = (temp/20) * BUBBLE_MAX_SIZE;
-    if (normalisedInflatedSize > BUBBLE_MAX_SIZE) {
-        normalisedInflatedSize = BUBBLE_MAX_SIZE;
+    self.normalisedInflatedSize = (temp/20) * BUBBLE_MAX_SIZE;
+    if (self.normalisedInflatedSize > BUBBLE_MAX_SIZE) {
+        self.normalisedInflatedSize = BUBBLE_MAX_SIZE;
     }
-    float inflatedDiameter = normalisedInflatedSize + BUBBLE_BASE_DIAMETER;
+    float inflatedDiameter = self.normalisedInflatedSize + BUBBLE_BASE_DIAMETER;
     
-    diameterRatio = inflatedDiameter/deflatedDiameter;
+    self.diameterRatio = inflatedDiameter/deflatedDiameter;
     //NSLog(@"Cards: %d, Diameter: %d",inputSize,diameter);
     
     
@@ -88,7 +95,7 @@
     CGRect rectangle = CGRectMake(self.frame.size.width/2 - deflatedDiameter/2,self.frame.size.height/2 - deflatedDiameter/2,deflatedDiameter,deflatedDiameter);
     CGContextAddEllipseInRect(context, rectangle);
     
-    if (inputRegularSize == 0) {
+    if (self.inputRegularSize == 0) {
         CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:(200.0 / 255.0) green:(200.0 / 255.0) blue:(200.0 / 255.0) alpha: 1].CGColor);
         CGContextStrokePath(UIGraphicsGetCurrentContext());
     } else {
@@ -99,7 +106,7 @@
 
 - (void)handleTapFrom:(UIGestureRecognizer*)recognizer {
     
-    if (inputRegularSize != 0) {
+    if (self.inputRegularSize != 0) {
         
         HomePanel* controller = (HomePanel*) [self superview];
         [controller changeBubbleView];
@@ -110,31 +117,31 @@
             [UIView animateWithDuration:0.09f
                                   delay:0
                                 options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                             animations:^{self.transform = CGAffineTransformMakeScale(diameterRatio*1.08,diameterRatio*1.08);self.alpha = 0.7;}
+                             animations:^{self.transform = CGAffineTransformMakeScale(self.diameterRatio*1.08,self.diameterRatio*1.08);self.alpha = 0.7;}
                              completion:^(BOOL fin) {
                                      
              [UIView animateWithDuration:0.08f
                                    delay:0
                                  options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                              animations:^{self.transform = CGAffineTransformMakeScale(diameterRatio*0.95,diameterRatio*0.95);}
+                              animations:^{self.transform = CGAffineTransformMakeScale(self.diameterRatio*0.95,self.diameterRatio*0.95);}
                               completion:^(BOOL fin) {
                               
               [UIView animateWithDuration:0.07f
                                     delay:0
                                   options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                               animations:^{self.transform = CGAffineTransformMakeScale(diameterRatio*1.04,diameterRatio*1.04);}
+                               animations:^{self.transform = CGAffineTransformMakeScale(self.diameterRatio*1.04,self.diameterRatio*1.04);}
                                completion:^(BOOL fin) {
                                    
                [UIView animateWithDuration:0.06f
                                      delay:0
                                    options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                animations:^{self.transform = CGAffineTransformMakeScale(diameterRatio*0.975,diameterRatio*0.975);}
+                                animations:^{self.transform = CGAffineTransformMakeScale(self.diameterRatio*0.975,self.diameterRatio*0.975);}
                                 completion:^(BOOL fin) {
                                 
                 [UIView animateWithDuration:0.05f
                                       delay:0
                                     options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                 animations:^{self.transform = CGAffineTransformMakeScale(diameterRatio,diameterRatio);}
+                                 animations:^{self.transform = CGAffineTransformMakeScale(self.diameterRatio,self.diameterRatio);}
                                  completion:^(BOOL fin) { }  ]; }]; }]; }]; }];
             
         } else {
