@@ -20,20 +20,11 @@
 @interface HomeViewController ()
 
 @property (nonatomic, weak) id delegate;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 @end
 
 @implementation HomeViewController
-
-@synthesize managedObjectContext;
-
-@synthesize home;
-@synthesize myDecks;
-@synthesize myDecksArray;
-
-@synthesize scrollView;
-@synthesize pageControl;
-@synthesize studyButton;
 
 bool pageControlBeingUsed;
 bool studyComplete;
@@ -70,22 +61,22 @@ int numPanels;
 - (void)preparePanels {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription
-                                   entityForName:@"Home" inManagedObjectContext:managedObjectContext];
+                                   entityForName:@"Home" inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
     // SHOULD retrieve the home object
     NSError *error;
-    NSLog(@"Number of home objects... %lu",(unsigned long)[[managedObjectContext executeFetchRequest:fetchRequest error:&error] count]);
-    self.home = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] firstObject];
-    self.myDecks = home.availableDecks; // Points to NSSet of decks (property of Deck Entity)
+    NSLog(@"Number of home objects... %lu",(unsigned long)[[self.managedObjectContext executeFetchRequest:fetchRequest error:&error] count]);
+    self.home = [[self.managedObjectContext executeFetchRequest:fetchRequest error:&error] firstObject];
+    self.myDecks = self.home.availableDecks; // Points to NSSet of decks (property of Deck Entity)
     
     // Sort decks by name and store in NSArray
-    myDecksArray = [myDecks sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:NO]]];
+    self.myDecksArray = [self.myDecks sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:NO]]];
     
-    for (int i = 0; i < [myDecks count]; i++) {
+    for (int i = 0; i < [self.myDecks count]; i++) {
         HomePanel *panel;
         
-        Deck *d = [myDecksArray objectAtIndex:i];
+        Deck *d = [self.myDecksArray objectAtIndex:i];
         NSLog(@"Deck %i name: %@, %@ cards.",i,d.name,d.numToStudy);
         
 //        NSArray *cardsInDeck = [d.cardsInDeck allObjects];
@@ -98,20 +89,20 @@ int numPanels;
         [self.scrollView addSubview:panel];
     }
     
-    panels = [scrollView subviews];
+    panels = [self.scrollView subviews];
     numPanels = (int)[panels count];
     
-    if ([myDecks count] != [panels count]) {
+    if ([self.myDecks count] != [panels count]) {
         NSLog(@"WARNING! Number of decks does not match number of panels.");
     }
     
     // Check if intial deck has no cards left to study
     if ([[panels objectAtIndex:0] toStudyCount] == 0) {
         studyComplete = YES;
-        studyButton.userInteractionEnabled = NO;
+        self.studyButton.userInteractionEnabled = NO;
     } else {
         studyComplete = NO;
-        studyButton.userInteractionEnabled = YES;
+        self.studyButton.userInteractionEnabled = YES;
     }
 }
 
@@ -159,12 +150,12 @@ int numPanels;
             
             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
             NSEntityDescription *entity = [NSEntityDescription
-                                           entityForName:@"Character" inManagedObjectContext:managedObjectContext];
+                                           entityForName:@"Character" inManagedObjectContext:self.managedObjectContext];
             [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"jlpt == %@", @"3"]];
             [fetchRequest setEntity:entity];
             
             NSError *error;
-            NSMutableArray *results = [NSMutableArray arrayWithArray:[managedObjectContext executeFetchRequest:fetchRequest error:&error]];
+            NSMutableArray *results = [NSMutableArray arrayWithArray:[self.managedObjectContext executeFetchRequest:fetchRequest error:&error]];
             
             Character *ch;
             
@@ -181,12 +172,12 @@ int numPanels;
             
             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
             NSEntityDescription *entity = [NSEntityDescription
-                                           entityForName:@"Character" inManagedObjectContext:managedObjectContext];
+                                           entityForName:@"Character" inManagedObjectContext:self.managedObjectContext];
             [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"jlpt == %@", @"2"]];
             [fetchRequest setEntity:entity];
             
             NSError *error;
-            NSMutableArray *results = [NSMutableArray arrayWithArray:[managedObjectContext executeFetchRequest:fetchRequest error:&error]];
+            NSMutableArray *results = [NSMutableArray arrayWithArray:[self.managedObjectContext executeFetchRequest:fetchRequest error:&error]];
             
             Character *ch;
             
@@ -238,7 +229,7 @@ int numPanels;
         
     }
     
-    panels = [scrollView subviews];
+    panels = [self.scrollView subviews];
     
     if ([decksForPages count] != [panels count]) {
         NSLog(@"WARNING! Not enough decks for the number of present pages.");
@@ -246,10 +237,10 @@ int numPanels;
     
     if ([[panels objectAtIndex:0] toStudyCount] == 0) {
         studyComplete = YES;
-        studyButton.userInteractionEnabled = NO;
+        self.studyButton.userInteractionEnabled = NO;
     } else {
         studyComplete = NO;
-        studyButton.userInteractionEnabled = YES;
+        self.studyButton.userInteractionEnabled = YES;
     }
 }
 
@@ -265,7 +256,7 @@ int numPanels;
         
         if ([[panels objectAtIndex:page] toStudyCount] == 0) {
             [UIView animateWithDuration:0.2 animations:^{
-                [studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 0.2].CGColor];
+                [self.studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 0.2].CGColor];
             } completion:NULL];
             
             [NSThread sleepForTimeInterval:0.1f];
@@ -288,19 +279,19 @@ int numPanels;
     
     if ([[panels objectAtIndex:page] toStudyCount] == 0) {
         studyComplete = YES;
-        studyButton.userInteractionEnabled = NO;
+        self.studyButton.userInteractionEnabled = NO;
     } else {
         studyComplete = NO;
-        studyButton.userInteractionEnabled = YES;
+        self.studyButton.userInteractionEnabled = YES;
     }
     
     if (studyComplete) {
         [UIView animateWithDuration:0.2 animations:^{
-            [studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 0.2].CGColor];
+            [self.studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 0.2].CGColor];
         } completion:NULL];
     } else {
         [UIView animateWithDuration:0.2 animations:^{
-            [studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 1.0].CGColor];
+            [self.studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 1.0].CGColor];
         } completion:NULL];
     }
     
@@ -317,8 +308,8 @@ int numPanels;
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     pageControlBeingUsed = NO;
     
-    CGFloat pageWidth = self.scrollView.frame.size.width;
-    int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+    CGFloat pageWidth = scrollView.frame.size.width;
+    int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     
     if (page < 0) {
         page = 0;
@@ -357,7 +348,7 @@ int numPanels;
     //int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     
     // Initiate StudyViewController with the appropriate deck to study
-    StudyViewController *BackgroundView = [[StudyViewController alloc] initWithDeck:[myDecksArray objectAtIndex:pageControl.currentPage]];
+    StudyViewController *BackgroundView = [[StudyViewController alloc] initWithDeck:[self.myDecksArray objectAtIndex:self.pageControl.currentPage]];
     [self presentViewController:BackgroundView animated:YES completion:nil];
     
     //        [self performSegueWithIdentifier:@"showStudyView" sender:self];
@@ -372,7 +363,7 @@ int numPanels;
 - (IBAction)studyButtonTouch:(id)sender {
     if (!studyComplete) {
         [UIView animateWithDuration:0.1 animations:^{
-            [studyButton.layer setBackgroundColor:[UIColor colorWithRed:(20.0 / 255.0) green:(150.0 / 255.0) blue:(80.0 / 255.0) alpha: 1.0].CGColor];
+            [self.studyButton.layer setBackgroundColor:[UIColor colorWithRed:(20.0 / 255.0) green:(150.0 / 255.0) blue:(80.0 / 255.0) alpha: 1.0].CGColor];
         } completion:NULL];
     }
 }
@@ -380,7 +371,7 @@ int numPanels;
 - (IBAction)studyButtonRelease:(id)sender {
     if (!studyComplete) {
         [UIView animateWithDuration:0.1 animations:^{
-            [studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 1.0].CGColor];
+            [self.studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 1.0].CGColor];
         } completion:NULL];
     }
 }
