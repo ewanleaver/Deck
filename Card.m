@@ -64,16 +64,17 @@ bool frontShowing;
 
 #pragma mark - Init and Drawing
 
-- (id)initCard:(CGRect)frame :(Character*)inputChar fresh:(BOOL)fresh
+- (id)initCard:(Character*)inputChar fresh:(BOOL)fresh
 {
-    self = [super initWithFrame:frame];
+    CGRect cardFrame = CGRectMake(HORIZONTAL_MARGIN, TOP_MARGIN, CARD_WIDTH, CARD_HEIGHT);
+    self = [super initWithFrame:cardFrame];
     if (self) {
         // Initialization code
         
         frontShowing = true;
         
         // Card Dimensions
-        CGRect cardFrame = CGRectMake(HORIZONTAL_MARGIN, TOP_MARGIN, CARD_WIDTH, CARD_HEIGHT);
+        
         [self setFrame:cardFrame];
         
         

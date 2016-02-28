@@ -13,7 +13,7 @@
 
 @interface Card : UIView
 
--(id)initCard:(CGRect)frame :(Character*)inputChar fresh:(BOOL)Fresh;
+-(id)initCard:(Character*)inputChar fresh:(BOOL)Fresh;
 
 @property (nonatomic,strong) NSManagedObjectContext* managedObjectContext;
 

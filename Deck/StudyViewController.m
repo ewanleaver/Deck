@@ -52,13 +52,6 @@ int maxAllowedVisibleCards;
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 
-#define HORIZONTAL_BORDER 15
-
-#define CARD_WIDTH 500
-//(SCREEN_WIDTH - (HORIZONAL_BORDER * 2))
-
-#define CARD_HEIGHT [UIScreen mainScreen].bounds.size.height
-
 #define BAR_OFFSET 20
 
 #define BAR_WIDTH (SCREEN_WIDTH - BAR_OFFSET*2)
@@ -75,7 +68,7 @@ int maxAllowedVisibleCards;
 
 -(IBAction)AddCard:(id)sender {
     
-    Card *cardView = [[Card alloc] initCard:CGRectMake(HORIZONTAL_BORDER,525,0,0):[charsToStudy objectAtIndex:nextCardNo] fresh:YES];
+    Card *cardView = [[Card alloc] initCard:[charsToStudy objectAtIndex:nextCardNo] fresh:YES];
     
     cardView.backgroundColor = ACTIVE_CARD_COLOUR;
     cardView.layer.borderColor = BORDER_COLOUR;
@@ -100,7 +93,7 @@ int maxAllowedVisibleCards;
 
 - (void)drawCardForChar:(Character*)c {
     
-    Card *cardView = [[Card alloc] initCard:CGRectMake(15,55,0,0):c fresh:NO];
+    Card *cardView = [[Card alloc] initCard:c fresh:NO];
     
     cardView.backgroundColor = ACTIVE_CARD_COLOUR;
     cardView.layer.borderColor = BORDER_COLOUR;
