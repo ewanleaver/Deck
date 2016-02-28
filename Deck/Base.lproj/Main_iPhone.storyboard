@@ -133,7 +133,7 @@
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Home" id="daq-wS-wTI">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="7vl-0p-YeU">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" style="plain" id="7vl-0p-YeU">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VEg-s5-f1K">
                                 <rect key="frame" x="517" y="7" width="63" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -176,7 +176,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Neu-wK-5jC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1976.25" y="-1149.2957746478874"/>
+            <point key="canvasLocation" x="1183" y="-830"/>
         </scene>
         <!--Master-->
         <scene sceneID="VgW-fR-Quf">

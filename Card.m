@@ -36,8 +36,17 @@
 int screenWidth;
 int screenHeight;
 
-#define CARD_WIDTH self.frame.size.width
-#define CARD_HEIGHT self.frame.size.height
+#define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
+#define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
+
+#define HORIZONTAL_MARGIN 15
+#define TOP_MARGIN 55
+#define BOTTOM_MARGIN 55
+
+#define CARD_WIDTH (SCREEN_WIDTH - HORIZONTAL_MARGIN*2)
+#define CARD_HEIGHT (SCREEN_HEIGHT - (TOP_MARGIN+BOTTOM_MARGIN))
+
+
 
 #define LEFT_OFFSET 15
 #define UPPER_OFFSET 15
@@ -49,55 +58,9 @@ int screenHeight;
 
 #define READING_GAP 5
 
-bool frontShowing;
+#define VERBOSE 0
 
-//- (id)initWithFrame:(CGRect)frame
-//{
-//    self = [super initWithFrame:frame];
-//    if (self) {
-//        // Initialization code
-//        
-//        CGRect newFrame = self.frame;
-//        
-//        newFrame.size.width = 290;
-//        newFrame.size.height = 400;
-//        [self setFrame:newFrame];
-//        
-//        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(85, 20, 150, 30)];
-//        title.text = @"Sample Card";
-//        [title setTextColor:[UIColor darkGrayColor]];
-//        [title setBackgroundColor:[UIColor clearColor]];
-//        [title setFont:[UIFont fontWithName: @"Trebuchet MS" size: 22.0f]];
-//        [self addSubview:title];
-//
-//        
-//        UIButton *dismissButton = [[UIButton alloc] initWithFrame:CGRectMake(200, 5, 100, 30)];
-//        [dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
-//        [dismissButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-//        [dismissButton.titleLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 14.0f]];
-//        [dismissButton addTarget:self
-//                          action: @selector(buttonClicked:)
-//                forControlEvents: UIControlEventTouchDown];
-//        [self addSubview:dismissButton];
-//        
-//        UILabel *countLabel = [[UILabel alloc] initWithFrame:CGRectMake(102, 180, 100, 50)];
-//        countLabel.text = [NSString stringWithFormat:@"#%d", cardNum];
-//        [countLabel setTextColor:[UIColor lightGrayColor]];
-//        [countLabel setBackgroundColor:[UIColor clearColor]];
-//        [countLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 48.0f]];
-//        [self addSubview:countLabel];
-//        
-//        
-//        [UIView animateWithDuration:0.22f
-//                              delay:0
-//                            options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-//                         animations:^{[self setCenter:CGPointMake(160, 260)]; }
-//                         completion:^(BOOL fin) {NSLog(@"[Card] done");}   ];
-//        
-//        //[UIView animateWithDuration:0.7f animations:^{[self setCenter:CGPointMake(160, -200)]; }];
-//    }
-//    return self;
-//}
+bool frontShowing;
 
 #pragma mark - Init and Drawing
 
@@ -107,20 +70,13 @@ bool frontShowing;
     if (self) {
         // Initialization code
         
-        screenWidth = [UIScreen mainScreen].bounds.size.width;
-        screenHeight = [UIScreen mainScreen].bounds.size.height;
-        
         frontShowing = true;
         
-        // Reference to Background view controller
-        //StudyBackground* controller = (StudyBackground*) [[self superview] nextResponder];
+        // Card Dimensions
+        CGRect cardFrame = CGRectMake(HORIZONTAL_MARGIN, TOP_MARGIN, CARD_WIDTH, CARD_HEIGHT);
+        [self setFrame:cardFrame];
         
-        // Screen dimensions: 320x568
-        CGRect newFrame = self.frame;
-        newFrame.size.width = 290;
-        newFrame.size.height = 458;//[UIScreen mainScreen].bounds.size.height - 110;
         
-        [self setFrame:newFrame];
         
 //        id delegate = [[UIApplication sharedApplication] delegate];
 //        self.managedObjectContext = [delegate managedObjectContext];
@@ -138,10 +94,7 @@ bool frontShowing;
         c = inputChar;
         studyDetails = c.studyDetails;
         tempStudyDetails = studyDetails.tempStudyDetails;
-        
-//        if (character.studyDetails.tempStudyDetails.isStudying == [NSNumber numberWithBool:YES]) {
-//            NSLog(@"[Card] CARD IS ALREADY BEING STUDIED");
-//        }
+
     
         if (tempStudyDetails.isStudying.boolValue == false) {
             [tempStudyDetails setIsStudying:[NSNumber numberWithBool:true]];
@@ -154,10 +107,13 @@ bool frontShowing;
         // Just to prevent madness....
         //[tempStudyDetails setIsStudying:[NSNumber numberWithBool:false]];
         
-//        NSLog(@"[Card] Card Num: %@",c.id_num);
-//        NSLog(@"[Card] Studying?: %@",c.studyDetails.tempStudyDetails.isStudying);
-//        NSLog(@"[Card] Num Correct?: %@",c.studyDetails.tempStudyDetails.numCorrect);
-//        NSLog(@"[Card] Num Incorrect?: %@",c.studyDetails.tempStudyDetails.numIncorrect);
+        // Logging
+        if (VERBOSE) {
+            NSLog(@"[Card] Card Num: %@",c.id_num);
+            NSLog(@"[Card] Studying?: %@",c.studyDetails.tempStudyDetails.isStudying);
+            NSLog(@"[Card] Num Correct?: %@",c.studyDetails.tempStudyDetails.numCorrect);
+            NSLog(@"[Card] Num Incorrect?: %@",c.studyDetails.tempStudyDetails.numIncorrect);
+        }
 
 //        [self.managedObjectContext save:&error];
         
@@ -273,6 +229,55 @@ bool frontShowing;
     
     return self;
 }
+
+
+//- (id)initWithFrame:(CGRect)frame
+//{
+//    self = [super initWithFrame:frame];
+//    if (self) {
+//        // Initialization code
+//
+//        CGRect newFrame = self.frame;
+//
+//        newFrame.size.width = 290;
+//        newFrame.size.height = 400;
+//        [self setFrame:newFrame];
+//
+//        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(85, 20, 150, 30)];
+//        title.text = @"Sample Card";
+//        [title setTextColor:[UIColor darkGrayColor]];
+//        [title setBackgroundColor:[UIColor clearColor]];
+//        [title setFont:[UIFont fontWithName: @"Trebuchet MS" size: 22.0f]];
+//        [self addSubview:title];
+//
+//
+//        UIButton *dismissButton = [[UIButton alloc] initWithFrame:CGRectMake(200, 5, 100, 30)];
+//        [dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
+//        [dismissButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+//        [dismissButton.titleLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 14.0f]];
+//        [dismissButton addTarget:self
+//                          action: @selector(buttonClicked:)
+//                forControlEvents: UIControlEventTouchDown];
+//        [self addSubview:dismissButton];
+//
+//        UILabel *countLabel = [[UILabel alloc] initWithFrame:CGRectMake(102, 180, 100, 50)];
+//        countLabel.text = [NSString stringWithFormat:@"#%d", cardNum];
+//        [countLabel setTextColor:[UIColor lightGrayColor]];
+//        [countLabel setBackgroundColor:[UIColor clearColor]];
+//        [countLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 48.0f]];
+//        [self addSubview:countLabel];
+//
+//
+//        [UIView animateWithDuration:0.22f
+//                              delay:0
+//                            options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
+//                         animations:^{[self setCenter:CGPointMake(160, 260)]; }
+//                         completion:^(BOOL fin) {NSLog(@"[Card] done");}   ];
+//
+//        //[UIView animateWithDuration:0.7f animations:^{[self setCenter:CGPointMake(160, -200)]; }];
+//    }
+//    return self;
+//}
 
 - (void) setupFrontView {
     
