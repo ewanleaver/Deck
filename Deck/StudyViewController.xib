@@ -17,7 +17,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="645-tW-55y">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="645-tW-55y">
                     <rect key="frame" x="278" y="22" width="22" height="22"/>
                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <state key="normal">
@@ -53,6 +53,10 @@
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="645-tW-55y" secondAttribute="trailing" constant="20" id="dp6-qZ-XCm"/>
+                <constraint firstItem="645-tW-55y" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="22" id="gpQ-dk-rgi"/>
+            </constraints>
             <point key="canvasLocation" x="139" y="154"/>
         </view>
     </objects>

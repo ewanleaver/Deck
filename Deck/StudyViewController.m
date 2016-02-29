@@ -421,7 +421,7 @@ int maxAllowedVisibleCards;
     
     UIColor *activeCountColor = [UIColor colorWithRed:(160.0 / 255.0) green:(8.0 / 255.0) blue:(40.0 / 255.0) alpha: 1];
     
-    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 22, 40, 25)];
+    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 20, 22, 40, 25)];
     activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
     activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
     [activeCardCountLabel setTextColor:activeCountColor];
