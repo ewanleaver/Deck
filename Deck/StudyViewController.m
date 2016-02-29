@@ -408,8 +408,8 @@ int maxAllowedVisibleCards;
     deckStudying = d;
     
     // Set background
-    UIImage *image = [UIImage imageNamed:@"Study Background.png"];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:image];
+    //UIImage *image = [UIImage imageNamed:@"Study Background.png"];
+    self.view.backgroundColor = [UIColor colorWithRed:(205.0/255.0) green:(20.0/255.0) blue:(52.0/255.0) alpha:1];//[UIColor colorWithPatternImage:image];
     
     // Initially no cards active
     totalCardCount = 0;
