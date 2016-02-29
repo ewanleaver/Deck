@@ -33,9 +33,6 @@
 
 @synthesize repQuality; // Intra-repetition quality
 
-int screenWidth;
-int screenHeight;
-
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 
@@ -45,6 +42,8 @@ int screenHeight;
 
 #define CARD_WIDTH (SCREEN_WIDTH - HORIZONTAL_MARGIN*2)
 #define CARD_HEIGHT (SCREEN_HEIGHT - (TOP_MARGIN+BOTTOM_MARGIN))
+
+#define CARD_ANIMATION_DURATION 0.7f
 
 
 
@@ -544,17 +543,17 @@ bool frontShowing;
             tempStudyDetails.numCorrect = [NSNumber numberWithInt:([tempStudyDetails.numCorrect intValue] + 1)];
             
             // Reinsert at back of back (currently - need to insert nearer the front.)
-            [UIView animateWithDuration:0.25f
+            [UIView animateWithDuration:CARD_ANIMATION_DURATION/2
                                   delay:0
                                 options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                             animations:^{[self setCenter:CGPointMake(160, -screenHeight*0.35)]; }
+                             animations:^{[self setCenter:CGPointMake(SCREEN_WIDTH/2, -SCREEN_HEIGHT*0.4)]; }
                              completion:^(BOOL fin) {
                                  
                                  [self.superview sendSubviewToBack:self ];
-                                 [UIView animateWithDuration:0.2f
+                                 [UIView animateWithDuration:CARD_ANIMATION_DURATION/2
                                                        delay:0
                                                      options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                                  animations:^{[self setCenter:CGPointMake(160, self.frame.size.height/2 + 55)]; }
+                                                  animations:^{[self setCenter:CGPointMake(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)]; }
                                                   completion:^(BOOL fin) {
                                                       
                                                       [controller handleCorrectCard:self willExitDeck:false]; }  ]; }  ];
@@ -595,10 +594,10 @@ bool frontShowing;
                 NSError *error = nil;
                 [self.managedObjectContext save:&error];
                 
-                [UIView animateWithDuration:0.25f
+                [UIView animateWithDuration:CARD_ANIMATION_DURATION/2
                                       delay:0
                                     options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                 animations:^{[self setCenter:CGPointMake(160, -screenHeight*0.5)]; }
+                                 animations:^{[self setCenter:CGPointMake(SCREEN_WIDTH/2, -SCREEN_HEIGHT/2)]; }
                                  completion:^(BOOL fin) {
                                      
                                      [controller handleCorrectCard:self willExitDeck:true]; }  ];
@@ -624,16 +623,16 @@ bool frontShowing;
         // SENDING TO BACK DOESN'T CORRECTLY UPDATE DECK TRACKERS!!!
         
         // Reinsert at back of back (currently - need to insert nearer the front.)
-        [UIView animateWithDuration:0.25f
+        [UIView animateWithDuration:CARD_ANIMATION_DURATION/2
                               delay:0
                             options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                         animations:^{[self setCenter:CGPointMake(160, screenHeight*1.35)]; }
+                         animations:^{[self setCenter:CGPointMake(SCREEN_WIDTH/2, SCREEN_HEIGHT*1.4)]; }
                          completion:^(BOOL fin) { [self.superview sendSubviewToBack:self ];
                              
-                                 [UIView animateWithDuration:0.2f
+                                 [UIView animateWithDuration:CARD_ANIMATION_DURATION/2
                                                        delay:0
                                                      options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                                  animations:^{[self setCenter:CGPointMake(160, self.frame.size.height/2 + 55)]; }
+                                                  animations:^{[self setCenter:CGPointMake(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)]; }
                                                   completion:^(BOOL fin) {
                                                       
                                                       [controller handleIncorrectCard:self]; }  ]; }  ];    }
@@ -731,9 +730,9 @@ bool frontShowing;
     
     draggedDistY = -(self.center.y - originalPoint.y)/2; // Need to convert to points
     draggedDistX = (self.center.x - originalPoint.x)/2;
-    distRemainingY = screenHeight*0.5 - draggedDistY;
+    distRemainingY = SCREEN_HEIGHT*0.5 - draggedDistY;
     
-    xDestination = ((screenHeight*0.5/draggedDistY) * draggedDistX) + screenWidth*0.5;
+    xDestination = ((SCREEN_HEIGHT*0.5/draggedDistY) * draggedDistX) + SCREEN_WIDTH*0.5;
     
     //NSLog(@"[Card] %f",duration);
     
@@ -775,7 +774,7 @@ bool frontShowing;
                 [UIView animateWithDuration:duration
                                       delay:0
                                     options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                 animations:^{[self setCenter:CGPointMake(xDestination, -screenHeight*0.5)]; }
+                                 animations:^{[self setCenter:CGPointMake(xDestination, -SCREEN_HEIGHT*0.5)]; }
                                  completion:^(BOOL fin) { [controller dismissTopCard:self]; }  ];
                 
             } else if (yDistance > 150) {
@@ -787,7 +786,7 @@ bool frontShowing;
                 [UIView animateWithDuration:duration
                                       delay:0
                                     options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                 animations:^{[self setCenter:CGPointMake(160, screenHeight*1.5)]; }
+                                 animations:^{[self setCenter:CGPointMake(160, SCREEN_HEIGHT*1.5)]; }
                                  completion:^(BOOL fin) { [controller dismissTopCard:self]; }  ];
                 
             } else {
