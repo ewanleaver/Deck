@@ -68,7 +68,7 @@ int maxAllowedVisibleCards;
 
 -(IBAction)AddCard:(id)sender {
     
-    Card *cardView = [[Card alloc] initCard:CGRectMake(15,525,500,500):[charsToStudy objectAtIndex:nextCardNo] fresh:YES];
+    Card *cardView = [[Card alloc] initCard:[charsToStudy objectAtIndex:nextCardNo] fresh:YES];
     
     cardView.backgroundColor = ACTIVE_CARD_COLOUR;
     cardView.layer.borderColor = BORDER_COLOUR;
@@ -93,7 +93,7 @@ int maxAllowedVisibleCards;
 
 - (void)drawCardForChar:(Character*)c {
     
-    Card *cardView = [[Card alloc] initCard:CGRectMake(15,55,500,500):c fresh:NO];
+    Card *cardView = [[Card alloc] initCard:c fresh:NO];
     
     cardView.backgroundColor = ACTIVE_CARD_COLOUR;
     cardView.layer.borderColor = BORDER_COLOUR;
@@ -408,8 +408,8 @@ int maxAllowedVisibleCards;
     deckStudying = d;
     
     // Set background
-    UIImage *image = [UIImage imageNamed:@"Study Background.png"];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:image];
+    //UIImage *image = [UIImage imageNamed:@"Study Background.png"];
+    self.view.backgroundColor = [UIColor colorWithRed:(205.0/255.0) green:(20.0/255.0) blue:(52.0/255.0) alpha:1];//[UIColor colorWithPatternImage:image];
     
     // Initially no cards active
     totalCardCount = 0;
@@ -421,7 +421,7 @@ int maxAllowedVisibleCards;
     
     UIColor *activeCountColor = [UIColor colorWithRed:(160.0 / 255.0) green:(8.0 / 255.0) blue:(40.0 / 255.0) alpha: 1];
     
-    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 22, 40, 25)];
+    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 20, 22, 40, 25)];
     activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
     activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
     [activeCardCountLabel setTextColor:activeCountColor];

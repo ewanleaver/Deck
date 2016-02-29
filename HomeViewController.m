@@ -82,7 +82,7 @@ int numPanels;
 //        NSArray *cardsInDeck = [d.cardsInDeck allObjects];
 //        NSLog(@"%lu cards in deck, %d to Study",(unsigned long)[cardsInDeck count],[d.numToStudy intValue]);
         
-        panel = [[HomePanel alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width * i, 0, 320, 240) deck:d];
+        panel = [[HomePanel alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width * i, 0, self.scrollView.frame.size.width, 240) deck:d];
         [[panel titleLabel] setText:d.name];
         [[panel cardLabel] setText:[NSString stringWithFormat:@"%@",d.numToStudy]];
         
@@ -217,7 +217,7 @@ int numPanels;
         cardsTotal = (int)[deckArray count];
         NSLog(@"Deck %d: %d cards.",i,cardsTotal);
         
-        panel = [[HomePanel alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width * i, 0, 320, 240) colour:bubbleColor numToStudy:numToStudy numTotal:cardsTotal];
+        panel = [[HomePanel alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width * i, 0, self.scrollView.frame.size.width, 240) colour:bubbleColor numToStudy:numToStudy numTotal:cardsTotal];
         [[panel titleLabel] setText:title];
 //        [panel setCardCount:cardsTotal];
 //        [panel setToStudyCount:numToStudy];
