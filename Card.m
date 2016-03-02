@@ -1,6 +1,6 @@
 //
 //  Card.m
-//  TestPro_iOS
+//  Deck
 //
 //  Created by Ewan Leaver on 13/03/2014.
 //  Copyright (c) 2014 Ewan Leaver. All rights reserved.
@@ -8,30 +8,20 @@
 //  kanjiArray = @[@"零", @"一", @"二", @"三", @"四", @"五", @"六", @"七", @"八", @"九", @"十", @"江", @"里", @"菜", @"駒"];
 //
 
-#define MY_DELEGATE (AppDelegate*)[[UIApplication sharedApplication] delegate]
-
 #import "Card.h"
 #import "StudyViewController.h"
 #import "Character.h"
 #import "StudyDetails.h"
 #import "TempStudyDetails.h"
 
+@interface Card ()
+
+@property (nonatomic, weak) id delegate;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+
+@end
+
 @implementation Card
-
-@synthesize managedObjectContext;
-
-@synthesize cardNum;
-
-@synthesize c;
-@synthesize studyDetails;
-@synthesize tempStudyDetails;
-
-@synthesize frontView;
-@synthesize readingsView;
-
-@synthesize originalPoint;
-
-@synthesize repQuality; // Intra-repetition quality
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
@@ -49,6 +39,8 @@
 
 #define CONTENT_OFFSET_LEFT 15
 #define CONTENT_OFFSET_TOP 15
+
+#define KANJI_SIZE 100
 
 #define READING_BOX_LEFT 0
 #define READING_BOX_TOP CONTENT_OFFSET_TOP + 110
@@ -72,20 +64,23 @@ bool frontShowing;
     self = [super initWithFrame:cardFrame];
     if (self) {
         
+        self.delegate = [[UIApplication sharedApplication] delegate];
+        self.managedObjectContext = [self.delegate managedObjectContext];
+        
         // May eventually have the option of showing two sides to a card
         frontShowing = true;
         
         [self setFrame:cardFrame];
         
-        c = inputChar;
-        studyDetails = c.studyDetails;
+        self.c = inputChar;
+        self.studyDetails = self.c.studyDetails;
         // tempStudyDetails are the study details for the current session (yes?)
-        tempStudyDetails = studyDetails.tempStudyDetails;
+        self.tempStudyDetails = self.studyDetails.tempStudyDetails;
 
-        if (tempStudyDetails.isStudying.boolValue == false) {
-            [tempStudyDetails setIsStudying:[NSNumber numberWithBool:true]];
-            tempStudyDetails.numIncorrect = [NSNumber numberWithInt:0];
-            tempStudyDetails.numCorrect = [NSNumber numberWithInt:0];
+        if (self.tempStudyDetails.isStudying.boolValue == false) {
+            [self.tempStudyDetails setIsStudying:[NSNumber numberWithBool:true]];
+            self.tempStudyDetails.numIncorrect = @0;
+            self.tempStudyDetails.numCorrect = @0;
         } else {
             NSLog(@"[Card] CARD IS ALREADY BEING STUDIED");
         }
@@ -95,33 +90,33 @@ bool frontShowing;
         
         // Logging
         if (VERBOSE) {
-            NSLog(@"[Card] Card Num: %@",c.id_num);
-            NSLog(@"[Card] Studying?: %@",c.studyDetails.tempStudyDetails.isStudying);
-            NSLog(@"[Card] Num Correct?: %@",c.studyDetails.tempStudyDetails.numCorrect);
-            NSLog(@"[Card] Num Incorrect?: %@",c.studyDetails.tempStudyDetails.numIncorrect);
+            NSLog(@"[Card] Card Num: %@", self.c.id_num);
+            NSLog(@"[Card] Studying?: %@", self.c.studyDetails.tempStudyDetails.isStudying);
+            NSLog(@"[Card] Num Correct?: %@", self.c.studyDetails.tempStudyDetails.numCorrect);
+            NSLog(@"[Card] Num Incorrect?: %@", self.c.studyDetails.tempStudyDetails.numIncorrect);
         }
         
         // Unpack the character's arrays
         
-        NSMutableArray *readings_pin = [NSKeyedUnarchiver unarchiveObjectWithData:c.reading_pin];
-        NSMutableArray *readings_kun = [NSKeyedUnarchiver unarchiveObjectWithData:c.reading_kun];
-        NSMutableArray *readings_on = [NSKeyedUnarchiver unarchiveObjectWithData:c.reading_on];
-        NSMutableArray *meanings = [NSKeyedUnarchiver unarchiveObjectWithData:c.meaning];
+        NSMutableArray *readings_pin = [NSKeyedUnarchiver unarchiveObjectWithData: self.c.reading_pin];
+        NSMutableArray *readings_kun = [NSKeyedUnarchiver unarchiveObjectWithData: self.c.reading_kun];
+        NSMutableArray *readings_on = [NSKeyedUnarchiver unarchiveObjectWithData: self.c.reading_on];
+        NSMutableArray *meanings = [NSKeyedUnarchiver unarchiveObjectWithData: self.c.meaning];
         
         // Init Readings View
         
-        readingsView = [[UIImageView alloc] initWithFrame:CGRectMake(READING_BOX_LEFT, READING_BOX_TOP, READING_BOX_WIDTH, READING_BOX_HEIGHT)];
-        [self addSubview:readingsView];
+        self.readingsView = [[UIImageView alloc] initWithFrame:CGRectMake(READING_BOX_LEFT, READING_BOX_TOP, READING_BOX_WIDTH, READING_BOX_HEIGHT)];
+        [self addSubview:self.readingsView];
         
         //
         // Prepare Card Labels
         //
         
-        UILabel *kanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, CONTENT_OFFSET_TOP, 100, 100)];
-        kanjiLabel.text = c.literal;
+        UILabel *kanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, CONTENT_OFFSET_TOP, KANJI_SIZE, KANJI_SIZE)];
+        kanjiLabel.text = self.c.literal;
         [kanjiLabel setTextColor:[UIColor darkGrayColor]];
         [kanjiLabel setBackgroundColor:[UIColor clearColor]];
-        [kanjiLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 100.0f]];
+        [kanjiLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: KANJI_SIZE]];
         [self addSubview:kanjiLabel];
         
         UILabel *pinyinLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, CONTENT_OFFSET_TOP + 175, 100, 20)];
@@ -177,8 +172,8 @@ bool frontShowing;
 
         UILabel *jlptLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT + 0.4, CARD_HEIGHT - 40.8, 60, 30)];
         
-        if (![c.jlpt  isEqual: @"null"]) {
-            NSString *jlptString = jlptString = [@"N" stringByAppendingString:c.jlpt];
+        if (![self.c.jlpt  isEqual: @"null"]) {
+            NSString *jlptString = jlptString = [@"N" stringByAppendingString:self.c.jlpt];
             jlptLabel.text = jlptString;
         };
         [jlptLabel setTextColor:[UIColor colorWithRed:(170.0 / 255.0) green:(170.0 / 255.0) blue:(170.0 / 255.0) alpha: 1]];
@@ -188,7 +183,7 @@ bool frontShowing;
         
         
         UILabel *cardNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(CARD_WIDTH - 80, CONTENT_OFFSET_TOP, 60, 25)];
-        cardNumLabel.text = [NSString stringWithFormat:@"# %@", c.id_num];
+        cardNumLabel.text = [NSString stringWithFormat:@"# %@", self.c.id_num];
         cardNumLabel.textAlignment = NSTextAlignmentRight;
         [cardNumLabel setTextColor:[UIColor lightGrayColor]];
         [cardNumLabel setBackgroundColor:[UIColor clearColor]];
@@ -268,17 +263,17 @@ bool frontShowing;
 - (void) setupFrontView {
     
     CGRect frame = CGRectMake(0, 0, CARD_WIDTH, CARD_HEIGHT);
-    frontView = [[UIView alloc] initWithFrame:frame];
-    [frontView setBackgroundColor:[UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 1]];
+    self.frontView = [[UIView alloc] initWithFrame:frame];
+    [self.frontView setBackgroundColor:[UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 1]];
     
     UILabel *frontKanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake(CARD_WIDTH/2 - 75, CARD_HEIGHT/2 - 100, 150, 150)];
-    frontKanjiLabel.text = c.literal;
+    frontKanjiLabel.text = self.c.literal;
     [frontKanjiLabel setTextColor:[UIColor darkGrayColor]];
     [frontKanjiLabel setBackgroundColor:[UIColor clearColor]];
     [frontKanjiLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 150.0f]];
     [self.frontView addSubview:frontKanjiLabel];
     
-    [self addSubview:frontView];
+    [self addSubview:self.frontView];
 }
 
 - (void) drawOnReadingLabels:(NSMutableArray*)readings_on {
@@ -312,7 +307,7 @@ bool frontShowing;
         readingLayer.lineJoin = kCALineJoinBevel;
         readingLayer.path = path.CGPath;
         
-        [readingsView.layer addSublayer:readingLayer];
+        [self.readingsView.layer addSublayer:readingLayer];
         
         UILabel *onReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(currPos + 5, READING_BOX_TOP + 7.5, 270, 20)];
         onReadingLabel.text = [readings_on objectAtIndex:i];//@"イチ, イツ";
@@ -387,7 +382,7 @@ bool frontShowing;
         readingLayer.lineJoin = kCALineJoinBevel;
         readingLayer.path = path.CGPath;
         
-        [readingsView.layer addSublayer:readingLayer];
+        [self.readingsView.layer addSublayer:readingLayer];
         
         currPos = currPos + labelWidth + READING_GAP;
         
@@ -471,40 +466,40 @@ bool frontShowing;
 - (void)calcNextRepetition {
     
     // Set to current date
-    studyDetails.lastStudied = [[NSDate alloc] init];
+    self.studyDetails.lastStudied = [[NSDate alloc] init];
     
     // Next interval number (first reschedule is interval 1)
-    studyDetails.intervalNum = [NSNumber numberWithInt:[studyDetails.intervalNum intValue] + 1];
+    self.studyDetails.intervalNum = [NSNumber numberWithInt:[self.studyDetails.intervalNum intValue] + 1];
     
     // Calc inter-repetition interval after the n-th repetition (in days)
-    if ([studyDetails.intervalNum intValue] == 1) {
-        studyDetails.interval = [NSNumber numberWithInt:1];
-    } else if ([studyDetails.intervalNum intValue] == 2) {
-        studyDetails.interval = [NSNumber numberWithInt:6];
+    if ([self.studyDetails.intervalNum intValue] == 1) {
+        self.studyDetails.interval = [NSNumber numberWithInt:1];
+    } else if ([self.studyDetails.intervalNum intValue] == 2) {
+        self.studyDetails.interval = [NSNumber numberWithInt:6];
     } else {
         // Rounding up any fractions
-        studyDetails.interval = [NSNumber numberWithInt:ceil([studyDetails.interval intValue]*[studyDetails.eFactor intValue])];
+        self.studyDetails.interval = [NSNumber numberWithInt:ceil([self.studyDetails.interval intValue] * [self.studyDetails.eFactor intValue])];
     }
     
-    if (repQuality > 3) {
+    if (self.repQuality > 3) {
         // EF':=EF+(0.1-(5-q)*(0.08+(5-q)*0.02))
-        double newFactor = [studyDetails.eFactor intValue] + (0.1-(5-repQuality)*(0.08+(5-repQuality)*0.02));
+        double newFactor = [self.studyDetails.eFactor intValue] + (0.1 - (5 - self.repQuality) * (0.08 + (5 - self.repQuality) * 0.02));
         
         if (newFactor < 1.3) {
             newFactor = 1.3;
         }
         
-        studyDetails.eFactor = [NSNumber numberWithDouble:newFactor];
+        self.studyDetails.eFactor = [NSNumber numberWithDouble:newFactor];
         
     } else {
         
         // Repetition quality was too low.
         // Start repetitions anew, as if newly memorised.
         
-        studyDetails.intervalNum = 0;
-        studyDetails.interval = 0;
-        studyDetails.quality = nil;
-        studyDetails.eFactor = [NSNumber numberWithDouble:2.5]; // Default value
+        self.studyDetails.intervalNum = 0;
+        self.studyDetails.interval = 0;
+        self.studyDetails.quality = nil;
+        self.studyDetails.eFactor = [NSNumber numberWithDouble:2.5]; // Default value
     }
 
     
@@ -521,10 +516,10 @@ bool frontShowing;
     if (isCorrect) {
         // Card marked correct
         
-        if ((tempStudyDetails.numCorrect.intValue - tempStudyDetails.numIncorrect.intValue) < 2) {
+        if ((self.tempStudyDetails.numCorrect.intValue - self.tempStudyDetails.numIncorrect.intValue) < 2) {
             // Haven't reached correct treshold. Keep studying.
             
-            tempStudyDetails.numCorrect = [NSNumber numberWithInt:([tempStudyDetails.numCorrect intValue] + 1)];
+            self.tempStudyDetails.numCorrect = [NSNumber numberWithInt:([self.tempStudyDetails.numCorrect intValue] + 1)];
             
             // Reinsert at back of back (currently - need to insert nearer the front.)
             [UIView animateWithDuration:CARD_ANIMATION_DURATION/2
@@ -554,11 +549,11 @@ bool frontShowing;
             // 1 = 4 wrong
             // 0 = anything less
             
-            repQuality = 5 - tempStudyDetails.numIncorrect.intValue;
+            self.repQuality = 5 - self.tempStudyDetails.numIncorrect.intValue;
             
-            if (repQuality < 0) {
+            if (self.repQuality < 0) {
                 // Ensure q lies between 0 and 5.
-                repQuality = 0;
+                self.repQuality = 0;
             }
             
             //studyDetails.quality = [NSNumber numberWithInt:repQuality];   //<<- Unnecessary?
@@ -567,13 +562,13 @@ bool frontShowing;
             // Note: Need to keep studying card today if q < 4
             [self calcNextRepetition];
             
-            if (repQuality >= 4) {
+            if (self.repQuality >= 4) {
                 // Card was well enough remembered that it can be removed from the deck. Animate and dismiss card.
 
                 // First reset all short-term study stats.
-                [tempStudyDetails setIsStudying:[NSNumber numberWithBool:false]];
-                tempStudyDetails.numIncorrect = [NSNumber numberWithInt:0];
-                tempStudyDetails.numCorrect = [NSNumber numberWithInt:0];
+                [self.tempStudyDetails setIsStudying:[NSNumber numberWithBool:false]];
+                self.tempStudyDetails.numIncorrect = @0;
+                self.tempStudyDetails.numCorrect = @0;
                 
                 NSError *error = nil;
                 [self.managedObjectContext save:&error];
@@ -590,10 +585,10 @@ bool frontShowing;
                 // After each repetition session of a given day repeat again all items that scored below four in the quality assessment.
                 // Continue the repetitions until all of these items score at least four.
                 
-                NSLog(@"[Card] Sutdy quality was below 4 for card %d. Restarting short-term study.",cardNum);
+                NSLog(@"[Card] Sutdy quality was below 4 for card %d. Restarting short-term study.", self.cardNum);
                 
-                tempStudyDetails.numCorrect = [NSNumber numberWithInt:0];
-                tempStudyDetails.numIncorrect = [NSNumber numberWithInt:0];
+                self.tempStudyDetails.numCorrect = @0;
+                self.tempStudyDetails.numIncorrect = @0;
                 
             }
             
@@ -602,7 +597,7 @@ bool frontShowing;
     } else {
         // Card was marked incorrect
         
-        tempStudyDetails.numIncorrect = [NSNumber numberWithInt:([tempStudyDetails.numIncorrect intValue] + 1)];
+        self.tempStudyDetails.numIncorrect = [NSNumber numberWithInt:([self.tempStudyDetails.numIncorrect intValue] + 1)];
         
         // SENDING TO BACK DOESN'T CORRECTLY UPDATE DECK TRACKERS!!!
         
@@ -689,9 +684,9 @@ bool frontShowing;
 - (void)handleTap:(UIGestureRecognizer*)recognizer {
     
     if (frontShowing) {
-        [frontView setHidden:YES];
+        [self.frontView setHidden:YES];
     } else {
-        [frontView setHidden:NO];
+        [self.frontView setHidden:NO];
     };
     
     frontShowing = !frontShowing;
@@ -712,8 +707,8 @@ bool frontShowing;
     
     CGFloat xDestination;
     
-    draggedDistY = -(self.center.y - originalPoint.y)/2; // Need to convert to points
-    draggedDistX = (self.center.x - originalPoint.x)/2;
+    draggedDistY = -(self.center.y - self.originalPoint.y)/2; // Need to convert to points
+    draggedDistX = (self.center.x - self.originalPoint.x)/2;
     distRemainingY = SCREEN_HEIGHT*0.5 - draggedDistY;
     
     xDestination = ((SCREEN_HEIGHT*0.5/draggedDistY) * draggedDistX) + SCREEN_WIDTH*0.5;

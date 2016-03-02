@@ -15,8 +15,6 @@
 
 -(id)initCard:(Character*)inputChar fresh:(BOOL)Fresh;
 
-@property (nonatomic,strong) NSManagedObjectContext* managedObjectContext;
-
 @property int cardNum;
 @property Character *c;
 @property StudyDetails *studyDetails;
