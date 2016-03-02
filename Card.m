@@ -47,6 +47,9 @@
 #define READING_BOX_WIDTH CARD_WIDTH
 #define READING_BOX_HEIGHT 90
 
+#define READING_HEIGHT 25
+#define READING_OFFSET_LEFT 10
+#define READING_OFFSET_TOP 5
 #define READING_GAP 5
 
 
@@ -131,8 +134,8 @@ bool frontShowing;
         [pinyinReadingLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 17.0f]];
         [self addSubview:pinyinReadingLabel];
         
-        [self drawOnReadingLabels:readings_on];
         
+        [self drawOnReadingLabels:readings_on];
         [self drawKunReadingLabels:readings_kun];
         
         
@@ -161,11 +164,10 @@ bool frontShowing;
                 
                 // Add label to array
                 [meaningLabels addObject:meaningLabel];
-                
             }
-
         }
 
+        
         //
         // Other informative labels
         //
@@ -199,9 +201,7 @@ bool frontShowing;
                              animations:^{[self setCenter:CGPointMake(160, CARD_HEIGHT/2 + 56)]; }
                              completion:^(BOOL fin) {}];
         }
-        
         //[UIView animateWithDuration:0.7f animations:^{[self setCenter:CGPointMake(160, -200)]; }];
-        
     }
     
     [self addGestureRecognisers];
@@ -278,26 +278,26 @@ bool frontShowing;
 
 - (void) drawOnReadingLabels:(NSMutableArray*)readings_on {
     
-    // Card width is 290!
-    int remSpace = CARD_WIDTH - 10; // Left Offset
-    int currPos = READING_BOX_LEFT + 10;
+    // Calc remaining space left to draw within:
+    int currPos = READING_BOX_LEFT + READING_OFFSET_LEFT;
+    int remainingSpace = CARD_WIDTH - currPos;
     
     for (int i = 0; i < [readings_on count]; i++) {
             
-        //~28,45,62
-        int labelWidth = 12 + (int)[[readings_on objectAtIndex:i] length]*17;
+        // Rough width formula which seems to work okay
+        int labelWidth = 12 + (int)[[readings_on objectAtIndex:i] length] * 17;
         
-        int newRemSpace = remSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
+        int newRemSpace = remainingSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
         
         if (newRemSpace < 0) {
             NSLog(@"[Card] No more space available for drawing On-yomi readings.");
             break;
         } else {
-            remSpace = newRemSpace;
+            remainingSpace = newRemSpace;
         }
         
         // 1. Create bezier path to draw
-        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(currPos, 5, labelWidth, 25) cornerRadius:12.5];
+        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(currPos, READING_OFFSET_TOP, labelWidth, READING_HEIGHT) cornerRadius:READING_HEIGHT/2];
         
         // 2. Create a shape layer for above created path.
         CAShapeLayer *readingLayer = [[CAShapeLayer alloc] init];
@@ -319,14 +319,13 @@ bool frontShowing;
         
         currPos = currPos + labelWidth + READING_GAP;
     }
-    
 }
 
 - (void) drawKunReadingLabels:(NSMutableArray*)readings_kun {
     
-    // Card width is 290!
-    int remSpace = CARD_WIDTH - 10; // Left Offset
-    int currPos = READING_BOX_LEFT + 10;
+    // Calc remaining space left to draw within:
+    int currPos = READING_BOX_LEFT + READING_OFFSET_LEFT;
+    int remainingSpace = CARD_WIDTH - currPos;
     
     for (int i = 0; i < [readings_kun count]; i++) {
             
@@ -354,16 +353,16 @@ bool frontShowing;
         
         // Check labelSize
         
-        //~28,45,62
+        // Rough width formula which seems to work okay
         int labelWidth = 12 + (int)[text length]*17;
         
-        int newRemSpace = remSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
+        int newRemSpace = remainingSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
         
         if (newRemSpace < 0) {
             NSLog(@"[Card] No more space available for drawing Kun-yomi readings.");
             break;
         } else {
-            remSpace = newRemSpace;
+            remainingSpace = newRemSpace;
         }
         
         //[kunReadingLabel setTextColor:[UIColor colorWithRed:(30.0 / 255.0) green:(30.0 / 255.0) blue:(120.0 / 255.0) alpha: 1]];
@@ -372,7 +371,7 @@ bool frontShowing;
         
         
         // 1. Create bezier path to draw
-        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(currPos, 37.5, labelWidth, 25) cornerRadius:12.5];
+        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(currPos, 37.5, labelWidth, READING_HEIGHT) cornerRadius:READING_HEIGHT/2];
         
         // 2. Create a shape layer for above created path.
         CAShapeLayer *readingLayer = [[CAShapeLayer alloc] init];
