@@ -36,26 +36,27 @@
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 
-#define HORIZONTAL_MARGIN 15
-#define TOP_MARGIN 55
-#define BOTTOM_MARGIN 55
 
-#define CARD_WIDTH (SCREEN_WIDTH - HORIZONTAL_MARGIN*2)
-#define CARD_HEIGHT (SCREEN_HEIGHT - (TOP_MARGIN+BOTTOM_MARGIN))
+#define CARD_WIDTH (SCREEN_WIDTH - CARD_MARGIN_HORIZONTAL * 2)
+#define CARD_HEIGHT (SCREEN_HEIGHT - (CARD_MARGIN_TOP + CARD_MARGIN_BOTTOM))
+
+#define CARD_MARGIN_HORIZONTAL 15
+#define CARD_MARGIN_TOP 55
+#define CARD_MARGIN_BOTTOM 55
 
 #define CARD_ANIMATION_DURATION 0.5f
 
 
+#define CONTENT_OFFSET_LEFT 15
+#define CONTENT_OFFSET_TOP 15
 
-#define LEFT_OFFSET 15
-#define UPPER_OFFSET 15
-
-#define READ_BOX_LEFT 0
-#define READ_BOX_UPPER UPPER_OFFSET + 110
-#define READ_BOX_WIDTH CARD_WIDTH
-#define READ_BOX_HEIGHT 90
+#define READING_BOX_LEFT 0
+#define READING_BOX_TOP CONTENT_OFFSET_TOP + 110
+#define READING_BOX_WIDTH CARD_WIDTH
+#define READING_BOX_HEIGHT 90
 
 #define READING_GAP 5
+
 
 #define VERBOSE 0
 
@@ -65,37 +66,22 @@ bool frontShowing;
 
 - (id)initCard:(Character*)inputChar fresh:(BOOL)fresh
 {
-    CGRect cardFrame = CGRectMake(HORIZONTAL_MARGIN, TOP_MARGIN, CARD_WIDTH, CARD_HEIGHT);
+    // Card Dimensions
+    CGRect cardFrame = CGRectMake(CARD_MARGIN_HORIZONTAL, CARD_MARGIN_TOP, CARD_WIDTH, CARD_HEIGHT);
+    
     self = [super initWithFrame:cardFrame];
     if (self) {
-        // Initialization code
         
+        // May eventually have the option of showing two sides to a card
         frontShowing = true;
-        
-        // Card Dimensions
         
         [self setFrame:cardFrame];
         
-        
-        
-//        id delegate = [[UIApplication sharedApplication] delegate];
-//        self.managedObjectContext = [delegate managedObjectContext];
-//        
-//        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//        NSEntityDescription *entity = [NSEntityDescription
-//                                       entityForName:@"Character" inManagedObjectContext:managedObjectContext];
-//
-//        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"id_num == %d", cardNum]];
-//        [fetchRequest setEntity:entity];
-//        
-//        NSError *error;
-//        
-//        character = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] objectAtIndex:0];
         c = inputChar;
         studyDetails = c.studyDetails;
+        // tempStudyDetails are the study details for the current session (yes?)
         tempStudyDetails = studyDetails.tempStudyDetails;
 
-    
         if (tempStudyDetails.isStudying.boolValue == false) {
             [tempStudyDetails setIsStudying:[NSNumber numberWithBool:true]];
             tempStudyDetails.numIncorrect = [NSNumber numberWithInt:0];
@@ -114,8 +100,6 @@ bool frontShowing;
             NSLog(@"[Card] Num Correct?: %@",c.studyDetails.tempStudyDetails.numCorrect);
             NSLog(@"[Card] Num Incorrect?: %@",c.studyDetails.tempStudyDetails.numIncorrect);
         }
-
-//        [self.managedObjectContext save:&error];
         
         // Unpack the character's arrays
         
@@ -126,27 +110,27 @@ bool frontShowing;
         
         // Init Readings View
         
-        readingsView = [[UIImageView alloc] initWithFrame:CGRectMake(READ_BOX_LEFT,READ_BOX_UPPER,READ_BOX_WIDTH,READ_BOX_HEIGHT)];
+        readingsView = [[UIImageView alloc] initWithFrame:CGRectMake(READING_BOX_LEFT, READING_BOX_TOP, READING_BOX_WIDTH, READING_BOX_HEIGHT)];
         [self addSubview:readingsView];
         
         //
         // Prepare Card Labels
         //
         
-        UILabel *kanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_OFFSET, UPPER_OFFSET, 100, 100)];
+        UILabel *kanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, CONTENT_OFFSET_TOP, 100, 100)];
         kanjiLabel.text = c.literal;
         [kanjiLabel setTextColor:[UIColor darkGrayColor]];
         [kanjiLabel setBackgroundColor:[UIColor clearColor]];
         [kanjiLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 100.0f]];
         [self addSubview:kanjiLabel];
         
-        UILabel *pinyinLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_OFFSET, UPPER_OFFSET + 175, 100, 20)];
+        UILabel *pinyinLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, CONTENT_OFFSET_TOP + 175, 100, 20)];
         pinyinLabel.text = @"Pinyin:";
         [pinyinLabel setTextColor:[UIColor lightGrayColor]];
         [pinyinLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 15.0f]];
         [self addSubview:pinyinLabel];
         
-        UILabel *pinyinReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_OFFSET + 55, UPPER_OFFSET + 175, 215, 20)];
+        UILabel *pinyinReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT + 55, CONTENT_OFFSET_TOP + 175, 215, 20)];
         pinyinReadingLabel.text = [readings_pin firstObject];//@"yi1";
         [pinyinReadingLabel setTextColor:[UIColor darkGrayColor]];
         [pinyinReadingLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 17.0f]];
@@ -167,7 +151,7 @@ bool frontShowing;
             
             if (i < 6) {
                 
-                UILabel *meaningLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_OFFSET, UPPER_OFFSET + 205 + i*30, 270, 25)];
+                UILabel *meaningLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, CONTENT_OFFSET_TOP + 205 + i*30, 270, 25)];
                 [meaningLabel setTextColor:[UIColor darkGrayColor]];
                 
                 NSMutableAttributedString *text = [[NSMutableAttributedString alloc]
@@ -191,7 +175,7 @@ bool frontShowing;
         // Other informative labels
         //
 
-        UILabel *jlptLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_OFFSET + 0.4, self.frame.size.height - 40.8, 60, 30)];
+        UILabel *jlptLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT + 0.4, CARD_HEIGHT - 40.8, 60, 30)];
         
         if (![c.jlpt  isEqual: @"null"]) {
             NSString *jlptString = jlptString = [@"N" stringByAppendingString:c.jlpt];
@@ -203,7 +187,7 @@ bool frontShowing;
         [self addSubview:jlptLabel];
         
         
-        UILabel *cardNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - 80, UPPER_OFFSET, 60, 25)];
+        UILabel *cardNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(CARD_WIDTH - 80, CONTENT_OFFSET_TOP, 60, 25)];
         cardNumLabel.text = [NSString stringWithFormat:@"# %@", c.id_num];
         cardNumLabel.textAlignment = NSTextAlignmentRight;
         [cardNumLabel setTextColor:[UIColor lightGrayColor]];
@@ -217,7 +201,7 @@ bool frontShowing;
             [UIView animateWithDuration:0.25f
                                   delay:0
                                 options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                             animations:^{[self setCenter:CGPointMake(160, self.frame.size.height/2 + 56)]; }
+                             animations:^{[self setCenter:CGPointMake(160, CARD_HEIGHT/2 + 56)]; }
                              completion:^(BOOL fin) {}];
         }
         
@@ -283,11 +267,11 @@ bool frontShowing;
 
 - (void) setupFrontView {
     
-    CGRect frame = CGRectMake(0,0,self.frame.size.width,self.frame.size.height);
+    CGRect frame = CGRectMake(0, 0, CARD_WIDTH, CARD_HEIGHT);
     frontView = [[UIView alloc] initWithFrame:frame];
     [frontView setBackgroundColor:[UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 1]];
     
-    UILabel *frontKanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 75, self.frame.size.height/2 - 100, 150, 150)];
+    UILabel *frontKanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake(CARD_WIDTH/2 - 75, CARD_HEIGHT/2 - 100, 150, 150)];
     frontKanjiLabel.text = c.literal;
     [frontKanjiLabel setTextColor:[UIColor darkGrayColor]];
     [frontKanjiLabel setBackgroundColor:[UIColor clearColor]];
@@ -301,7 +285,7 @@ bool frontShowing;
     
     // Card width is 290!
     int remSpace = CARD_WIDTH - 10; // Left Offset
-    int currPos = READ_BOX_LEFT + 10;
+    int currPos = READING_BOX_LEFT + 10;
     
     for (int i = 0; i < [readings_on count]; i++) {
             
@@ -330,7 +314,7 @@ bool frontShowing;
         
         [readingsView.layer addSublayer:readingLayer];
         
-        UILabel *onReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(currPos + 5, READ_BOX_UPPER + 7.5, 270, 20)];
+        UILabel *onReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(currPos + 5, READING_BOX_TOP + 7.5, 270, 20)];
         onReadingLabel.text = [readings_on objectAtIndex:i];//@"イチ, イツ";
         [onReadingLabel setTextColor:[UIColor whiteColor]];
         
@@ -347,11 +331,11 @@ bool frontShowing;
     
     // Card width is 290!
     int remSpace = CARD_WIDTH - 10; // Left Offset
-    int currPos = READ_BOX_LEFT + 10;
+    int currPos = READING_BOX_LEFT + 10;
     
     for (int i = 0; i < [readings_kun count]; i++) {
             
-        UILabel *kunReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(currPos + 5, READ_BOX_UPPER + 40, 270, 20)];
+        UILabel *kunReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(currPos + 5, READING_BOX_TOP + 40, 270, 20)];
         kunReadingLabel.text = [readings_kun objectAtIndex:i];//@"ひと, ひと.つ";
         [kunReadingLabel setTextColor:[UIColor whiteColor]];
         
@@ -419,7 +403,7 @@ bool frontShowing;
     CGContextSetLineWidth(context, 4.0);
     CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:(225.0 / 255.0) green:(225.0 / 255.0) blue:(225.0 / 255.0) alpha: 1].CGColor);
     
-    CGRect rectangle = CGRectMake(READ_BOX_LEFT,READ_BOX_UPPER,READ_BOX_WIDTH,READ_BOX_HEIGHT);
+    CGRect rectangle = CGRectMake(READING_BOX_LEFT, READING_BOX_TOP, READING_BOX_WIDTH, READING_BOX_HEIGHT);
     CGContextAddRect(context, rectangle);
     
     CGContextStrokePath(context);
@@ -433,7 +417,7 @@ bool frontShowing;
     
     CGContextSetLineWidth(context, 2.0);
     self.transform = CGAffineTransformIdentity;
-    rectangle = CGRectMake(9.1,self.frame.size.height - 43.2,35,35);
+    rectangle = CGRectMake(9.1, CARD_HEIGHT - 43.2, 35, 35);
     CGContextAddEllipseInRect(context, rectangle);
     //CGContextStrokePath(context);
     
@@ -669,11 +653,11 @@ bool frontShowing;
         [UIView animateWithDuration:0.25f
                               delay:0
                             options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                         animations:^{[self setCenter:CGPointMake(457, self.frame.size.height/2 + 55)]; }
+                         animations:^{[self setCenter:CGPointMake(457, CARD_HEIGHT/2 + 55)]; }
                          completion:^(BOOL fin) { [self.superview sendSubviewToBack:self ]; [UIView animateWithDuration:0.2f
                                                                                                                   delay:0
                                                                                                                 options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                                                                                             animations:^{[self setCenter:CGPointMake(160, self.frame.size.height/2 + 55)]; }
+                                                                                                             animations:^{[self setCenter:CGPointMake(160, CARD_HEIGHT/2 + 55)]; }
                                                                                                              completion:^(BOOL fin) { [controller moveCardToBack:self]; }  ]; }  ];
     };
     
