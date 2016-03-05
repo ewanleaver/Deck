@@ -248,6 +248,16 @@ int numPanels;
     // YAY. Now page control correctly displays available decks.
     self.pageControl.numberOfPages = numPanels;
     
+    POPSpringAnimation *scaleAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+    scaleAnimation.fromValue = [NSValue valueWithCGPoint:CGPointMake(0.7, 0.7)];
+    scaleAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(1, 1)];
+    scaleAnimation.velocity = [NSValue valueWithCGPoint:CGPointMake(5, 5)];
+    scaleAnimation.springBounciness = 20.f;
+    
+
+    HomePanel *topView = self.scrollView.subviews[0];
+    [topView.bubble pop_addAnimation:scaleAnimation forKey:@"scalingUp"];
+    
     // Animate a comment showing praise
     if ([[panels objectAtIndex:0] toStudyCount] == 0) {
         

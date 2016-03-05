@@ -114,68 +114,25 @@
         if (!self.bubbleToggled) {
             
             // Grow
-            [UIView animateWithDuration:0.09f
-                                  delay:0
-                                options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                             animations:^{self.transform = CGAffineTransformMakeScale(self.diameterRatio*1.08,self.diameterRatio*1.08);self.alpha = 0.7;}
-                             completion:^(BOOL fin) {
-                                     
-             [UIView animateWithDuration:0.08f
-                                   delay:0
-                                 options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                              animations:^{self.transform = CGAffineTransformMakeScale(self.diameterRatio*0.95,self.diameterRatio*0.95);}
-                              completion:^(BOOL fin) {
-                              
-              [UIView animateWithDuration:0.07f
-                                    delay:0
-                                  options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                               animations:^{self.transform = CGAffineTransformMakeScale(self.diameterRatio*1.04,self.diameterRatio*1.04);}
-                               completion:^(BOOL fin) {
-                                   
-               [UIView animateWithDuration:0.06f
-                                     delay:0
-                                   options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                animations:^{self.transform = CGAffineTransformMakeScale(self.diameterRatio*0.975,self.diameterRatio*0.975);}
-                                completion:^(BOOL fin) {
-                                
-                [UIView animateWithDuration:0.05f
-                                      delay:0
-                                    options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                 animations:^{self.transform = CGAffineTransformMakeScale(self.diameterRatio,self.diameterRatio);}
-                                 completion:^(BOOL fin) { }  ]; }]; }]; }]; }];
+            
+            POPSpringAnimation *scaleAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+            scaleAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(1.1, 1.1)];//self.diameterRatio, self.diameterRatio)];
+            scaleAnimation.velocity = [NSValue valueWithCGPoint:CGPointMake(2, 2)];
+            scaleAnimation.springBounciness = 20.f;
+            
+            [self pop_addAnimation:scaleAnimation forKey:@"scalingUp"];
+            //[self.alpha pop_addAnimation:scaleAnimation forKey:@"scalingDown"];
+            //self.alpha = 0.7;
             
         } else {
             // Shrink
             
-            [UIView animateWithDuration:0.09f
-                                  delay:0
-                                options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                             animations:^{self.transform = CGAffineTransformMakeScale(0.92,0.92);self.alpha = 1.0;}
-                             completion:^(BOOL fin) {
-                                 
-             [UIView animateWithDuration:0.08f
-                                   delay:0
-                                 options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                              animations:^{self.transform = CGAffineTransformMakeScale(1.05,1.05);}
-                              completion:^(BOOL fin) {
-                                  
-              [UIView animateWithDuration:0.07f
-                                    delay:0
-                                  options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                               animations:^{self.transform = CGAffineTransformMakeScale(0.96,0.96);}
-                               completion:^(BOOL fin) {
-                                   
-               [UIView animateWithDuration:0.06f
-                                     delay:0
-                                   options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                animations:^{self.transform = CGAffineTransformMakeScale(1.025,1.025);}
-                                completion:^(BOOL fin) {
-                                    
-                [UIView animateWithDuration:0.05f
-                                      delay:0
-                                    options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                 animations:^{self.transform = CGAffineTransformIdentity; }
-                                 completion:^(BOOL fin) { }  ]; }]; }]; }]; }];
+            POPSpringAnimation *scaleAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+            scaleAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(1, 1)];
+            scaleAnimation.velocity = [NSValue valueWithCGPoint:CGPointMake(2.5, 2.5)];
+            scaleAnimation.springBounciness = 20.f;
+            
+            [self pop_addAnimation:scaleAnimation forKey:@"scalingDown"];
         }
         
         // Flip the toggle

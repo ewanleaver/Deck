@@ -14,6 +14,8 @@
 		402047D81A0271F100C76B7B /* Home.m in Sources */ = {isa = PBXBuildFile; fileRef = 402047D71A0271F100C76B7B /* Home.m */; };
 		402E71B119FC69E6003E4C86 /* TempStudyDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 402E71B019FC69E6003E4C86 /* TempStudyDetails.m */; };
 		402E71B419FC6AF7003E4C86 /* StudyDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 402E71B319FC6AF7003E4C86 /* StudyDetails.m */; };
+		4077E3E41C8B20C400FD257E /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4077E3D91C8B20B500FD257E /* pop.framework */; };
+		4077E3E51C8B20C400FD257E /* pop.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4077E3D91C8B20B500FD257E /* pop.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		40BB524119446EC50088EC12 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BB523F19446EC50088EC12 /* HomeViewController.m */; };
 		40BC9E3D1905537100D6A792 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E3C1905537100D6A792 /* Foundation.framework */; };
 		40BC9E3F1905537100D6A792 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40BC9E3E1905537100D6A792 /* CoreGraphics.framework */; };
@@ -44,6 +46,62 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4077E3D61C8B20B500FD257E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4077E3CC1C8B20B400FD257E /* pop.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EC191218162FB53A00E0CC76;
+			remoteInfo = "pop-ios-static";
+		};
+		4077E3D81C8B20B500FD257E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4077E3CC1C8B20B400FD257E /* pop.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0B6BE74819FFD3B900762101;
+			remoteInfo = "pop-ios-framework";
+		};
+		4077E3DA1C8B20B500FD257E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4077E3CC1C8B20B400FD257E /* pop.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EC68857F18C7B60000C6194C;
+			remoteInfo = "pop-osx-framework";
+		};
+		4077E3DC1C8B20B500FD257E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4077E3CC1C8B20B400FD257E /* pop.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0755AE4F1BEA15950094AB41;
+			remoteInfo = "pop-tvos-framework";
+		};
+		4077E3DE1C8B20B500FD257E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4077E3CC1C8B20B400FD257E /* pop.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ECF01ED318C92B7F009E0AD1;
+			remoteInfo = "pop-tests-ios";
+		};
+		4077E3E01C8B20B500FD257E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4077E3CC1C8B20B400FD257E /* pop.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EC7E319918C93D6500B38170;
+			remoteInfo = "pop-tests-osx";
+		};
+		4077E3E21C8B20B500FD257E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4077E3CC1C8B20B400FD257E /* pop.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0755AE8C1BEA19580094AB41;
+			remoteInfo = "pop-tests-tvos";
+		};
+		4077E3E61C8B20C400FD257E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4077E3CC1C8B20B400FD257E /* pop.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 0B6BE74719FFD3B900762101;
+			remoteInfo = "pop-ios-framework";
+		};
 		40BC9E6B1905537100D6A792 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 40BC9E311905537100D6A792 /* Project object */;
@@ -52,6 +110,20 @@
 			remoteInfo = Deck;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4077E3E81C8B20C400FD257E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4077E3E51C8B20C400FD257E /* pop.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4001D13919EB5D9500C5B688 /* Study Background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Study Background@2x.png"; sourceTree = "<group>"; };
@@ -66,6 +138,7 @@
 		402E71B019FC69E6003E4C86 /* TempStudyDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TempStudyDetails.m; path = Deck/TempStudyDetails.m; sourceTree = "<group>"; };
 		402E71B219FC6AF7003E4C86 /* StudyDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StudyDetails.h; path = Deck/StudyDetails.h; sourceTree = "<group>"; };
 		402E71B319FC6AF7003E4C86 /* StudyDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StudyDetails.m; path = Deck/StudyDetails.m; sourceTree = "<group>"; };
+		4077E3CC1C8B20B400FD257E /* pop.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = pop.xcodeproj; path = "../../../../Downloads/pop-master/pop.xcodeproj"; sourceTree = "<group>"; };
 		40BB523E19446EC50088EC12 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeViewController.h; path = ../HomeViewController.h; sourceTree = "<group>"; };
 		40BB523F19446EC50088EC12 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeViewController.m; path = ../HomeViewController.m; sourceTree = "<group>"; };
 		40BC9E391905537100D6A792 /* Deck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Deck.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,6 +186,7 @@
 			files = (
 				40BC9E3F1905537100D6A792 /* CoreGraphics.framework in Frameworks */,
 				40BC9E431905537100D6A792 /* CoreData.framework in Frameworks */,
+				4077E3E41C8B20C400FD257E /* pop.framework in Frameworks */,
 				40BC9E411905537100D6A792 /* UIKit.framework in Frameworks */,
 				40BC9E3D1905537100D6A792 /* Foundation.framework in Frameworks */,
 			);
@@ -132,6 +206,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4077E3CD1C8B20B400FD257E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4077E3D71C8B20B500FD257E /* libpop.a */,
+				4077E3D91C8B20B500FD257E /* pop.framework */,
+				4077E3DB1C8B20B500FD257E /* pop.framework */,
+				4077E3DD1C8B20B500FD257E /* pop.framework */,
+				4077E3DF1C8B20B500FD257E /* pop-tests.xctest */,
+				4077E3E11C8B20B500FD257E /* pop-tests.xctest */,
+				4077E3E31C8B20B500FD257E /* pop-tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		40BC9E301905537100D6A792 = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +227,7 @@
 				40BC9E6D1905537100D6A792 /* DeckTests */,
 				40BC9E3B1905537100D6A792 /* Frameworks */,
 				40BC9E3A1905537100D6A792 /* Products */,
+				4077E3CC1C8B20B400FD257E /* pop.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -281,10 +370,12 @@
 				40BC9E351905537100D6A792 /* Sources */,
 				40BC9E361905537100D6A792 /* Frameworks */,
 				40BC9E371905537100D6A792 /* Resources */,
+				4077E3E81C8B20C400FD257E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4077E3E71C8B20C400FD257E /* PBXTargetDependency */,
 			);
 			name = Deck;
 			productName = Deck;
@@ -337,6 +428,12 @@
 			mainGroup = 40BC9E301905537100D6A792;
 			productRefGroup = 40BC9E3A1905537100D6A792 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4077E3CD1C8B20B400FD257E /* Products */;
+					ProjectRef = 4077E3CC1C8B20B400FD257E /* pop.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				40BC9E381905537100D6A792 /* Deck */,
@@ -344,6 +441,58 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4077E3D71C8B20B500FD257E /* libpop.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libpop.a;
+			remoteRef = 4077E3D61C8B20B500FD257E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4077E3D91C8B20B500FD257E /* pop.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = pop.framework;
+			remoteRef = 4077E3D81C8B20B500FD257E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4077E3DB1C8B20B500FD257E /* pop.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = pop.framework;
+			remoteRef = 4077E3DA1C8B20B500FD257E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4077E3DD1C8B20B500FD257E /* pop.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = pop.framework;
+			remoteRef = 4077E3DC1C8B20B500FD257E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4077E3DF1C8B20B500FD257E /* pop-tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "pop-tests.xctest";
+			remoteRef = 4077E3DE1C8B20B500FD257E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4077E3E11C8B20B500FD257E /* pop-tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "pop-tests.xctest";
+			remoteRef = 4077E3E01C8B20B500FD257E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4077E3E31C8B20B500FD257E /* pop-tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "pop-tests.xctest";
+			remoteRef = 4077E3E21C8B20B500FD257E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		40BC9E371905537100D6A792 /* Resources */ = {
@@ -406,6 +555,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4077E3E71C8B20C400FD257E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "pop-ios-framework";
+			targetProxy = 4077E3E61C8B20C400FD257E /* PBXContainerItemProxy */;
+		};
 		40BC9E6C1905537100D6A792 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 40BC9E381905537100D6A792 /* Deck */;
@@ -531,6 +685,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Deck/Deck-Prefix.pch";
 				INFOPLIST_FILE = "Deck/Deck-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ewan.Deck;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -549,6 +705,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Deck/Deck-Prefix.pch";
 				INFOPLIST_FILE = "Deck/Deck-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ewan.Deck;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

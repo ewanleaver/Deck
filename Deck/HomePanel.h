@@ -36,4 +36,6 @@
 @property (nonatomic, strong) UILabel *toStudyLabel;
 @property (nonatomic, strong) UILabel *descLabel;
 
+@property (nonatomic, strong) Bubble *bubble;
+
 @end

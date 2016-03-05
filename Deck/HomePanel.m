@@ -13,8 +13,6 @@
 
 @implementation HomePanel
 
-Bubble *bubble;
-
 NSArray *comments;
 
 - (instancetype)initWithFrame:(CGRect)frame deck:(Deck *)d {
@@ -74,13 +72,13 @@ NSArray *comments;
         }
         
         if (customColour) {
-            bubble = [[Bubble alloc] initBubbleWithFrame:CGRectMake(self.frame.size.width/2 - 110,100,220,220) colour:bubbleColour regularSize:self.toStudyCount  inflatedSize:self.cardCount];
+            self.bubble = [[Bubble alloc] initBubbleWithFrame:CGRectMake(self.frame.size.width/2 - 110,100,220,220) colour:bubbleColour regularSize:self.toStudyCount  inflatedSize:self.cardCount];
             //bubble = [[Bubble alloc] init:CGRectMake(self.frame.size.width/2 - 90,40,180,180) colour:bubbleColour];
         } else {
-            bubble = [[Bubble alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 110,100,220,220)];
+            self.bubble = [[Bubble alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 110,100,220,220)];
         }
         
-        [self addSubview:bubble];
+        [self addSubview:self.bubble];
         
         self.toStudyLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 100,178,200,50)];
         [self.toStudyLabel setTextAlignment:NSTextAlignmentCenter];
@@ -107,7 +105,7 @@ NSArray *comments;
         
         comments = [NSArray arrayWithObjects:@"Fantastic!",@"Good work!",@"Well done!",@"Spiffing!",@"Neato!",@"Fantastic!",nil];
         
-        bubbleToggled = [bubble bubbleToggled];
+        bubbleToggled = [self.bubble bubbleToggled];
         
     }
     return self;
