@@ -283,9 +283,17 @@ bool frontShowing;
     int remainingSpace = CARD_WIDTH - currPos;
     
     for (int i = 0; i < [readings_on count]; i++) {
-            
+
+        NSString *currentReading = [readings_on objectAtIndex:i];
+        
+        UILabel *onReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(currPos + 5, READING_BOX_TOP + 7.5, 270, 20)];
+        onReadingLabel.text = currentReading;//@"イチ, イツ";
+        [onReadingLabel setTextColor:[UIColor whiteColor]];
+        
+        // No attributed text processing in On readings
+        
         // Rough width formula which seems to work okay
-        int labelWidth = 12 + (int)[[readings_on objectAtIndex:i] length] * 17;
+        int labelWidth = 12 + (int)[currentReading length] * 17;
         
         int newRemSpace = remainingSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
         
@@ -309,10 +317,6 @@ bool frontShowing;
         
         [self.readingsView.layer addSublayer:readingLayer];
         
-        UILabel *onReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(currPos + 5, READING_BOX_TOP + 7.5, 270, 20)];
-        onReadingLabel.text = [readings_on objectAtIndex:i];//@"イチ, イツ";
-        [onReadingLabel setTextColor:[UIColor whiteColor]];
-        
         //[onReadingLabel setTextColor:[UIColor colorWithRed:(120.0 / 255.0) green:(30.0 / 255.0) blue:(30.0 / 255.0) alpha: 1]];
         [onReadingLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 18.0f]];
         [self addSubview:onReadingLabel];
@@ -328,33 +332,32 @@ bool frontShowing;
     int remainingSpace = CARD_WIDTH - currPos;
     
     for (int i = 0; i < [readings_kun count]; i++) {
+        
+        NSString *currentReading = [readings_kun objectAtIndex:i];
             
         UILabel *kunReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(currPos + 5, READING_BOX_TOP + 40, 270, 20)];
-        kunReadingLabel.text = [readings_kun objectAtIndex:i];//@"ひと, ひと.つ";
+        kunReadingLabel.text = currentReading;//@"ひと, ひと.つ";
         [kunReadingLabel setTextColor:[UIColor whiteColor]];
         
-        NSMutableAttributedString *text = [readings_kun objectAtIndex:i];
+        // Kun-readings only: format text for reading-endings
+        NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc]
+                                                     initWithString:[currentReading stringByReplacingOccurrencesOfString:@"." withString:@""]];
         
         NSRange range = [[readings_kun objectAtIndex:i] rangeOfString:@"."];
         if (range.location != NSNotFound) {
-            // Need to remove period and format
+            // Need to remove period and format reading-endings
             //NSLog(@"[Card] Period at: %lu, length of string: %lu", (unsigned long)range.location, (unsigned long)[[readings_kun objectAtIndex:i] length]);
             
             [kunReadingLabel setTextColor:[UIColor colorWithRed:(255.0 / 255.0) green:(145.0 / 255.0) blue:(195.0 / 255.0) alpha: 1]];
             
-            text = [[NSMutableAttributedString alloc]
-                    initWithString:[[readings_kun objectAtIndex:i] stringByReplacingOccurrencesOfString:@"." withString:@""]];
-            
-            [text addAttribute:NSForegroundColorAttributeName
+            [attributedText addAttribute:NSForegroundColorAttributeName
                          value:[UIColor whiteColor]
                          range:NSMakeRange(0, range.location)];
-            [kunReadingLabel setAttributedText: text];
+            [kunReadingLabel setAttributedText: attributedText];
         }
         
-        // Check labelSize
-        
         // Rough width formula which seems to work okay
-        int labelWidth = 12 + (int)[text length]*17;
+        int labelWidth = 12 + (int)[attributedText length]*17;
         
         int newRemSpace = remainingSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
         
@@ -364,11 +367,6 @@ bool frontShowing;
         } else {
             remainingSpace = newRemSpace;
         }
-        
-        //[kunReadingLabel setTextColor:[UIColor colorWithRed:(30.0 / 255.0) green:(30.0 / 255.0) blue:(120.0 / 255.0) alpha: 1]];
-        [kunReadingLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 18.0f]];
-        [self addSubview:kunReadingLabel];
-        
         
         // 1. Create bezier path to draw
         UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(currPos, 37.5, labelWidth, READING_HEIGHT) cornerRadius:READING_HEIGHT/2];
@@ -383,8 +381,11 @@ bool frontShowing;
         
         [self.readingsView.layer addSublayer:readingLayer];
         
-        currPos = currPos + labelWidth + READING_GAP;
+        //[kunReadingLabel setTextColor:[UIColor colorWithRed:(30.0 / 255.0) green:(30.0 / 255.0) blue:(120.0 / 255.0) alpha: 1]];
+        [kunReadingLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 18.0f]];
+        [self addSubview:kunReadingLabel];
         
+        currPos = currPos + labelWidth + READING_GAP;
     }
 }
 
