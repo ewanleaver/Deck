@@ -249,14 +249,13 @@ int numPanels;
     self.pageControl.numberOfPages = numPanels;
     
     POPSpringAnimation *scaleAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
-    scaleAnimation.fromValue = [NSValue valueWithCGPoint:CGPointMake(0.7, 0.7)];
-    scaleAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(1, 1)];
-    scaleAnimation.velocity = [NSValue valueWithCGPoint:CGPointMake(5, 5)];
+//    scaleAnimation.fromValue = [NSValue valueWithCGPoint:CGPointMake(0.7, 0.7)];
+//    scaleAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(1, 1)];
+    scaleAnimation.velocity = [NSValue valueWithCGPoint:CGPointMake(3, 3)];
     scaleAnimation.springBounciness = 20.f;
-    
 
-    HomePanel *topView = self.scrollView.subviews[0];
-    [topView.bubble pop_addAnimation:scaleAnimation forKey:@"scalingUp"];
+    HomePanel *currentView = self.scrollView.subviews[self.pageControl.currentPage];
+    [currentView.bubble pop_addAnimation:scaleAnimation forKey:@"scalingUp"];
     
     // Animate a comment showing praise
     if ([[panels objectAtIndex:0] toStudyCount] == 0) {
@@ -354,7 +353,7 @@ int numPanels;
 -(IBAction)StartStudy:(id)sender {
     
     // Get current page
-    CGFloat pageWidth = self.scrollView.frame.size.width;
+    //CGFloat pageWidth = self.scrollView.frame.size.width;
     //int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     
     // Initiate StudyViewController with the appropriate deck to study
