@@ -19,6 +19,8 @@
 @property (nonatomic, weak) id delegate;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
+@property (nonatomic, weak) StudyViewController *controller;
+
 @end
 
 @implementation Card
@@ -69,6 +71,8 @@ bool frontShowing;
         
         self.delegate = [[UIApplication sharedApplication] delegate];
         self.managedObjectContext = [self.delegate managedObjectContext];
+        
+        self.controller = (StudyViewController*) [[self superview] nextResponder];
         
         // May eventually have the option of showing two sides to a card
         frontShowing = true;
@@ -511,7 +515,9 @@ bool frontShowing;
 
 - (void)gradeCard:(BOOL)isCorrect {
     
-    StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
+    CGPoint destPoint;
+    NSString *animName;
+    BOOL autoReverses = false;
     
     if (isCorrect) {
         // Card marked correct
@@ -519,23 +525,11 @@ bool frontShowing;
         if ((self.tempStudyDetails.numCorrect.intValue - self.tempStudyDetails.numIncorrect.intValue) < 2) {
             // Haven't reached correct treshold. Keep studying.
             
-            self.tempStudyDetails.numCorrect = [NSNumber numberWithInt:([self.tempStudyDetails.numCorrect intValue] + 1)];
+            destPoint = CGPointMake(-SCREEN_HEIGHT*0.4, -SCREEN_HEIGHT*0.4);
+            animName = @"popCorrectCard";
+            autoReverses = true;
             
-            // Reinsert at back of back (currently - need to insert nearer the front.)
-            [UIView animateWithDuration:CARD_ANIMATION_DURATION/2
-                                  delay:0
-                                options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                             animations:^{[self setCenter:CGPointMake(SCREEN_WIDTH/2, -SCREEN_HEIGHT*0.4)]; }
-                             completion:^(BOOL fin) {
-                                 
-                                 [self.superview sendSubviewToBack:self ];
-                                 [UIView animateWithDuration:CARD_ANIMATION_DURATION/2
-                                                       delay:0
-                                                     options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                                  animations:^{[self setCenter:CGPointMake(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)]; }
-                                                  completion:^(BOOL fin) {
-                                                      
-                                                      [controller handleCorrectCard:self willExitDeck:false]; }  ]; }  ];
+            self.tempStudyDetails.numCorrect = [NSNumber numberWithInt:([self.tempStudyDetails.numCorrect intValue] + 1)];
             
         } else {
             // Third correct call, can attempt to exit card
@@ -564,6 +558,9 @@ bool frontShowing;
             
             if (self.repQuality >= 4) {
                 // Card was well enough remembered that it can be removed from the deck. Animate and dismiss card.
+                
+                destPoint = CGPointMake(-SCREEN_HEIGHT/2, -SCREEN_HEIGHT/2);
+                animName = @"popCorrectCardDone";
 
                 // First reset all short-term study stats.
                 [self.tempStudyDetails setIsStudying:[NSNumber numberWithBool:false]];
@@ -573,25 +570,19 @@ bool frontShowing;
                 NSError *error = nil;
                 [self.managedObjectContext save:&error];
                 
-                [UIView animateWithDuration:CARD_ANIMATION_DURATION/2
-                                      delay:0
-                                    options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                 animations:^{[self setCenter:CGPointMake(SCREEN_WIDTH/2, -SCREEN_HEIGHT/2)]; }
-                                 completion:^(BOOL fin) {
-                                     
-                                     [controller handleCorrectCard:self willExitDeck:true]; }  ];
-                
             } else {
                 // After each repetition session of a given day repeat again all items that scored below four in the quality assessment.
                 // Continue the repetitions until all of these items score at least four.
                 
-                NSLog(@"[Card] Sutdy quality was below 4 for card %d. Restarting short-term study.", self.cardNum);
+                destPoint = CGPointMake(-SCREEN_HEIGHT*0.4, -SCREEN_HEIGHT*0.4);
+                animName = @"popCorrectCard";
+                autoReverses = true;
+                
+                NSLog(@"[Card] Study quality was below 4 for card %d. Restarting short-term study.", self.cardNum);
                 
                 self.tempStudyDetails.numCorrect = @0;
                 self.tempStudyDetails.numIncorrect = @0;
-                
             }
-            
         }
         
     } else {
@@ -602,19 +593,20 @@ bool frontShowing;
         // SENDING TO BACK DOESN'T CORRECTLY UPDATE DECK TRACKERS!!!
         
         // Reinsert at back of back (currently - need to insert nearer the front.)
-        [UIView animateWithDuration:CARD_ANIMATION_DURATION/2
-                              delay:0
-                            options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                         animations:^{[self setCenter:CGPointMake(SCREEN_WIDTH/2, SCREEN_HEIGHT*1.4)]; }
-                         completion:^(BOOL fin) { [self.superview sendSubviewToBack:self ];
-                             
-                                 [UIView animateWithDuration:CARD_ANIMATION_DURATION/2
-                                                       delay:0
-                                                     options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                                  animations:^{[self setCenter:CGPointMake(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)]; }
-                                                  completion:^(BOOL fin) {
-                                                      
-                                                      [controller handleIncorrectCard:self]; }  ]; }  ];    }
+        destPoint = CGPointMake(SCREEN_HEIGHT*1.4, SCREEN_HEIGHT*1.4);
+        animName = @"popIncorrectCard";
+        autoReverses = true;
+    }
+    
+    // Create and perform animation
+    POPBasicAnimation *popMoveCard = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionY];
+    popMoveCard.toValue = [NSValue valueWithCGPoint:destPoint];
+    popMoveCard.autoreverses = autoReverses;
+    popMoveCard.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    popMoveCard.delegate = self;
+    popMoveCard.name = animName;
+    popMoveCard.duration = CARD_ANIMATION_DURATION/2;
+    [self pop_addAnimation:popMoveCard forKey:animName];
     
     NSError *error = nil;
     [self.managedObjectContext save:&error];
@@ -663,7 +655,8 @@ bool frontShowing;
     StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
     
     if ([controller getActiveCardCount] > 1) {
-        [controller moveBackCardToFront];
+        // THIS IS BROKEN
+        //[controller moveBackCardToFront];
     }
     
 //    if ([controller getCardsActive] > 1) {
@@ -693,92 +686,92 @@ bool frontShowing;
     
 }
 
-- (void)dragged:(UIPanGestureRecognizer *)gestureRecognizer
-{
-    CGFloat xDistance = [gestureRecognizer translationInView:self].x;
-    CGFloat yDistance = [gestureRecognizer translationInView:self].y;
-    
-    NSLog(@"[Card] %f,%f,%f,%f",xDistance,yDistance,[gestureRecognizer velocityInView:self].x,[gestureRecognizer velocityInView:self].y);
-    
-    CGFloat velocityY = -1*[gestureRecognizer velocityInView:self].y;
-    NSTimeInterval duration = CARD_HEIGHT / velocityY;
-    
-    CGFloat draggedDistX, draggedDistY, distRemainingY;
-    
-    CGFloat xDestination;
-    
-    draggedDistY = -(self.center.y - self.originalPoint.y)/2; // Need to convert to points
-    draggedDistX = (self.center.x - self.originalPoint.x)/2;
-    distRemainingY = SCREEN_HEIGHT*0.5 - draggedDistY;
-    
-    xDestination = ((SCREEN_HEIGHT*0.5/draggedDistY) * draggedDistX) + SCREEN_WIDTH*0.5;
-    
-    //NSLog(@"[Card] %f",duration);
-    
-    switch (gestureRecognizer.state) {
-        case UIGestureRecognizerStateBegan:{
-            self.originalPoint = self.center;
-            break;
-        };
-        case UIGestureRecognizerStateChanged:{
-            CGFloat rotationStrength = MIN(xDistance / 320, 1);
-            CGFloat rotationAngle = (CGFloat) (2*M_PI * rotationStrength / 64);
-            CGFloat scaleStrength = 1 - fabsf(rotationStrength) / 4;
-            CGFloat scale = MAX(scaleStrength, 0.93);
-            self.center = CGPointMake(self.originalPoint.x + xDistance, self.originalPoint.y + yDistance);
-            CGAffineTransform transform = CGAffineTransformMakeRotation(rotationAngle);
-            CGAffineTransform scaleTransform = CGAffineTransformScale(transform, scale, scale);
-            self.transform = scaleTransform;
-            
-            NSLog(@"[Card] Y Dist: %f, Y Rem: %f, X Dest: %f",draggedDistY,distRemainingY,xDestination);
-            
-            break;
-        };
-        case UIGestureRecognizerStateEnded: {
-            
-            if (duration > 0.25 || velocityY > 150) {
-                duration = 0.25;
-            }
-            
-            if (yDistance < -150) {
-                
-                StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
-                
-                [controller handleCorrectCard:self willExitDeck:false];
-                
-                [gestureRecognizer velocityInView:self];
-                
-                NSLog(@"[Card] Y Dist: %f, Y Rem: %f, X Dest: %f",draggedDistY,distRemainingY,xDestination);
-                
-                [UIView animateWithDuration:duration
-                                      delay:0
-                                    options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                 animations:^{[self setCenter:CGPointMake(xDestination, -SCREEN_HEIGHT*0.5)]; }
-                                 completion:^(BOOL fin) { [controller dismissTopCard:self]; }  ];
-                
-            } else if (yDistance > 150) {
-                
-                StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
-                
-                [controller handleIncorrectCard:self];
-                
-                [UIView animateWithDuration:duration
-                                      delay:0
-                                    options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-                                 animations:^{[self setCenter:CGPointMake(160, SCREEN_HEIGHT*1.5)]; }
-                                 completion:^(BOOL fin) { [controller dismissTopCard:self]; }  ];
-                
-            } else {
-                [self resetViewPositionAndTransformations];
-            }
-            
-            break;
-        };
-        case UIGestureRecognizerStatePossible:break;
-        case UIGestureRecognizerStateCancelled:break;
-        case UIGestureRecognizerStateFailed:break;
-    }
-}
+//- (void)dragged:(UIPanGestureRecognizer *)gestureRecognizer
+//{
+//    CGFloat xDistance = [gestureRecognizer translationInView:self].x;
+//    CGFloat yDistance = [gestureRecognizer translationInView:self].y;
+//    
+//    NSLog(@"[Card] %f,%f,%f,%f",xDistance,yDistance,[gestureRecognizer velocityInView:self].x,[gestureRecognizer velocityInView:self].y);
+//    
+//    CGFloat velocityY = -1*[gestureRecognizer velocityInView:self].y;
+//    NSTimeInterval duration = CARD_HEIGHT / velocityY;
+//    
+//    CGFloat draggedDistX, draggedDistY, distRemainingY;
+//    
+//    CGFloat xDestination;
+//    
+//    draggedDistY = -(self.center.y - self.originalPoint.y)/2; // Need to convert to points
+//    draggedDistX = (self.center.x - self.originalPoint.x)/2;
+//    distRemainingY = SCREEN_HEIGHT*0.5 - draggedDistY;
+//    
+//    xDestination = ((SCREEN_HEIGHT*0.5/draggedDistY) * draggedDistX) + SCREEN_WIDTH*0.5;
+//    
+//    //NSLog(@"[Card] %f",duration);
+//    
+//    switch (gestureRecognizer.state) {
+//        case UIGestureRecognizerStateBegan:{
+//            self.originalPoint = self.center;
+//            break;
+//        };
+//        case UIGestureRecognizerStateChanged:{
+//            CGFloat rotationStrength = MIN(xDistance / 320, 1);
+//            CGFloat rotationAngle = (CGFloat) (2*M_PI * rotationStrength / 64);
+//            CGFloat scaleStrength = 1 - fabsf(rotationStrength) / 4;
+//            CGFloat scale = MAX(scaleStrength, 0.93);
+//            self.center = CGPointMake(self.originalPoint.x + xDistance, self.originalPoint.y + yDistance);
+//            CGAffineTransform transform = CGAffineTransformMakeRotation(rotationAngle);
+//            CGAffineTransform scaleTransform = CGAffineTransformScale(transform, scale, scale);
+//            self.transform = scaleTransform;
+//            
+//            NSLog(@"[Card] Y Dist: %f, Y Rem: %f, X Dest: %f",draggedDistY,distRemainingY,xDestination);
+//            
+//            break;
+//        };
+//        case UIGestureRecognizerStateEnded: {
+//            
+//            if (duration > 0.25 || velocityY > 150) {
+//                duration = 0.25;
+//            }
+//            
+//            if (yDistance < -150) {
+//                
+//                StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
+//                
+//                [controller handleCorrectCard:self willExitDeck:false];
+//                
+//                [gestureRecognizer velocityInView:self];
+//                
+//                NSLog(@"[Card] Y Dist: %f, Y Rem: %f, X Dest: %f",draggedDistY,distRemainingY,xDestination);
+//                
+//                [UIView animateWithDuration:duration
+//                                      delay:0
+//                                    options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
+//                                 animations:^{[self setCenter:CGPointMake(xDestination, -SCREEN_HEIGHT*0.5)]; }
+//                                 completion:^(BOOL fin) { [controller dismissTopCard:self]; }  ];
+//                
+//            } else if (yDistance > 150) {
+//                
+//                StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
+//                
+//                [controller handleIncorrectCard:self];
+//                
+//                [UIView animateWithDuration:duration
+//                                      delay:0
+//                                    options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
+//                                 animations:^{[self setCenter:CGPointMake(160, SCREEN_HEIGHT*1.5)]; }
+//                                 completion:^(BOOL fin) { [controller dismissTopCard:self]; }  ];
+//                
+//            } else {
+//                [self resetViewPositionAndTransformations];
+//            }
+//            
+//            break;
+//        };
+//        case UIGestureRecognizerStatePossible:break;
+//        case UIGestureRecognizerStateCancelled:break;
+//        case UIGestureRecognizerStateFailed:break;
+//    }
+//}
 
 - (void)resetViewPositionAndTransformations
 {
@@ -820,5 +813,37 @@ bool frontShowing;
     [self addGestureRecognizer:tapGestureRecognizer];
     
 }
+
+#pragma mark - POP Delegate
+
+- (void)pop_animationDidStop:(POPAnimation *)anim finished:(BOOL)finished {
+    
+    StudyViewController *controller = (StudyViewController*) [[self superview] nextResponder];
+
+    if ([anim.name isEqualToString:@"popCorrectCard"]) {
+        NSLog(@"Type: 1");
+        if (finished) {
+            // Original position
+            [controller handleCorrectCard:self willExitDeck:false];
+        } else {
+            // Mid-transition
+            [self.superview sendSubviewToBack:self];
+        }
+        
+    } else if ([anim.name isEqualToString:@"popCorrectCardDone"]) {
+        NSLog(@"Type: 2");
+        [controller handleCorrectCard:self willExitDeck:true];
+        
+    } else if ([anim.name isEqualToString:@"popIncorrectCard"]) {
+        NSLog(@"Type: 3");
+        if (finished) {
+            // Original position
+            [controller handleIncorrectCard:self];
+        } else {
+            // Mid-transition
+            [self.superview sendSubviewToBack:self];
+        }
+    }
+};
 
 @end

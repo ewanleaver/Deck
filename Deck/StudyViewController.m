@@ -419,7 +419,7 @@ int maxAllowedVisibleCards;
     // 2. Draw study progress bar
     //
     self.progressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET + 2, SCREEN_HEIGHT - 35, BAR_HEIGHT - 4, BAR_HEIGHT - 4)];
-    self.progressBar.backgroundColor = [UIColor colorWithRed:(235.0 / 255.0) green:(10.0 / 255.0) blue:(55.0 / 255.0) alpha: 0.7];
+    self.progressBar.backgroundColor = [UIColor colorWithRed:(235.0 / 255.0) green:(45.0 / 255.0) blue:(100.0 / 255.0) alpha: 0.7];
     self.progressBar.layer.cornerRadius = self.progressBar.frame.size.height/2;
     [self.view addSubview:self.progressBar];
     
@@ -558,7 +558,6 @@ int maxAllowedVisibleCards;
     [self maintainDeck]; // Perform maintenance on visible cards
     
     nextCardNo++;
-    
 }
 
 @end
