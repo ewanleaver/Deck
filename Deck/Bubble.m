@@ -54,7 +54,7 @@
     
     // Add the tap gesture recognizer to the view
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)];
-//    NSLog(@"%f, %f, %f, %f", frame.origin.x, frame.origin.x, frame.size.width, frame.size.height);//[tapGestureRecognizer locationInView:self];
+//    NSLog(@"%f, %f, %f, %f", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);//[tapGestureRecognizer locationInView:self];
     [self addGestureRecognizer:tapGestureRecognizer];
     
     self.bubbleToggled = false;

@@ -13,6 +13,11 @@
 
 @interface StudyViewController ()
 
+@property (nonatomic, strong) UIView *correctBar;
+@property (nonatomic, strong) CAShapeLayer *correctBarStartPoint;
+@property (nonatomic, strong) CAShapeLayer *correctBarEndPoint;
+@property (nonatomic, strong) CAShapeLayer *correctBarRect;
+
 @end
 
 @implementation StudyViewController
@@ -54,7 +59,7 @@ int maxAllowedVisibleCards;
 
 #define BAR_OFFSET 20
 
-#define BAR_WIDTH (SCREEN_WIDTH - BAR_OFFSET*2)
+#define BAR_MAX_WIDTH (SCREEN_WIDTH - BAR_OFFSET*2)
 #define BAR_HEIGHT 18
 
 #define ACTIVE_CARD_COLOUR [UIColor whiteColor]
@@ -62,34 +67,120 @@ int maxAllowedVisibleCards;
 #define BORDER_WIDTH 3
 #define CORNER_RADIUS 25
 
--(IBAction)StopStudy:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
 
--(IBAction)AddCard:(id)sender {
+- (id)initWithDeck:(Deck *)d {
+    NSLog(@"[StudyView] Studying deck '%@': %@ cards.",d.name,d.numToStudy);
     
-    Card *cardView = [[Card alloc] initCard:[charsToStudy objectAtIndex:nextCardNo] fresh:YES];
     
-    cardView.backgroundColor = ACTIVE_CARD_COLOUR;
-    cardView.layer.borderColor = BORDER_COLOUR;
-    cardView.layer.borderWidth = BORDER_WIDTH;
-    cardView.layer.cornerRadius = CORNER_RADIUS;
-    cardView.layer.masksToBounds = YES;
+    self = [super initWithNibName:nil bundle:nil];
+    deckStudying = d;
     
-    [self.view addSubview:cardView];
+    // Set background
+    //UIImage *image = [UIImage imageNamed:@"Study Background.png"];
+    self.view.backgroundColor = [UIColor colorWithRed:(205.0/255.0) green:(20.0/255.0) blue:(52.0/255.0) alpha:1];//[UIColor colorWithPatternImage:image];
     
-    totalCardCount++;
-    activeCardCount++;
+    // Initially no cards active
+    totalCardCount = 0;
+    activeCardCount = 0;
+    correctCardCount = 0;
+    incorrectCardCount = 0;
+    
+    maxAllowedVisibleCards = 3;
+    
+    UIColor *activeCountColor = [UIColor colorWithRed:(160.0 / 255.0) green:(8.0 / 255.0) blue:(40.0 / 255.0) alpha: 1];
+    
+    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 40, 22, 80, 25)];
     activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
-
-    [charsToStudy insertObject:[NSNumber numberWithInt:nextCardNo] atIndex:0]; // Track the card number in the deck (place on the top of the deck)
-    [visibleCards insertObject:cardView atIndex:0];
+    activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
+    [activeCardCountLabel setTextColor:activeCountColor];
+    [activeCardCountLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 25.0f]];
+    [self.view addSubview:activeCardCountLabel];
     
-    [self maintainDeck]; // Perform maintenance on visible cards
+    studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET, SCREEN_HEIGHT-37, BAR_MAX_WIDTH, BAR_HEIGHT)];
+    [self.view addSubview:studyProgressBar];
+    [self drawProgressBar];
     
-    nextCardNo++;
-
+    self.correctBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET + 2, SCREEN_HEIGHT - 35, BAR_HEIGHT - 4, BAR_HEIGHT - 4)];
+    self.correctBar.backgroundColor = [UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7];
+    self.correctBar.layer.cornerRadius = self.correctBar.frame.size.height/2;
+    [self.view addSubview:self.correctBar];
+    NSLog(@"CORRECTBAR: %f, %f, %f, %f", self.correctBar.frame.origin.x, self.correctBar.frame.origin.y, self.correctBar.frame.size.width, self.correctBar.frame.size.height);
+    
+    return self;
+    
 }
+
+//- (id)initWithDeckOld:(NSMutableArray *)inputDeck {
+//
+//    self = [super initWithNibName:nil bundle:nil];
+//
+//    inputDeckArray = inputDeck;
+//
+//    // Custom initialization
+//    //    UIColor *backColor = [UIColor colorWithRed:(80.0 / 255.0) green:(80.0 / 255.0) blue:(130.0 / 255.0) alpha: 1];
+//    //    self.view.backgroundColor = backColor;
+//    UIImage *image = [UIImage imageNamed:@"Study Background.png"];
+//    self.view.backgroundColor = [UIColor colorWithPatternImage:image];
+//
+//    // Initially no cards active
+//    totalCardCount = 0;
+//    activeCardCount = 0;
+//    correctCardCount = 0;
+//    incorrectCardCount = 0;
+//
+//    [UIBezierPath bezierPathWithRoundedRect:CGRectMake(15,25,100,100) cornerRadius:15];
+//
+//    //kanjiArray = @[@"一", @"二", @"三", @"四", @"五", @"六", @"七", @"八", @"九", @"十", @"零", @"江", @"里", @"菜", @"駒"];
+//
+////    UILabel *incorrectDescLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 100, [UIScreen mainScreen].bounds.size.height - 20, 80, 15)];
+////    incorrectDescLabel.text = [NSString stringWithFormat:@"Incorrect"];
+////    incorrectDescLabel.textAlignment = NSTextAlignmentCenter;
+////    myColor = [UIColor colorWithRed:(235.0 / 255.0) green:(10.0 / 255.0) blue:(65.0 / 255.0) alpha: 1];
+////    [incorrectDescLabel setTextColor:myColor];
+////    [incorrectDescLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 15.0f]];
+////    [self.view addSubview:incorrectDescLabel];
+////
+////    incorrectLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 100, [UIScreen mainScreen].bounds.size.height - 48, 80, 25)];
+////    incorrectLabel.text = [NSString stringWithFormat:@"%d", incorrectCardCount];
+////    incorrectLabel.textAlignment = NSTextAlignmentCenter;
+////    myColor = [UIColor colorWithRed:(235.0 / 255.0) green:(10.0 / 255.0) blue:(65.0 / 255.0) alpha: 1];
+////    [incorrectLabel setTextColor:myColor];
+////    [incorrectLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 30.0f]];
+////    [self.view addSubview:incorrectLabel];
+////
+////    UILabel *correctDescLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 + 20, [UIScreen mainScreen].bounds.size.height - 20, 80, 15)];
+////    correctDescLabel.text = [NSString stringWithFormat:@"Correct"];
+////    correctDescLabel.textAlignment = NSTextAlignmentCenter;
+////    myColor = [UIColor colorWithRed:(200.0 / 255.0) green:(200.0 / 255.0) blue:(200.0 / 255.0) alpha: 1];
+////    [correctDescLabel setTextColor:myColor];
+////    [correctDescLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 15.0f]];
+////    [self.view addSubview:correctDescLabel];
+////
+////    correctLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 + 20, [UIScreen mainScreen].bounds.size.height - 48, 80, 25)];
+////    correctLabel.text = [NSString stringWithFormat:@"%d", correctCardCount];
+////    correctLabel.textAlignment = NSTextAlignmentCenter;
+////    myColor = [UIColor colorWithRed:(200.0 / 255.0) green:(200.0 / 255.0) blue:(200.0 / 255.0) alpha: 1];
+////    [correctLabel setTextColor:myColor];
+////    [correctLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 25.0f]];
+////    [self.view addSubview:correctLabel];
+//
+//    UIColor *activeCountColor = [UIColor colorWithRed:(160.0 / 255.0) green:(8.0 / 255.0) blue:(40.0 / 255.0) alpha: 1];
+//
+//    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 22, 40, 25)];
+//    activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
+//    activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
+//    [activeCardCountLabel setTextColor:activeCountColor];
+//    [activeCardCountLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 25.0f]];
+//    [self.view addSubview:activeCardCountLabel];
+//
+//    studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET,SCREEN_HEIGHT-37,BAR_WIDTH,BAR_HEIGHT)];
+//    [self.view addSubview:studyProgressBar];
+//    [self drawProgressBar];
+//
+//    return self;
+//
+//}
+
 
 - (void)drawCardForChar:(Character*)c {
     
@@ -287,7 +378,7 @@ int maxAllowedVisibleCards;
         studiedRatio = (float)(totalCardCount - activeCardCount)/totalCardCount;
         
         // Redraw study progress bar with new study stats
-        [self drawProgressBar];
+        [self animateProgressBar];
 
         [self dismissTopCard:cardView];
         
@@ -331,7 +422,7 @@ int maxAllowedVisibleCards;
     //
     // 2. Draw bar outline
     //
-    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, BAR_WIDTH, BAR_HEIGHT) cornerRadius:BAR_HEIGHT/2];
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, BAR_MAX_WIDTH, BAR_HEIGHT) cornerRadius:BAR_HEIGHT/2];
     
     CAShapeLayer *barOutlineLayer = [[CAShapeLayer alloc] init];
     barOutlineLayer.strokeColor = [[UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7] CGColor];
@@ -342,17 +433,11 @@ int maxAllowedVisibleCards;
     
     [studyProgressBar.layer addSublayer:barOutlineLayer];
     
-    // Algorithm:
-    // If width is less than BAR_HEIGHT, width = BAR_HEIGHT
-    // Try start and end circle (careful about alpha)
-    // Draw rect
-    //Somehow animate rect and end circle to current position
-    
     //
     // 3. Draw study progress bar
     //
-    int width = studiedRatio*(BAR_WIDTH-4);
-    if (studiedRatio*(BAR_WIDTH-4) < BAR_HEIGHT) {
+    int width = studiedRatio*(BAR_MAX_WIDTH-4);
+    if (studiedRatio*(BAR_MAX_WIDTH-4) < BAR_HEIGHT) {
         width = BAR_HEIGHT-4;
     }
     path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(2, 2, width, BAR_HEIGHT-4) cornerRadius:(BAR_HEIGHT-4)/2];
@@ -369,20 +454,74 @@ int maxAllowedVisibleCards;
     //
     // 4. Draw correct progress bar
     //
-    width = studiedRatio*(BAR_WIDTH-4);
-    if (correctRatio*(BAR_WIDTH-4) < BAR_HEIGHT) {
+    width = correctRatio*(BAR_MAX_WIDTH-4);
+    if (correctRatio*(BAR_MAX_WIDTH-4) < BAR_HEIGHT) {
         width = BAR_HEIGHT-4;
     }
-    path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(2, 2, width, BAR_HEIGHT-4) cornerRadius:(BAR_HEIGHT-4)/2];
+//    path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(2, 2, width, BAR_HEIGHT-4) cornerRadius:(BAR_HEIGHT-4)/2];
+//    
+//    self.correctBarEndPoint = [[CAShapeLayer alloc] init];
+//    self.correctBarEndPoint.strokeColor = nil;
+//    self.correctBarEndPoint.lineWidth = 0;
+//    self.correctBarEndPoint.fillColor = [[UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7] CGColor];
+//    self.correctBarEndPoint.lineJoin = kCALineJoinBevel;
+//    self.correctBarEndPoint.path = path.CGPath;
+//    
+//    [studyProgressBar.layer addSublayer:self.correctBarEndPoint];
     
-    CAShapeLayer *barCorrectLayer = [[CAShapeLayer alloc] init];
-    barCorrectLayer.strokeColor = nil;
-    barCorrectLayer.lineWidth = 0;
-    barCorrectLayer.fillColor = [[UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7] CGColor];
-    barCorrectLayer.lineJoin = kCALineJoinBevel;
-    barCorrectLayer.path = path.CGPath;
+//    CGRect frame = CGRectMake(2, 2, width, BAR_HEIGHT-4);
+//    UIView *view = [[UIView alloc]initWithFrame:frame];
+//    view.backgroundColor = [UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7];
+//    [studyProgressBar.layer addSublayer:self.correctBarEndPoint];
     
-    [studyProgressBar.layer addSublayer:barCorrectLayer];
+    
+//    if (tag != 5) {
+//        //View 5 will be square
+//        view.layer.cornerRadius = diameter/2;
+//    }
+
+    
+    
+//    path = [UIBezierPath bezierPathWithRect:CGRectMake(2, 2, width, BAR_HEIGHT-4)];
+//    
+//    self.correctBarRect = [[CAShapeLayer alloc] init];
+//    self.correctBarRect.strokeColor = nil;
+//    self.correctBarRect.lineWidth = 0;
+//    self.correctBarRect.fillColor = [[UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7] CGColor];
+//    //self.correctBarRect.lineJoin = kCALineJoinBevel;
+//    self.correctBarRect.path = path.CGPath;
+//    
+//    [studyProgressBar.layer addSublayer:self.correctBarRect];
+}
+
+- (void)animateProgressBar {
+    
+    // Algorithm:
+    // If width is less than BAR_HEIGHT, width = BAR_HEIGHT
+    // Try start and end circle (careful about alpha)
+    // Draw rect
+    //Somehow animate rect and end circle to current position
+    
+    int width = studiedRatio*(BAR_MAX_WIDTH-4);
+    if (studiedRatio*(BAR_MAX_WIDTH-4) < BAR_HEIGHT) {
+        width = BAR_HEIGHT-4;
+    }
+    
+    CGRect newFrame = self.correctBar.frame;
+    newFrame.size.width = width;
+    newFrame.origin.x = BAR_OFFSET + 2;
+    
+    POPBasicAnimation *anim = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerBounds];
+    anim.toValue = [NSValue valueWithCGRect:newFrame];
+    anim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [self.correctBar pop_addAnimation:anim forKey:@"popBounds"];
+    NSLog(@"CORRECTBAR: %f, %f, %f, %f", self.correctBar.frame.origin.x, self.correctBar.frame.origin.y, self.correctBar.frame.size.width, self.correctBar.frame.size.height);
+    
+    POPBasicAnimation *animPos = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionX];
+    animPos.toValue = [NSValue valueWithCGPoint:CGPointMake(BAR_OFFSET + 2 + width/2, BAR_OFFSET + 2 + width)];
+    animPos.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [self.correctBar pop_addAnimation:animPos forKey:@"popPos"];
+    NSLog(@"CORRECTBAR: %f, %f, %f, %f", self.correctBar.frame.origin.x, self.correctBar.frame.origin.y, self.correctBar.frame.size.width, self.correctBar.frame.size.height);
 
 }
 
@@ -414,113 +553,6 @@ int maxAllowedVisibleCards;
 //    self.view.backgroundColor = myColor;
 //}
 
-- (id)initWithDeck:(Deck *)d {
-    NSLog(@"[StudyView] Studying deck '%@': %@ cards.",d.name,d.numToStudy);
-
-    
-    self = [super initWithNibName:nil bundle:nil];
-    deckStudying = d;
-    
-    // Set background
-    //UIImage *image = [UIImage imageNamed:@"Study Background.png"];
-    self.view.backgroundColor = [UIColor colorWithRed:(205.0/255.0) green:(20.0/255.0) blue:(52.0/255.0) alpha:1];//[UIColor colorWithPatternImage:image];
-    
-    // Initially no cards active
-    totalCardCount = 0;
-    activeCardCount = 0;
-    correctCardCount = 0;
-    incorrectCardCount = 0;
-    
-    maxAllowedVisibleCards = 3;
-    
-    UIColor *activeCountColor = [UIColor colorWithRed:(160.0 / 255.0) green:(8.0 / 255.0) blue:(40.0 / 255.0) alpha: 1];
-    
-    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 40, 22, 80, 25)];
-    activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
-    activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
-    [activeCardCountLabel setTextColor:activeCountColor];
-    [activeCardCountLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 25.0f]];
-    [self.view addSubview:activeCardCountLabel];
-    
-    studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET,SCREEN_HEIGHT-37,BAR_WIDTH,BAR_HEIGHT)];
-    [self.view addSubview:studyProgressBar];
-    [self drawProgressBar];
-    
-    return self;
-    
-}
-
-//- (id)initWithDeckOld:(NSMutableArray *)inputDeck {
-//    
-//    self = [super initWithNibName:nil bundle:nil];
-//    
-//    inputDeckArray = inputDeck;
-//    
-//    // Custom initialization
-//    //    UIColor *backColor = [UIColor colorWithRed:(80.0 / 255.0) green:(80.0 / 255.0) blue:(130.0 / 255.0) alpha: 1];
-//    //    self.view.backgroundColor = backColor;
-//    UIImage *image = [UIImage imageNamed:@"Study Background.png"];
-//    self.view.backgroundColor = [UIColor colorWithPatternImage:image];
-//    
-//    // Initially no cards active
-//    totalCardCount = 0;
-//    activeCardCount = 0;
-//    correctCardCount = 0;
-//    incorrectCardCount = 0;
-//    
-//    [UIBezierPath bezierPathWithRoundedRect:CGRectMake(15,25,100,100) cornerRadius:15];
-//    
-//    //kanjiArray = @[@"一", @"二", @"三", @"四", @"五", @"六", @"七", @"八", @"九", @"十", @"零", @"江", @"里", @"菜", @"駒"];
-//    
-////    UILabel *incorrectDescLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 100, [UIScreen mainScreen].bounds.size.height - 20, 80, 15)];
-////    incorrectDescLabel.text = [NSString stringWithFormat:@"Incorrect"];
-////    incorrectDescLabel.textAlignment = NSTextAlignmentCenter;
-////    myColor = [UIColor colorWithRed:(235.0 / 255.0) green:(10.0 / 255.0) blue:(65.0 / 255.0) alpha: 1];
-////    [incorrectDescLabel setTextColor:myColor];
-////    [incorrectDescLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 15.0f]];
-////    [self.view addSubview:incorrectDescLabel];
-////    
-////    incorrectLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 - 100, [UIScreen mainScreen].bounds.size.height - 48, 80, 25)];
-////    incorrectLabel.text = [NSString stringWithFormat:@"%d", incorrectCardCount];
-////    incorrectLabel.textAlignment = NSTextAlignmentCenter;
-////    myColor = [UIColor colorWithRed:(235.0 / 255.0) green:(10.0 / 255.0) blue:(65.0 / 255.0) alpha: 1];
-////    [incorrectLabel setTextColor:myColor];
-////    [incorrectLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 30.0f]];
-////    [self.view addSubview:incorrectLabel];
-////    
-////    UILabel *correctDescLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 + 20, [UIScreen mainScreen].bounds.size.height - 20, 80, 15)];
-////    correctDescLabel.text = [NSString stringWithFormat:@"Correct"];
-////    correctDescLabel.textAlignment = NSTextAlignmentCenter;
-////    myColor = [UIColor colorWithRed:(200.0 / 255.0) green:(200.0 / 255.0) blue:(200.0 / 255.0) alpha: 1];
-////    [correctDescLabel setTextColor:myColor];
-////    [correctDescLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 15.0f]];
-////    [self.view addSubview:correctDescLabel];
-////    
-////    correctLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2 + 20, [UIScreen mainScreen].bounds.size.height - 48, 80, 25)];
-////    correctLabel.text = [NSString stringWithFormat:@"%d", correctCardCount];
-////    correctLabel.textAlignment = NSTextAlignmentCenter;
-////    myColor = [UIColor colorWithRed:(200.0 / 255.0) green:(200.0 / 255.0) blue:(200.0 / 255.0) alpha: 1];
-////    [correctLabel setTextColor:myColor];
-////    [correctLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 25.0f]];
-////    [self.view addSubview:correctLabel];
-//    
-//    UIColor *activeCountColor = [UIColor colorWithRed:(160.0 / 255.0) green:(8.0 / 255.0) blue:(40.0 / 255.0) alpha: 1];
-//    
-//    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(140, 22, 40, 25)];
-//    activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
-//    activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
-//    [activeCardCountLabel setTextColor:activeCountColor];
-//    [activeCardCountLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 25.0f]];
-//    [self.view addSubview:activeCardCountLabel];
-//    
-//    studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET,SCREEN_HEIGHT-37,BAR_WIDTH,BAR_HEIGHT)];
-//    [self.view addSubview:studyProgressBar];
-//    [self drawProgressBar];
-//    
-//    return self;
-//
-//}
-
 - (void)viewDidLoad {
     
     [super viewDidLoad];
@@ -537,6 +569,37 @@ int maxAllowedVisibleCards;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - IBActions
+
+-(IBAction)StopStudy:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(IBAction)AddCard:(id)sender {
+    
+    Card *cardView = [[Card alloc] initCard:[charsToStudy objectAtIndex:nextCardNo] fresh:YES];
+    
+    cardView.backgroundColor = ACTIVE_CARD_COLOUR;
+    cardView.layer.borderColor = BORDER_COLOUR;
+    cardView.layer.borderWidth = BORDER_WIDTH;
+    cardView.layer.cornerRadius = CORNER_RADIUS;
+    cardView.layer.masksToBounds = YES;
+    
+    [self.view addSubview:cardView];
+    
+    totalCardCount++;
+    activeCardCount++;
+    activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
+    
+    [charsToStudy insertObject:[NSNumber numberWithInt:nextCardNo] atIndex:0]; // Track the card number in the deck (place on the top of the deck)
+    [visibleCards insertObject:cardView atIndex:0];
+    
+    [self maintainDeck]; // Perform maintenance on visible cards
+    
+    nextCardNo++;
+    
 }
 
 @end

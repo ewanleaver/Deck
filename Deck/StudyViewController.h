@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <pop/POP.h>
 #import "Deck.h"
 #import "Character.h"
 #import "Card.h"
