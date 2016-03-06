@@ -13,10 +13,9 @@
 
 @interface StudyViewController ()
 
+@property (nonatomic, strong) UIImageView *studyProgressBar;
+@property (nonatomic, strong) UIView *progressBar;
 @property (nonatomic, strong) UIView *correctBar;
-@property (nonatomic, strong) CAShapeLayer *correctBarStartPoint;
-@property (nonatomic, strong) CAShapeLayer *correctBarEndPoint;
-@property (nonatomic, strong) CAShapeLayer *correctBarRect;
 
 @end
 
@@ -51,8 +50,6 @@ NSMutableArray *charsToStudy;
 NSMutableArray *visibleCards;
 
 int maxAllowedVisibleCards;
-
-@synthesize studyProgressBar;
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
@@ -96,15 +93,9 @@ int maxAllowedVisibleCards;
     [activeCardCountLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 25.0f]];
     [self.view addSubview:activeCardCountLabel];
     
-    studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET, SCREEN_HEIGHT-37, BAR_MAX_WIDTH, BAR_HEIGHT)];
-    [self.view addSubview:studyProgressBar];
+    self.studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET, SCREEN_HEIGHT-37, BAR_MAX_WIDTH, BAR_HEIGHT)];
+    [self.view addSubview:self.studyProgressBar];
     [self drawProgressBar];
-    
-    self.correctBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET + 2, SCREEN_HEIGHT - 35, BAR_HEIGHT - 4, BAR_HEIGHT - 4)];
-    self.correctBar.backgroundColor = [UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7];
-    self.correctBar.layer.cornerRadius = self.correctBar.frame.size.height/2;
-    [self.view addSubview:self.correctBar];
-    NSLog(@"CORRECTBAR: %f, %f, %f, %f", self.correctBar.frame.origin.x, self.correctBar.frame.origin.y, self.correctBar.frame.size.width, self.correctBar.frame.size.height);
     
     return self;
     
@@ -411,16 +402,7 @@ int maxAllowedVisibleCards;
 - (void)drawProgressBar {
     
     //
-    // 1. Refresh drawing by removing all previous layers
-    //    (Future: implement animation instead?)
-    //
-    NSArray* sublayers = [NSArray arrayWithArray:studyProgressBar.layer.sublayers];
-    for (CALayer *layer in sublayers) {
-        [layer removeFromSuperlayer];
-    }
-    
-    //
-    // 2. Draw bar outline
+    // 1. Draw bar outline
     //
     UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, BAR_MAX_WIDTH, BAR_HEIGHT) cornerRadius:BAR_HEIGHT/2];
     
@@ -431,98 +413,75 @@ int maxAllowedVisibleCards;
     barOutlineLayer.lineJoin = kCALineJoinBevel;
     barOutlineLayer.path = path.CGPath;
     
-    [studyProgressBar.layer addSublayer:barOutlineLayer];
+    [self.studyProgressBar.layer addSublayer:barOutlineLayer];
     
     //
-    // 3. Draw study progress bar
+    // 2. Draw study progress bar
     //
-    int width = studiedRatio*(BAR_MAX_WIDTH-4);
-    if (studiedRatio*(BAR_MAX_WIDTH-4) < BAR_HEIGHT) {
-        width = BAR_HEIGHT-4;
-    }
-    path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(2, 2, width, BAR_HEIGHT-4) cornerRadius:(BAR_HEIGHT-4)/2];
-    
-    CAShapeLayer *barProgressLayer = [[CAShapeLayer alloc] init];
-    barProgressLayer.strokeColor = nil;
-    barProgressLayer.lineWidth = 0;
-    barProgressLayer.fillColor = [[UIColor colorWithRed:(235.0 / 255.0) green:(10.0 / 255.0) blue:(55.0 / 255.0) alpha: 0.7] CGColor];
-    barProgressLayer.lineJoin = kCALineJoinBevel;
-    barProgressLayer.path = path.CGPath;
-    
-    [studyProgressBar.layer addSublayer:barProgressLayer];
+    self.progressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET + 2, SCREEN_HEIGHT - 35, BAR_HEIGHT - 4, BAR_HEIGHT - 4)];
+    self.progressBar.backgroundColor = [UIColor colorWithRed:(235.0 / 255.0) green:(10.0 / 255.0) blue:(55.0 / 255.0) alpha: 0.7];
+    self.progressBar.layer.cornerRadius = self.progressBar.frame.size.height/2;
+    [self.view addSubview:self.progressBar];
     
     //
-    // 4. Draw correct progress bar
+    // 3. Draw correct progress bar
     //
-    width = correctRatio*(BAR_MAX_WIDTH-4);
-    if (correctRatio*(BAR_MAX_WIDTH-4) < BAR_HEIGHT) {
-        width = BAR_HEIGHT-4;
-    }
-//    path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(2, 2, width, BAR_HEIGHT-4) cornerRadius:(BAR_HEIGHT-4)/2];
-//    
-//    self.correctBarEndPoint = [[CAShapeLayer alloc] init];
-//    self.correctBarEndPoint.strokeColor = nil;
-//    self.correctBarEndPoint.lineWidth = 0;
-//    self.correctBarEndPoint.fillColor = [[UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7] CGColor];
-//    self.correctBarEndPoint.lineJoin = kCALineJoinBevel;
-//    self.correctBarEndPoint.path = path.CGPath;
-//    
-//    [studyProgressBar.layer addSublayer:self.correctBarEndPoint];
-    
-//    CGRect frame = CGRectMake(2, 2, width, BAR_HEIGHT-4);
-//    UIView *view = [[UIView alloc]initWithFrame:frame];
-//    view.backgroundColor = [UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7];
-//    [studyProgressBar.layer addSublayer:self.correctBarEndPoint];
-    
-    
-//    if (tag != 5) {
-//        //View 5 will be square
-//        view.layer.cornerRadius = diameter/2;
-//    }
-
-    
-    
-//    path = [UIBezierPath bezierPathWithRect:CGRectMake(2, 2, width, BAR_HEIGHT-4)];
-//    
-//    self.correctBarRect = [[CAShapeLayer alloc] init];
-//    self.correctBarRect.strokeColor = nil;
-//    self.correctBarRect.lineWidth = 0;
-//    self.correctBarRect.fillColor = [[UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7] CGColor];
-//    //self.correctBarRect.lineJoin = kCALineJoinBevel;
-//    self.correctBarRect.path = path.CGPath;
-//    
-//    [studyProgressBar.layer addSublayer:self.correctBarRect];
+    self.correctBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET + 2, SCREEN_HEIGHT - 35, BAR_HEIGHT - 4, BAR_HEIGHT - 4)];
+    self.correctBar.backgroundColor = [UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7];
+    self.correctBar.layer.cornerRadius = self.correctBar.frame.size.height/2;
+    [self.view addSubview:self.correctBar];
+    NSLog(@"CORRECTBAR: %f, %f, %f, %f", self.correctBar.frame.origin.x, self.correctBar.frame.origin.y, self.correctBar.frame.size.width, self.correctBar.frame.size.height);
 }
 
 - (void)animateProgressBar {
     
-    // Algorithm:
-    // If width is less than BAR_HEIGHT, width = BAR_HEIGHT
-    // Try start and end circle (careful about alpha)
-    // Draw rect
-    //Somehow animate rect and end circle to current position
+    // TODO: Animate the endcircle appearing!
     
-    int width = studiedRatio*(BAR_MAX_WIDTH-4);
+    //
+    // 1. Animate study progress bar
+    //
+    int progressBarWidth = studiedRatio*(BAR_MAX_WIDTH-4);
     if (studiedRatio*(BAR_MAX_WIDTH-4) < BAR_HEIGHT) {
-        width = BAR_HEIGHT-4;
+        progressBarWidth = BAR_HEIGHT-4;
     }
     
-    CGRect newFrame = self.correctBar.frame;
-    newFrame.size.width = width;
-    newFrame.origin.x = BAR_OFFSET + 2;
+    CGRect newProgressBarFrame = self.progressBar.frame;
+    newProgressBarFrame.size.width = progressBarWidth;
+//    newProgressBarFrame.origin.x = BAR_OFFSET + 2;
     
-    POPBasicAnimation *anim = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerBounds];
-    anim.toValue = [NSValue valueWithCGRect:newFrame];
-    anim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    [self.correctBar pop_addAnimation:anim forKey:@"popBounds"];
-    NSLog(@"CORRECTBAR: %f, %f, %f, %f", self.correctBar.frame.origin.x, self.correctBar.frame.origin.y, self.correctBar.frame.size.width, self.correctBar.frame.size.height);
+    POPBasicAnimation *animProgessBounds = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerBounds];
+    animProgessBounds.toValue = [NSValue valueWithCGRect:newProgressBarFrame];
+    animProgessBounds.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [self.progressBar pop_addAnimation:animProgessBounds forKey:@"animProgessBounds"];
     
-    POPBasicAnimation *animPos = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionX];
-    animPos.toValue = [NSValue valueWithCGPoint:CGPointMake(BAR_OFFSET + 2 + width/2, BAR_OFFSET + 2 + width)];
-    animPos.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    [self.correctBar pop_addAnimation:animPos forKey:@"popPos"];
-    NSLog(@"CORRECTBAR: %f, %f, %f, %f", self.correctBar.frame.origin.x, self.correctBar.frame.origin.y, self.correctBar.frame.size.width, self.correctBar.frame.size.height);
+    POPBasicAnimation *animProgessPos = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionX];
+    animProgessPos.toValue = [NSValue valueWithCGPoint:CGPointMake(BAR_OFFSET + 2 + progressBarWidth/2, BAR_OFFSET + 2 + progressBarWidth/2)];
+    animProgessPos.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [self.progressBar pop_addAnimation:animProgessPos forKey:@"animProgessPos"];
 
+    //
+    // 2. Animate correct progress bar
+    //
+    int correctBarWidth = correctRatio*(BAR_MAX_WIDTH-4);
+    if (correctRatio*(BAR_MAX_WIDTH-4) < BAR_HEIGHT) {
+        correctBarWidth = BAR_HEIGHT-4;
+    }
+    
+    CGRect newCorrectBarFrame = self.correctBar.frame;
+    newCorrectBarFrame.size.width = correctBarWidth;
+//    newCorrectBarFrame.origin.x = BAR_OFFSET + 2;
+    
+    POPBasicAnimation *animCorrectBounds = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerBounds];
+    animCorrectBounds.toValue = [NSValue valueWithCGRect:newCorrectBarFrame];
+    animCorrectBounds.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [self.correctBar pop_addAnimation:animCorrectBounds forKey:@"animCorrectBounds"];
+//    NSLog(@"CORRECTBAR: %f, %f, %f, %f", self.correctBar.frame.origin.x, self.correctBar.frame.origin.y, self.correctBar.frame.size.width, self.correctBar.frame.size.height);
+    
+    POPBasicAnimation *animCorrectPos = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionX];
+    animCorrectPos.toValue = [NSValue valueWithCGPoint:CGPointMake(BAR_OFFSET + 2 + correctBarWidth/2, BAR_OFFSET + 2 + correctBarWidth/2)];
+    animCorrectPos.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [self.correctBar pop_addAnimation:animCorrectPos forKey:@"animCorrectPos"];
+//    NSLog(@"CORRECTBAR: %f, %f, %f, %f", self.correctBar.frame.origin.x, self.correctBar.frame.origin.y, self.correctBar.frame.size.width, self.correctBar.frame.size.height);
 }
 
 - (void)prepDeck {

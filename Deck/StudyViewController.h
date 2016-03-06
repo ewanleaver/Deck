@@ -16,15 +16,12 @@
 
 - (IBAction)StopStudy:(id)sender;
 - (IBAction)AddCard:(id)sender;
-//- (IBAction)AddTen:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UILabel *deckEmptyLabel;
 @property (weak, nonatomic) IBOutlet UIButton *keepStudyingButton;
 
 @property (nonatomic) Deck *deckStudying;
 @property (nonatomic) int nextCardNo;
-
-@property UIImageView *studyProgressBar;
 
 - (id) initWithDeck: (NSMutableArray *)inputDeck;
 
