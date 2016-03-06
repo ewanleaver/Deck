@@ -271,7 +271,7 @@ int maxAllowedVisibleCards;
     NSLog(@"[StudyView] %d active cards",activeCardCount);
 }
 
-- (void) handleCorrectCard:(Card*)cardView willExitDeck:(BOOL)willExitDeck {
+- (void)handleCorrectCard:(Card*)cardView willExitDeck:(BOOL)willExitDeck {
     
     if (willExitDeck) {
         
@@ -301,7 +301,7 @@ int maxAllowedVisibleCards;
 
 }
 
-- (void) handleIncorrectCard:(Card*)cardView {
+- (void)handleIncorrectCard:(Card*)cardView {
     
     NSLog(@"[StudyView] INCORRECT card shuffle. Kanji: %@ Score: %d",cardView.c.literal,(cardView.tempStudyDetails.numCorrect.intValue - cardView.tempStudyDetails.numIncorrect.intValue));
     
@@ -309,11 +309,11 @@ int maxAllowedVisibleCards;
 
 }
 
-- (int) getActiveCardCount {
+- (int)getActiveCardCount {
     return activeCardCount;
 }
 
-- (void) decActiveCardCount {
+- (void)decActiveCardCount {
     activeCardCount--;
 }
 
@@ -342,10 +342,20 @@ int maxAllowedVisibleCards;
     
     [studyProgressBar.layer addSublayer:barOutlineLayer];
     
+    // Algorithm:
+    // If width is less than BAR_HEIGHT, width = BAR_HEIGHT
+    // Try start and end circle (careful about alpha)
+    // Draw rect
+    //Somehow animate rect and end circle to current position
+    
     //
     // 3. Draw study progress bar
     //
-    path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(2, 2, studiedRatio*(BAR_WIDTH-4), BAR_HEIGHT-4) cornerRadius:(BAR_HEIGHT-4)/2];
+    int width = studiedRatio*(BAR_WIDTH-4);
+    if (studiedRatio*(BAR_WIDTH-4) < BAR_HEIGHT) {
+        width = BAR_HEIGHT-4;
+    }
+    path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(2, 2, width, BAR_HEIGHT-4) cornerRadius:(BAR_HEIGHT-4)/2];
     
     CAShapeLayer *barProgressLayer = [[CAShapeLayer alloc] init];
     barProgressLayer.strokeColor = nil;
@@ -359,7 +369,11 @@ int maxAllowedVisibleCards;
     //
     // 4. Draw correct progress bar
     //
-    path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(2, 2, correctRatio*(BAR_WIDTH-4), BAR_HEIGHT-4) cornerRadius:(BAR_HEIGHT-4)/2];
+    width = studiedRatio*(BAR_WIDTH-4);
+    if (correctRatio*(BAR_WIDTH-4) < BAR_HEIGHT) {
+        width = BAR_HEIGHT-4;
+    }
+    path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(2, 2, width, BAR_HEIGHT-4) cornerRadius:(BAR_HEIGHT-4)/2];
     
     CAShapeLayer *barCorrectLayer = [[CAShapeLayer alloc] init];
     barCorrectLayer.strokeColor = nil;
@@ -421,7 +435,7 @@ int maxAllowedVisibleCards;
     
     UIColor *activeCountColor = [UIColor colorWithRed:(160.0 / 255.0) green:(8.0 / 255.0) blue:(40.0 / 255.0) alpha: 1];
     
-    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 20, 22, 40, 25)];
+    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 40, 22, 80, 25)];
     activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
     activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
     [activeCardCountLabel setTextColor:activeCountColor];

@@ -54,6 +54,7 @@
     
     // Add the tap gesture recognizer to the view
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)];
+//    NSLog(@"%f, %f, %f, %f", frame.origin.x, frame.origin.x, frame.size.width, frame.size.height);//[tapGestureRecognizer locationInView:self];
     [self addGestureRecognizer:tapGestureRecognizer];
     
     self.bubbleToggled = false;
@@ -109,6 +110,9 @@
 }
 
 - (void)handleTapFrom:(UIGestureRecognizer*)recognizer {
+    
+//    CGPoint touchPoint = [recognizer locationInView: self];
+//    NSLog(@"%f, %f",touchPoint.x,touchPoint.y);
     
     if (self.inputRegularSize != 0) {
         
