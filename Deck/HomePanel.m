@@ -80,21 +80,21 @@ NSArray *comments;
         
         [self addSubview:self.bubble];
         
-        self.toStudyLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 100,178,200,50)];
-        [self.toStudyLabel setTextAlignment:NSTextAlignmentCenter];
-        [self.toStudyLabel setFont:[UIFont systemFontOfSize:64.0f]];
-        [self.toStudyLabel setTextColor:labelColour];
-        self.toStudyLabel.text = [NSString stringWithFormat:@"%d",self.toStudyCount];
-        [self addSubview:self.toStudyLabel];
+        self.studyCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 100,178,200,50)];
+        [self.studyCountLabel setTextAlignment:NSTextAlignmentCenter];
+        [self.studyCountLabel setFont:[UIFont systemFontOfSize:64.0f]];
+        [self.studyCountLabel setTextColor:labelColour];
+        self.studyCountLabel.text = [NSString stringWithFormat:@"%d",self.toStudyCount];
+        [self addSubview:self.studyCountLabel];
         
         // Displays total number of cards
-        self.cardLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 100,178,200,50)];
-        [self.cardLabel setTextAlignment:NSTextAlignmentCenter];
-        [self.cardLabel setFont:[UIFont systemFontOfSize:64.0f]];
-        [self.cardLabel setTextColor:labelColour];
-        self.cardLabel.text = [NSString stringWithFormat:@"%d",self.cardCount];
-        [self addSubview:self.cardLabel];
-        [self.cardLabel setHidden:YES];
+        self.totalCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 100,178,200,50)];
+        [self.totalCountLabel setTextAlignment:NSTextAlignmentCenter];
+        [self.totalCountLabel setFont:[UIFont systemFontOfSize:64.0f]];
+        [self.totalCountLabel setTextColor:labelColour];
+        self.totalCountLabel.text = [NSString stringWithFormat:@"%d",self.cardCount];
+        [self addSubview:self.totalCountLabel];
+        [self.totalCountLabel setHidden:YES];
         
         self.descLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 30,215,60,50)];
         [self.descLabel setTextAlignment:NSTextAlignmentCenter];
@@ -114,14 +114,14 @@ NSArray *comments;
 - (void)changeBubbleView {
     
     if (!bubbleToggled) {
-        self.toStudyLabel.hidden = YES;
-        [self.cardLabel setText:[NSString stringWithFormat:@"%d",self.cardCount]];
-        self.cardLabel.hidden = NO;
+        self.studyCountLabel.hidden = YES;
+        [self.totalCountLabel setText:[NSString stringWithFormat:@"%d",self.cardCount]];
+        self.totalCountLabel.hidden = NO;
         
         self.descLabel.text = @"Total";
     } else {
-        self.cardLabel.hidden = YES;
-        self.toStudyLabel.hidden = NO;
+        self.totalCountLabel.hidden = YES;
+        self.studyCountLabel.hidden = NO;
 
         
         self.descLabel.text = @"Cards";

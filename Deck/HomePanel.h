@@ -31,9 +31,9 @@
 // Consider whether these should be made private
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, assign) int cardCount;
-@property (nonatomic, strong) UILabel *cardLabel;
+@property (nonatomic, strong) UILabel *totalCountLabel;
 @property (nonatomic, assign) int toStudyCount;
-@property (nonatomic, strong) UILabel *toStudyLabel;
+@property (nonatomic, strong) UILabel *studyCountLabel;
 @property (nonatomic, strong) UILabel *descLabel;
 
 @property (nonatomic, strong) Bubble *bubble;

@@ -84,7 +84,7 @@ int numPanels;
         
         panel = [[HomePanel alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width * i, 0, self.scrollView.frame.size.width, 240) deck:d];
         [[panel titleLabel] setText:d.name];
-        [[panel cardLabel] setText:[NSString stringWithFormat:@"%@",d.numToStudy]];
+        [[panel totalCountLabel] setText:[NSString stringWithFormat:@"%@",d.numToStudy]];
         
         [self.scrollView addSubview:panel];
     }
@@ -221,7 +221,7 @@ int numPanels;
         [[panel titleLabel] setText:title];
 //        [panel setCardCount:cardsTotal];
 //        [panel setToStudyCount:numToStudy];
-        [[panel cardLabel] setText:[NSString stringWithFormat:@"%d",numToStudy]];
+        [[panel totalCountLabel] setText:[NSString stringWithFormat:@"%d",numToStudy]];
         
         //[subview addSubview:panel];
         
