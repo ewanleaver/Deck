@@ -103,6 +103,13 @@
     if (self.inputRegularSize == 0) {
         CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:(200.0 / 255.0) green:(200.0 / 255.0) blue:(200.0 / 255.0) alpha: 1].CGColor);
         CGContextStrokePath(UIGraphicsGetCurrentContext());
+        
+        POPBasicAnimation *rotationAnimation = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerRotation];
+        rotationAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(M_PI, M_PI)];
+        rotationAnimation.duration = 10;
+        rotationAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        rotationAnimation.repeatForever = true;
+        [self.layer pop_addAnimation:rotationAnimation forKey:@"rotateBubble"];
     } else {
         CGContextSetFillColorWithColor(context, self.colour.CGColor);
         CGContextFillPath(context);
