@@ -46,7 +46,7 @@
 #define KANJI_SIZE 100
 
 #define READING_BOX_LEFT 0
-#define READING_BOX_TOP CONTENT_OFFSET_TOP + 110
+#define READING_BOX_TOP CONTENT_OFFSET_TOP + KANJI_SIZE + 11
 #define READING_BOX_WIDTH CARD_WIDTH
 #define READING_BOX_HEIGHT 90
 
@@ -55,6 +55,7 @@
 #define READING_OFFSET_TOP 5
 #define READING_GAP 5
 
+#define MEANING_BOX_TOP READING_BOX_TOP + READING_BOX_HEIGHT + 10
 
 #define VERBOSE 0
 
@@ -154,7 +155,7 @@ bool frontShowing;
             
             if (i < 6) {
                 
-                UILabel *meaningLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, CONTENT_OFFSET_TOP + 205 + i*30, 270, 25)];
+                UILabel *meaningLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, MEANING_BOX_TOP + i*30, 270, 25)];
                 [meaningLabel setTextColor:[UIColor darkGrayColor]];
                 
                 NSMutableAttributedString *text = [[NSMutableAttributedString alloc]
