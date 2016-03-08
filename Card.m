@@ -42,6 +42,7 @@
 #define CONTENT_OFFSET_LEFT 15
 #define CONTENT_OFFSET_TOP 15
 
+#define FRONT_KANJI_SIZE 150
 #define KANJI_SIZE 100
 
 #define READING_BOX_LEFT 0
@@ -123,19 +124,19 @@ bool frontShowing;
         kanjiLabel.text = self.c.literal;
         [kanjiLabel setTextColor:[UIColor darkGrayColor]];
         [kanjiLabel setBackgroundColor:[UIColor clearColor]];
-        [kanjiLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: KANJI_SIZE]];
+        [kanjiLabel setFont:[UIFont systemFontOfSize:KANJI_SIZE weight:UIFontWeightThin]];
         [self addSubview:kanjiLabel];
         
         UILabel *pinyinLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, CONTENT_OFFSET_TOP + 175, 100, 20)];
         pinyinLabel.text = @"Pinyin:";
         [pinyinLabel setTextColor:[UIColor lightGrayColor]];
-        [pinyinLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 15.0f]];
+        [pinyinLabel setFont:[UIFont systemFontOfSize:15.0f]];
         [self addSubview:pinyinLabel];
         
         UILabel *pinyinReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT + 55, CONTENT_OFFSET_TOP + 175, 215, 20)];
         pinyinReadingLabel.text = [readings_pin firstObject];//@"yi1";
         [pinyinReadingLabel setTextColor:[UIColor darkGrayColor]];
-        [pinyinReadingLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 17.0f]];
+        [pinyinReadingLabel setFont:[UIFont systemFontOfSize:17.0f]];
         [self addSubview:pinyinReadingLabel];
         
         
@@ -163,7 +164,7 @@ bool frontShowing;
                              range:NSMakeRange(0, 2)];
                 [meaningLabel setAttributedText: text];
                 
-                [meaningLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 20.0f]];
+                [meaningLabel setFont:[UIFont systemFontOfSize: 20.0f]];
                 [self addSubview:meaningLabel];
                 
                 // Add label to array
@@ -184,7 +185,7 @@ bool frontShowing;
         };
         [jlptLabel setTextColor:[UIColor colorWithRed:(170.0 / 255.0) green:(170.0 / 255.0) blue:(170.0 / 255.0) alpha: 1]];
         [jlptLabel setBackgroundColor:[UIColor clearColor]];
-        [jlptLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 20.0f]];
+        [jlptLabel setFont:[UIFont systemFontOfSize:20.0f]];
         [self addSubview:jlptLabel];
         
         
@@ -193,7 +194,7 @@ bool frontShowing;
         cardNumLabel.textAlignment = NSTextAlignmentRight;
         [cardNumLabel setTextColor:[UIColor lightGrayColor]];
         [cardNumLabel setBackgroundColor:[UIColor clearColor]];
-        [cardNumLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 20.0f]];
+        [cardNumLabel setFont:[UIFont systemFontOfSize:20.0f]];
         [self addSubview:cardNumLabel];
         
         [self setupFrontView];
@@ -270,11 +271,11 @@ bool frontShowing;
     self.frontView = [[UIView alloc] initWithFrame:frame];
     [self.frontView setBackgroundColor:[UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 1]];
     
-    UILabel *frontKanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake(CARD_WIDTH/2 - 75, CARD_HEIGHT/2 - 100, 150, 150)];
+    UILabel *frontKanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake((CARD_WIDTH - FRONT_KANJI_SIZE)/2, (CARD_HEIGHT - FRONT_KANJI_SIZE)/2, FRONT_KANJI_SIZE, FRONT_KANJI_SIZE)];
     frontKanjiLabel.text = self.c.literal;
     [frontKanjiLabel setTextColor:[UIColor darkGrayColor]];
     [frontKanjiLabel setBackgroundColor:[UIColor clearColor]];
-    [frontKanjiLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 150.0f]];
+    [frontKanjiLabel setFont:[UIFont systemFontOfSize:FRONT_KANJI_SIZE weight:UIFontWeightThin]];
     [self.frontView addSubview:frontKanjiLabel];
     
     [self addSubview:self.frontView];
@@ -322,7 +323,7 @@ bool frontShowing;
         [self.readingsView.layer addSublayer:readingLayer];
         
         //[onReadingLabel setTextColor:[UIColor colorWithRed:(120.0 / 255.0) green:(30.0 / 255.0) blue:(30.0 / 255.0) alpha: 1]];
-        [onReadingLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 18.0f]];
+        [onReadingLabel setFont:[UIFont systemFontOfSize:18.0f]];
         [self addSubview:onReadingLabel];
         
         currPos = currPos + labelWidth + READING_GAP;
@@ -386,7 +387,7 @@ bool frontShowing;
         [self.readingsView.layer addSublayer:readingLayer];
         
         //[kunReadingLabel setTextColor:[UIColor colorWithRed:(30.0 / 255.0) green:(30.0 / 255.0) blue:(120.0 / 255.0) alpha: 1]];
-        [kunReadingLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 18.0f]];
+        [kunReadingLabel setFont:[UIFont systemFontOfSize:18.0f]];
         [self addSubview:kunReadingLabel];
         
         currPos = currPos + labelWidth + READING_GAP;

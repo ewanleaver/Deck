@@ -90,7 +90,7 @@ int maxAllowedVisibleCards;
     activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
     activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
     [activeCardCountLabel setTextColor:activeCountColor];
-    [activeCardCountLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 25.0f]];
+    [activeCardCountLabel setFont:[UIFont systemFontOfSize: 25.0f]];
     [self.view addSubview:activeCardCountLabel];
     
     self.studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET, SCREEN_HEIGHT-37, BAR_MAX_WIDTH, BAR_HEIGHT)];
