@@ -796,11 +796,11 @@ bool frontShowing;
     UISwipeGestureRecognizer* swipeDownGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeDownFrom:)];
     swipeDownGestureRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
     
-    UISwipeGestureRecognizer* swipeRightGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeRightFrom:)];
-    swipeRightGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-    
-    UISwipeGestureRecognizer* swipeLeftGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeLeftFrom:)];
-    swipeLeftGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+//    UISwipeGestureRecognizer* swipeRightGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeRightFrom:)];
+//    swipeRightGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+//    
+//    UISwipeGestureRecognizer* swipeLeftGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeLeftFrom:)];
+//    swipeLeftGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
     
     UITapGestureRecognizer* tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     
@@ -809,8 +809,8 @@ bool frontShowing;
     
     [self addGestureRecognizer:swipeUpGestureRecognizer];
     [self addGestureRecognizer:swipeDownGestureRecognizer];
-    [self addGestureRecognizer:swipeRightGestureRecognizer];
-    [self addGestureRecognizer:swipeLeftGestureRecognizer];
+//    [self addGestureRecognizer:swipeRightGestureRecognizer];
+//    [self addGestureRecognizer:swipeLeftGestureRecognizer];
     
     [self addGestureRecognizer:tapGestureRecognizer];
     
