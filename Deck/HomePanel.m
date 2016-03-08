@@ -25,8 +25,8 @@ NSArray *comments;
     bubbleColour = [UIColor colorWithRed:(bR /255.0) green:(bG / 255.0) blue:(bB / 255.0) alpha: 1];
     customColour = YES; // Override default bubble colour
     
-    self.toStudyCount = [d.numToStudy intValue];
-    self.cardCount = [d.numToStudy intValue];
+    self.unstudiedCount = [d.numToStudy intValue];
+    self.totalCount = [d.numToStudy intValue];
     
     return [self initWithFrame:frame];
 }
@@ -36,8 +36,8 @@ NSArray *comments;
     bubbleColour = inputColour;
     customColour = YES; // Override default bubble colour
     
-    self.toStudyCount = cardsToStudy;
-    self.cardCount = cardsTotal;
+    self.unstudiedCount = cardsToStudy;
+    self.totalCount = cardsTotal;
     
     return [self initWithFrame:frame];
 };
@@ -56,7 +56,7 @@ NSArray *comments;
         
         UIColor *labelColour = [UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7];
         
-        if (self.toStudyCount == 0) {
+        if (self.unstudiedCount == 0) {
             // Remember this colour (green):
             //labelColour = [UIColor colorWithRed:(65.0 / 255.0) green:(220.0 / 255.0) blue:(130.0 / 255.0) alpha: 1];
             labelColour = bubbleColour;
@@ -72,7 +72,7 @@ NSArray *comments;
         }
         
         if (customColour) {
-            self.bubble = [[Bubble alloc] initBubbleWithFrame:CGRectMake(self.frame.size.width/2 - 110,100,220,220) colour:bubbleColour regularSize:self.toStudyCount  inflatedSize:self.cardCount];
+            self.bubble = [[Bubble alloc] initBubbleWithFrame:CGRectMake(self.frame.size.width/2 - 110,100,220,220) colour:bubbleColour regularSize:self.unstudiedCount  inflatedSize:self.totalCount];
             //bubble = [[Bubble alloc] init:CGRectMake(self.frame.size.width/2 - 90,40,180,180) colour:bubbleColour];
         } else {
             self.bubble = [[Bubble alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 110,100,220,220)];
@@ -80,28 +80,28 @@ NSArray *comments;
         
         [self addSubview:self.bubble];
         
-        self.studyCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 100,178,200,50)];
-        [self.studyCountLabel setTextAlignment:NSTextAlignmentCenter];
-        [self.studyCountLabel setFont:[UIFont systemFontOfSize:64.0f]];
-        [self.studyCountLabel setTextColor:labelColour];
-        self.studyCountLabel.text = [NSString stringWithFormat:@"%d",self.toStudyCount];
-        [self addSubview:self.studyCountLabel];
+        self.unstudiedCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 100,178,200,50)];
+        [self.unstudiedCountLabel setTextAlignment:NSTextAlignmentCenter];
+        [self.unstudiedCountLabel setFont:[UIFont systemFontOfSize:64.0f]];
+        [self.unstudiedCountLabel setTextColor:labelColour];
+        self.unstudiedCountLabel.text = [NSString stringWithFormat:@"%d",self.unstudiedCount];
+        [self addSubview:self.unstudiedCountLabel];
         
         // Displays total number of cards
         self.totalCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 100,178,200,50)];
         [self.totalCountLabel setTextAlignment:NSTextAlignmentCenter];
         [self.totalCountLabel setFont:[UIFont systemFontOfSize:64.0f]];
         [self.totalCountLabel setTextColor:labelColour];
-        self.totalCountLabel.text = [NSString stringWithFormat:@"%d",self.cardCount];
+        self.totalCountLabel.text = [NSString stringWithFormat:@"%d",self.totalCount];
         [self addSubview:self.totalCountLabel];
         [self.totalCountLabel setHidden:YES];
         
-        self.descLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 30,215,60,50)];
-        [self.descLabel setTextAlignment:NSTextAlignmentCenter];
-        [self.descLabel setFont:[UIFont systemFontOfSize:16.0f]];
-        [self.descLabel setTextColor:labelColour];
-        self.descLabel.text = @"Cards";
-        [self addSubview:self.descLabel];
+        self.countDescLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 30,215,60,50)];
+        [self.countDescLabel setTextAlignment:NSTextAlignmentCenter];
+        [self.countDescLabel setFont:[UIFont systemFontOfSize:16.0f]];
+        [self.countDescLabel setTextColor:labelColour];
+        self.countDescLabel.text = @"Cards";
+        [self addSubview:self.countDescLabel];
         
         comments = [NSArray arrayWithObjects:@"Fantastic!",@"Good work!",@"Well done!",@"Spiffing!",@"Neato!",@"Fantastic!",nil];
         
@@ -114,17 +114,17 @@ NSArray *comments;
 - (void)changeBubbleView {
     
     if (!bubbleToggled) {
-        self.studyCountLabel.hidden = YES;
-        [self.totalCountLabel setText:[NSString stringWithFormat:@"%d",self.cardCount]];
+        self.unstudiedCountLabel.hidden = YES;
+        [self.totalCountLabel setText:[NSString stringWithFormat:@"%d",self.totalCount]];
         self.totalCountLabel.hidden = NO;
         
-        self.descLabel.text = @"Total";
+        self.countDescLabel.text = @"Total";
     } else {
         self.totalCountLabel.hidden = YES;
-        self.studyCountLabel.hidden = NO;
+        self.unstudiedCountLabel.hidden = NO;
 
         
-        self.descLabel.text = @"Cards";
+        self.countDescLabel.text = @"Cards";
     }
     
     bubbleToggled = !bubbleToggled;

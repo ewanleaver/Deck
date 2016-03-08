@@ -97,7 +97,7 @@ int numPanels;
     }
     
     // Check if intial deck has no cards left to study
-    if ([[panels objectAtIndex:0] toStudyCount] == 0) {
+    if ([[panels objectAtIndex:0] unstudiedCount] == 0) {
         studyComplete = YES;
         self.studyButton.userInteractionEnabled = NO;
     } else {
@@ -235,7 +235,7 @@ int numPanels;
         NSLog(@"WARNING! Not enough decks for the number of present pages.");
     }
     
-    if ([[panels objectAtIndex:0] toStudyCount] == 0) {
+    if ([[panels objectAtIndex:0] unstudiedCount] == 0) {
         studyComplete = YES;
         self.studyButton.userInteractionEnabled = NO;
     } else {
@@ -258,12 +258,12 @@ int numPanels;
     [currentView.bubble pop_addAnimation:scaleAnimation forKey:@"scalingUp"];
     
     // Animate a comment showing praise
-    if ([[panels objectAtIndex:0] toStudyCount] == 0) {
+    if ([[panels objectAtIndex:0] unstudiedCount] == 0) {
         
         CGFloat pageWidth = self.scrollView.frame.size.width;
         int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
         
-        if ([[panels objectAtIndex:page] toStudyCount] == 0) {
+        if ([[panels objectAtIndex:page] unstudiedCount] == 0) {
             [UIView animateWithDuration:0.2 animations:^{
                 [self.studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 0.2].CGColor];
             } completion:NULL];
@@ -286,7 +286,7 @@ int numPanels;
         page = numPanels - 1;
     }
     
-    if ([[panels objectAtIndex:page] toStudyCount] == 0) {
+    if ([[panels objectAtIndex:page] unstudiedCount] == 0) {
         studyComplete = YES;
         self.studyButton.userInteractionEnabled = NO;
     } else {
@@ -305,7 +305,7 @@ int numPanels;
     }
     
     // Fade out any comments
-    if ([[panels objectAtIndex:page] toStudyCount] == 0) {
+    if ([[panels objectAtIndex:page] unstudiedCount] == 0) {
         [[panels objectAtIndex:page] hideComment];
     }
 }
@@ -327,7 +327,7 @@ int numPanels;
     }
     
     // Animate a comment showing praise
-    if ([[panels objectAtIndex:page] toStudyCount] == 0) {
+    if ([[panels objectAtIndex:page] unstudiedCount] == 0) {
         [[panels objectAtIndex:page] showComment];
     }
 }
