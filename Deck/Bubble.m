@@ -124,7 +124,7 @@
             // Grow
             
             POPSpringAnimation *scaleAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
-            scaleAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(1.1, 1.1)];//self.diameterRatio, self.diameterRatio)];
+            scaleAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(self.diameterRatio, self.diameterRatio)];
             scaleAnimation.velocity = [NSValue valueWithCGPoint:CGPointMake(BUBBLE_ANIMATION_VELOCITY, BUBBLE_ANIMATION_VELOCITY)];
             scaleAnimation.springBounciness = BUBBLE_ANIMATION_BOUNCINESS;
             scaleAnimation.dynamicsTension = BUBBLE_ANIMATION_TENSION;
@@ -137,6 +137,7 @@
             fadeAnimation.dynamicsTension = BUBBLE_ANIMATION_TENSION;
             [self pop_addAnimation:fadeAnimation forKey:@"scalingUpAlpha"];
         } else {
+            
             // Shrink
             
             POPSpringAnimation *scaleAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];

@@ -26,18 +26,27 @@ NSArray *comments;
     customColour = YES; // Override default bubble colour
     
     self.unstudiedCount = [d.numToStudy intValue];
-    self.totalCount = [d.numToStudy intValue];
+    self.totalCount = (int)[d.cardsInDeck count];
     
+    // Some value dummying for demo purposes
+    // (Remove this when we implement saving of study state)
+    if ([d.name isEqualToString:@"JLPT N3"]) {
+        self.unstudiedCount = 0;
+    }
+    if ([d.name isEqualToString:@"Review"]) {
+        self.totalCount = 135;
+    }
+
     return [self initWithFrame:frame];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame colour:(UIColor *)inputColour numToStudy:(int)cardsToStudy numTotal:(int)cardsTotal {
+- (instancetype)initWithFrame:(CGRect)frame colour:(UIColor *)inputColour numUnstudied:(int)unstudiedCount numTotal:(int)totalCount {
     
     bubbleColour = inputColour;
     customColour = YES; // Override default bubble colour
     
-    self.unstudiedCount = cardsToStudy;
-    self.totalCount = cardsTotal;
+    self.unstudiedCount = unstudiedCount;
+    self.totalCount = totalCount;
     
     return [self initWithFrame:frame];
 };

@@ -107,6 +107,8 @@ int numPanels;
 }
 
 - (void)prepareSubviews {
+    // THIS METHOD IS OLD AND NOT USED ANYMORE
+    // SEE preparePanels
     decksForPages = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < numPanels; i++) {
@@ -217,7 +219,7 @@ int numPanels;
         cardsTotal = (int)[deckArray count];
         NSLog(@"Deck %d: %d cards.",i,cardsTotal);
         
-        panel = [[HomePanel alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width * i, 0, self.scrollView.frame.size.width, 240) colour:bubbleColor numToStudy:numToStudy numTotal:cardsTotal];
+        panel = [[HomePanel alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width * i, 0, self.scrollView.frame.size.width, 240) colour:bubbleColor numUnstudied:numToStudy numTotal:cardsTotal];
         [[panel titleLabel] setText:title];
 //        [panel setCardCount:cardsTotal];
 //        [panel setToStudyCount:numToStudy];

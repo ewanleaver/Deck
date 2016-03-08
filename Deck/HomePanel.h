@@ -20,8 +20,8 @@
     bool bubbleToggled;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame deck:(Deck*)d;
-- (instancetype)initWithFrame:(CGRect)frame colour:(UIColor*)inputColour numToStudy:(int)numToStudy numTotal:(int)cardsTotal;
+- (instancetype)initWithFrame:(CGRect)frame deck:(Deck *)d;
+- (instancetype)initWithFrame:(CGRect)frame colour:(UIColor *)inputColour numUnstudied:(int)unstudiedCount numTotal:(int)totalCount;
 
 - (void)changeBubbleView;
 
