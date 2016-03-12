@@ -171,15 +171,28 @@ bool frontShowing;
         [jlptLabel setFont:[UIFont systemFontOfSize:20.0f]];
         [jlptLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:jlptLabel];
+
+        int padding = 15;
         
-        
-        UILabel *cardNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(CARD_WIDTH - 80, CONTENT_OFFSET_TOP, 60, 25)];
+        UILabel *cardNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(CARD_WIDTH - (90 + padding/2), CONTENT_OFFSET_TOP - 5, 80, 25)];
         cardNumLabel.text = [NSString stringWithFormat:@"# %@", self.c.id_num];
         cardNumLabel.textAlignment = NSTextAlignmentRight;
+        
         [cardNumLabel setTextColor:[UIColor lightGrayColor]];
         [cardNumLabel setBackgroundColor:[UIColor clearColor]];
         [cardNumLabel setFont:[UIFont systemFontOfSize:20.0f]];
+        
+        // 1. Create bezier path to draw
+        int width = [self widthOfString:cardNumLabel.text withFont:cardNumLabel.font] + padding; //cardNumLabel.frame.size.width;
+        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(CARD_WIDTH - (width + 10), CONTENT_OFFSET_TOP - 5, width, 25) cornerRadius:12.5];
+        
+        // 2. Create a shape layer for above created path.
+        CAShapeLayer *cardNumBubble = [[CAShapeLayer alloc] init];
+        cardNumBubble.fillColor = [[UIColor colorWithRed:(235.0 / 255.0) green:(235.0 / 255.0) blue:(235.0 / 255.0) alpha: 1] CGColor];
+        cardNumBubble.path = path.CGPath;
+        [self.layer addSublayer:cardNumBubble];
         [self addSubview:cardNumLabel];
+
         
         [self setupFrontView];
         
@@ -198,6 +211,10 @@ bool frontShowing;
     return self;
 }
 
+- (CGFloat)widthOfString:(NSString *)string withFont:(UIFont *)font {
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
+    return [[[NSAttributedString alloc] initWithString:string attributes:attributes] size].width;
+}
 
 
 
