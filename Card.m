@@ -57,6 +57,9 @@
 
 #define MEANING_BOX_TOP READING_BOX_TOP + READING_BOX_HEIGHT + 10
 
+#define JLPT_BUBBLE_SIZE 35
+#define JLPT_BUBBLE_OFFSET 9.1
+
 #define VERBOSE 0
 
 bool frontShowing;
@@ -178,7 +181,7 @@ bool frontShowing;
         // Other informative labels
         //
 
-        UILabel *jlptLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT + 0.4, CARD_HEIGHT - 40.8, 60, 30)];
+        UILabel *jlptLabel = [[UILabel alloc] initWithFrame:CGRectMake(JLPT_BUBBLE_OFFSET, CARD_HEIGHT - 40.8, JLPT_BUBBLE_SIZE, 30)];
         
         if (![self.c.jlpt  isEqual: @"null"]) {
             NSString *jlptString = jlptString = [@"N" stringByAppendingString:self.c.jlpt];
@@ -187,6 +190,7 @@ bool frontShowing;
         [jlptLabel setTextColor:[UIColor colorWithRed:(170.0 / 255.0) green:(170.0 / 255.0) blue:(170.0 / 255.0) alpha: 1]];
         [jlptLabel setBackgroundColor:[UIColor clearColor]];
         [jlptLabel setFont:[UIFont systemFontOfSize:20.0f]];
+        [jlptLabel setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:jlptLabel];
         
         
@@ -418,7 +422,7 @@ bool frontShowing;
     
     CGContextSetLineWidth(context, 2.0);
     self.transform = CGAffineTransformIdentity;
-    rectangle = CGRectMake(9.1, CARD_HEIGHT - 43.2, 35, 35);
+    rectangle = CGRectMake(JLPT_BUBBLE_OFFSET, CARD_HEIGHT - (JLPT_BUBBLE_OFFSET + 34.1), JLPT_BUBBLE_SIZE, JLPT_BUBBLE_SIZE);
     CGContextAddEllipseInRect(context, rectangle);
     //CGContextStrokePath(context);
     
