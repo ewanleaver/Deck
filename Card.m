@@ -65,6 +65,8 @@
 #define JLPT_BUBBLE_SIZE 35
 #define JLPT_BUBBLE_OFFSET 9.1
 
+#define CARD_NUM_LABEL_PADDING 15
+
 #define VERBOSE 0
 
 bool frontShowing;
@@ -159,31 +161,26 @@ bool frontShowing;
         //
         // Other informative labels
         //
-
-        UILabel *jlptLabel = [[UILabel alloc] initWithFrame:CGRectMake(JLPT_BUBBLE_OFFSET, CARD_HEIGHT - 40.8, JLPT_BUBBLE_SIZE, 30)];
-        
-        if (![self.c.jlpt  isEqual: @"null"]) {
+        if (![self.c.jlpt isEqual: @"null"]) {
+            UILabel *jlptLabel = [[UILabel alloc] initWithFrame:CGRectMake(JLPT_BUBBLE_OFFSET, CARD_HEIGHT - 40.8, JLPT_BUBBLE_SIZE, 30)];
+            
             NSString *jlptString = jlptString = [@"N" stringByAppendingString:self.c.jlpt];
             jlptLabel.text = jlptString;
+            jlptLabel.textColor = [UIColor colorWithRed:(170.0 / 255.0) green:(170.0 / 255.0) blue:(170.0 / 255.0) alpha: 1];
+            jlptLabel.font = [UIFont systemFontOfSize:20.0f];
+            jlptLabel.textAlignment = NSTextAlignmentCenter;
+            [self addSubview:jlptLabel];
         };
-        [jlptLabel setTextColor:[UIColor colorWithRed:(170.0 / 255.0) green:(170.0 / 255.0) blue:(170.0 / 255.0) alpha: 1]];
-        [jlptLabel setBackgroundColor:[UIColor clearColor]];
-        [jlptLabel setFont:[UIFont systemFontOfSize:20.0f]];
-        [jlptLabel setTextAlignment:NSTextAlignmentCenter];
-        [self addSubview:jlptLabel];
 
-        int padding = 15;
         
-        UILabel *cardNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(CARD_WIDTH - (90 + padding/2), CONTENT_OFFSET_TOP - 5, 80, 25)];
+        UILabel *cardNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(CARD_WIDTH - (90 + CARD_NUM_LABEL_PADDING/2), CONTENT_OFFSET_TOP - 5, 80, 25)];
         cardNumLabel.text = [NSString stringWithFormat:@"# %@", self.c.id_num];
         cardNumLabel.textAlignment = NSTextAlignmentRight;
-        
-        [cardNumLabel setTextColor:[UIColor lightGrayColor]];
-        [cardNumLabel setBackgroundColor:[UIColor clearColor]];
-        [cardNumLabel setFont:[UIFont systemFontOfSize:20.0f]];
+        cardNumLabel.textColor = [UIColor lightGrayColor];
+        cardNumLabel.font = [UIFont systemFontOfSize:20.0f];
         
         // 1. Create bezier path to draw
-        int width = [self widthOfString:cardNumLabel.text withFont:cardNumLabel.font] + padding; //cardNumLabel.frame.size.width;
+        int width = [self widthOfString:cardNumLabel.text withFont:cardNumLabel.font] + CARD_NUM_LABEL_PADDING;
         UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(CARD_WIDTH - (width + 10), CONTENT_OFFSET_TOP - 5, width, 25) cornerRadius:12.5];
         
         // 2. Create a shape layer for above created path.
