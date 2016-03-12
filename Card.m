@@ -21,6 +21,8 @@
 
 @property (nonatomic, weak) StudyViewController *controller;
 
+@property (nonatomic, assign) bool frontShowing;
+
 @end
 
 @implementation Card
@@ -67,9 +69,8 @@
 
 #define CARD_NUM_LABEL_PADDING 15
 
-#define VERBOSE 0
+#define VERBOSE false
 
-bool frontShowing;
 
 #pragma mark - Init and Drawing
 
@@ -87,7 +88,7 @@ bool frontShowing;
         self.controller = (StudyViewController*) [[self superview] nextResponder];
         
         // May eventually have the option of showing two sides to a card
-        frontShowing = true;
+        self.frontShowing = true;
         
         [self setFrame:cardFrame];
         
@@ -448,19 +449,6 @@ bool frontShowing;
 }
 
 
-//- (void) buttonClicked: (id)sender
-//{
-//    [UIView animateWithDuration:0.25f
-//                          delay:0
-//                        options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-//                     animations:^{[self setCenter:CGPointMake(160, -200)]; }
-//                     completion:^(BOOL fin) { [self removeFromSuperview]; }  ];
-//    
-//    // Decrease the number of tracked active cards
-//    StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
-//    [controller decActiveCardCount];
-//    
-//}
 
 //// Respond to a swipe gesture
 //- (IBAction)showGestureForSwipeRecognizer:(UISwipeGestureRecognizer *)recognizer {
@@ -698,13 +686,13 @@ bool frontShowing;
 
 - (void)handleTap:(UIGestureRecognizer*)recognizer {
     
-    if (frontShowing) {
+    if (self.frontShowing) {
         [self.frontView setHidden:YES];
     } else {
         [self.frontView setHidden:NO];
     };
     
-    frontShowing = !frontShowing;
+    self.frontShowing = !self.frontShowing;
     
 }
 
