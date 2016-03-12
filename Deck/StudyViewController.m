@@ -13,43 +13,36 @@
 
 @interface StudyViewController ()
 
+@property (nonatomic, strong) Deck *deckStudying;
+@property (nonatomic, assign) int nextCardNo;
+
+@property (nonatomic, strong) NSArray *kanjiArray;
+@property (nonatomic, strong) NSMutableArray *inputDeckArray;
+@property (nonatomic, strong) NSMutableArray *charsToStudy;
+@property (nonatomic, strong) NSMutableArray *drawnCards;
+
+
+@property (nonatomic, assign) int totalCardCount;
+@property (nonatomic, assign) int activeCardCount;
+
+@property (nonatomic, assign) int correctCardCount;
+@property (nonatomic, assign) int incorrectCardCount;
+
+@property (nonatomic, assign) float studiedRatio;
+@property (nonatomic, assign) float correctRatio;
+
+
+@property (nonatomic, strong) UILabel *activeCardCountLabel;
 @property (nonatomic, strong) UIImageView *studyProgressBar;
 @property (nonatomic, strong) UIView *progressBar;
 @property (nonatomic, strong) UIView *correctBar;
 
+@property (weak, nonatomic) IBOutlet UILabel *deckEmptyLabel;
+@property (weak, nonatomic) IBOutlet UIButton *keepStudyingButton;
+
 @end
 
 @implementation StudyViewController
-
-@synthesize deckStudying;
-@synthesize nextCardNo;
-
-@synthesize deckEmptyLabel;
-@synthesize keepStudyingButton;
-
-int totalCardCount;
-
-int activeCardCount;
-
-int correctCardCount;
-int incorrectCardCount;
-
-float studiedRatio = 0;
-float correctRatio = 0;
-
-UILabel *activeCardCountLabel;
-
-UILabel *correctLabel;
-UILabel *incorrectLabel;
-
-NSArray *kanjiArray;
-
-NSMutableArray *inputDeckArray;
-
-NSMutableArray *charsToStudy;
-NSMutableArray *visibleCards;
-
-int maxAllowedVisibleCards;
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
@@ -64,34 +57,33 @@ int maxAllowedVisibleCards;
 #define BORDER_WIDTH 3
 #define CORNER_RADIUS 25
 
+#define MAX_DRAWN_CARDS 3
 
 - (id)initWithDeck:(Deck *)d {
     NSLog(@"[StudyView] Studying deck '%@': %@ cards.",d.name,d.numToStudy);
     
     
     self = [super initWithNibName:nil bundle:nil];
-    deckStudying = d;
+    self.deckStudying = d;
     
     // Set background
     //UIImage *image = [UIImage imageNamed:@"Study Background.png"];
     self.view.backgroundColor = [UIColor colorWithRed:(205.0/255.0) green:(20.0/255.0) blue:(52.0/255.0) alpha:1];//[UIColor colorWithPatternImage:image];
     
     // Initially no cards active
-    totalCardCount = 0;
-    activeCardCount = 0;
-    correctCardCount = 0;
-    incorrectCardCount = 0;
-    
-    maxAllowedVisibleCards = 3;
+    self.totalCardCount = 0;
+    self.activeCardCount = 0;
+    self.correctCardCount = 0;
+    self.incorrectCardCount = 0;
     
     UIColor *activeCountColor = [UIColor colorWithRed:(160.0 / 255.0) green:(8.0 / 255.0) blue:(40.0 / 255.0) alpha: 1];
     
-    activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 40, 22, 80, 25)];
-    activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
-    activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
-    [activeCardCountLabel setTextColor:activeCountColor];
-    [activeCardCountLabel setFont:[UIFont systemFontOfSize: 25.0f]];
-    [self.view addSubview:activeCardCountLabel];
+    self.activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 40, 22, 80, 25)];
+    self.activeCardCountLabel.text = [NSString stringWithFormat:@"%d", self.activeCardCount];
+    self.activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
+    [self.activeCardCountLabel setTextColor:activeCountColor];
+    [self.activeCardCountLabel setFont:[UIFont systemFontOfSize: 25.0f]];
+    [self.view addSubview:self.activeCardCountLabel];
     
     self.studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET, SCREEN_HEIGHT-37, BAR_MAX_WIDTH, BAR_HEIGHT)];
     [self.view addSubview:self.studyProgressBar];
@@ -184,7 +176,7 @@ int maxAllowedVisibleCards;
     cardView.layer.masksToBounds = YES;
     
     [self.view addSubview:cardView];
-    [visibleCards addObject:cardView];
+    [self.drawnCards addObject:cardView];
     
     //cardView.layer.zPosition = -1;
     [self.view sendSubviewToBack:cardView];
@@ -200,26 +192,26 @@ int maxAllowedVisibleCards;
 
     int newPos = arc4random_uniform(range) + low_bound;
 
-    if (newPos > [charsToStudy count] - 1) {
-        newPos = (int)[charsToStudy count] - 1;
+    if (newPos > [self.charsToStudy count] - 1) {
+        newPos = (int)[self.charsToStudy count] - 1;
     }
     
-    NSLog(@"[StudyView] Shuffling card to position %d of %d.",newPos,(int)[charsToStudy count]-1);
+    NSLog(@"[StudyView] Shuffling card to position %d of %d.",newPos,(int)[self.charsToStudy count]-1);
     
-    NSLog(@"[StudyView] DEBUG. %d active cards, %lu cards in Deck:",activeCardCount,(unsigned long)[charsToStudy count]);
+    NSLog(@"[StudyView] DEBUG. %d active cards, %lu cards in Deck:",self.activeCardCount,(unsigned long)[self.charsToStudy count]);
     
     // CAREFUL: Removing a character will remove all instances of that kanji!
-    [charsToStudy removeObject:cardView.c];
-    [charsToStudy insertObject:cardView.c atIndex:newPos];
+    [self.charsToStudy removeObject:cardView.c];
+    [self.charsToStudy insertObject:cardView.c atIndex:newPos];
     
-    if ([charsToStudy count] > maxAllowedVisibleCards) {
-        [visibleCards removeObject:cardView];
+    if ([self.charsToStudy count] > MAX_DRAWN_CARDS) {
+        [self.drawnCards removeObject:cardView];
         [cardView removeFromSuperview];
     }
     
     // Print out all cards in deck
-    for (int i = 0; i < [charsToStudy count]; i++) {
-        Character *tempChar = [charsToStudy objectAtIndex:i];
+    for (int i = 0; i < [self.charsToStudy count]; i++) {
+        Character *tempChar = [self.charsToStudy objectAtIndex:i];
         NSLog(@"[StudyView] Card at position %d: %@",i,tempChar.literal);
     }
     
@@ -228,22 +220,22 @@ int maxAllowedVisibleCards;
 
 - (void)moveCardToBack:(Card*)cardView {
     NSLog(@"[StudyView] Moving card to back of deck.");
-    NSLog(@"[StudyView] Shuffling card to position %d of %d.",(int)[charsToStudy count]-1,(int)[charsToStudy count]-1);
+    NSLog(@"[StudyView] Shuffling card to position %d of %d.",(int)[self.charsToStudy count]-1,(int)[self.charsToStudy count]-1);
     
-    NSLog(@"[StudyView] DEBUG. %d active cards, %lu cards in Deck:",activeCardCount,(unsigned long)[charsToStudy count]);
+    NSLog(@"[StudyView] DEBUG. %d active cards, %lu cards in Deck:",self.activeCardCount,(unsigned long)[self.charsToStudy count]);
     
     // CAREFUL: Removing a character will remove all instances of that kanji!
-    [charsToStudy removeObject:cardView.c];
-    [charsToStudy insertObject:cardView.c atIndex:[charsToStudy count]];
+    [self.charsToStudy removeObject:cardView.c];
+    [self.charsToStudy insertObject:cardView.c atIndex:[self.charsToStudy count]];
     
-    if ([charsToStudy count] > maxAllowedVisibleCards) {
-        [visibleCards removeObject:cardView];
+    if ([self.charsToStudy count] > MAX_DRAWN_CARDS) {
+        [self.drawnCards removeObject:cardView];
         [cardView removeFromSuperview];
     }
     
     // Print out all cards in deck
-    for (int i = 0; i < [charsToStudy count]; i++) {
-        Character *tempChar = [charsToStudy objectAtIndex:i];
+    for (int i = 0; i < [self.charsToStudy count]; i++) {
+        Character *tempChar = [self.charsToStudy objectAtIndex:i];
         NSLog(@"[StudyView] Card at position %d: %@",i,tempChar.literal);
     }
     
@@ -253,13 +245,13 @@ int maxAllowedVisibleCards;
 - (void)moveBackCardToFront {
     
     // Get id of back card
-    Character *backChar = [charsToStudy lastObject];
+    Character *backChar = [self.charsToStudy lastObject];
     Card *backCard;
     
     // Try to find back card in currently visible cards
-    for (int i = 0; i < [visibleCards count]; i++) {
-        if ([charsToStudy objectAtIndex:i] == backChar) {
-            backCard = [visibleCards objectAtIndex:i];
+    for (int i = 0; i < [self.drawnCards count]; i++) {
+        if ([self.charsToStudy objectAtIndex:i] == backChar) {
+            backCard = [self.drawnCards objectAtIndex:i];
         }
     }
     
@@ -267,20 +259,20 @@ int maxAllowedVisibleCards;
     if (backCard == nil) {
         [self drawCardForChar:backChar];
         
-        for (int i = 0; i < [visibleCards count]; i++) {
-            if ([visibleCards objectAtIndex:i] == backCard) {
-                backCard = [visibleCards objectAtIndex:i];
+        for (int i = 0; i < [self.drawnCards count]; i++) {
+            if ([self.drawnCards objectAtIndex:i] == backCard) {
+                backCard = [self.drawnCards objectAtIndex:i];
             }
         }
     }
     
     // Move card to the front of the visible cards
-    [visibleCards removeObject:backCard];
-    [visibleCards insertObject:backCard atIndex:0];
+    [self.drawnCards removeObject:backCard];
+    [self.drawnCards insertObject:backCard atIndex:0];
     
     // Remove and insert character at front of deck
-    [charsToStudy removeObject:backChar];
-    [charsToStudy insertObject:backChar atIndex:0];
+    [self.charsToStudy removeObject:backChar];
+    [self.charsToStudy insertObject:backChar atIndex:0];
     
     // Animate the back card
     [UIView animateWithDuration:0.25f
@@ -302,15 +294,15 @@ int maxAllowedVisibleCards;
 - (void)dismissTopCard:(Card*)cardView {
     
     // Remove both from deck array, and from array of visible cards.
-    [charsToStudy removeObject:cardView.c];
-    [visibleCards removeObject:cardView];
+    [self.charsToStudy removeObject:cardView.c];
+    [self.drawnCards removeObject:cardView];
     
     // Remove view.
     [cardView removeFromSuperview];
     
     // Print out all cards in deck
-    for (int i = 0; i < [charsToStudy count]; i++) {
-        Character *tempChar = [charsToStudy objectAtIndex:i];
+    for (int i = 0; i < [self.charsToStudy count]; i++) {
+        Character *tempChar = [self.charsToStudy objectAtIndex:i];
         NSLog(@"[StudyView] Card at position %d: %@",i,tempChar.literal);
     }
     
@@ -324,33 +316,33 @@ int maxAllowedVisibleCards;
     // visibleCards tracks top ~3 CARDS
     
     // Deal with case that there are more cards visible than permitted (otherwise could build up)
-    if ([visibleCards count] > maxAllowedVisibleCards) {
-        Card *cardView = [visibleCards objectAtIndex:[visibleCards count]-1]; // Remove the last card
-        [visibleCards removeObject:cardView];
+    if ([self.drawnCards count] > MAX_DRAWN_CARDS) {
+        Card *cardView = [self.drawnCards objectAtIndex:[self.drawnCards count]-1]; // Remove the last card
+        [self.drawnCards removeObject:cardView];
         [cardView removeFromSuperview];
     }
     
-    if ((activeCardCount > 1) && ([visibleCards count] < maxAllowedVisibleCards)) {
-        while (([visibleCards count] < activeCardCount) && ([visibleCards count] < maxAllowedVisibleCards)) {
+    if ((self.activeCardCount > 1) && ([self.drawnCards count] < MAX_DRAWN_CARDS)) {
+        while (([self.drawnCards count] < self.activeCardCount) && ([self.drawnCards count] < MAX_DRAWN_CARDS)) {
             
-            Character *nextChar = [charsToStudy objectAtIndex:[visibleCards count]];
+            Character *nextChar = [self.charsToStudy objectAtIndex:[self.drawnCards count]];
             
             NSLog(@"[StudyView] Drawing card: %@",nextChar.literal);
             [self drawCardForChar:nextChar]; // Draw the card at the next deck position
         }
         
         // Always bring the top card to the front afterwards.
-        Card *cardView = [visibleCards objectAtIndex:0];
+        Card *cardView = [self.drawnCards objectAtIndex:0];
         [self.view bringSubviewToFront:cardView];
     }
     
 //    [self.view sendSubviewToBack:deckEmptyLabel];
 //    [self.view sendSubviewToBack:keepStudyingButton];
     
-    activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
+    self.activeCardCountLabel.text = [NSString stringWithFormat:@"%d", self.activeCardCount];
     
-    NSLog(@"[StudyView] Deck maintenance complete. %lu visible cards.", (unsigned long)[visibleCards count]);
-    NSLog(@"[StudyView] %d active cards",activeCardCount);
+    NSLog(@"[StudyView] Deck maintenance complete. %lu visible cards.", (unsigned long)[self.drawnCards count]);
+    NSLog(@"[StudyView] %d active cards",self.activeCardCount);
 }
 
 - (void)handleCorrectCard:(Card*)cardView willExitDeck:(BOOL)willExitDeck {
@@ -359,14 +351,14 @@ int maxAllowedVisibleCards;
         
         // Only track perfectly remembered cards.
         if (cardView.repQuality == 5) {
-            correctCardCount++;
+            self.correctCardCount++;
         }
         
-        activeCardCount--;
-        activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
+        self.activeCardCount--;
+        self.activeCardCountLabel.text = [NSString stringWithFormat:@"%d", self.activeCardCount];
         
-        correctRatio = (float)correctCardCount/totalCardCount;
-        studiedRatio = (float)(totalCardCount - activeCardCount)/totalCardCount;
+        self.correctRatio = (float)self.correctCardCount/self.totalCardCount;
+        self.studiedRatio = (float)(self.totalCardCount - self.activeCardCount)/self.totalCardCount;
         
         // Redraw study progress bar with new study stats
         [self animateProgressBar];
@@ -392,11 +384,11 @@ int maxAllowedVisibleCards;
 }
 
 - (int)getActiveCardCount {
-    return activeCardCount;
+    return self.activeCardCount;
 }
 
 - (void)decActiveCardCount {
-    activeCardCount--;
+    self.activeCardCount--;
 }
 
 - (void)drawProgressBar {
@@ -440,8 +432,8 @@ int maxAllowedVisibleCards;
     //
     // 1. Animate study progress bar
     //
-    int progressBarWidth = studiedRatio*(BAR_MAX_WIDTH-4);
-    if (studiedRatio*(BAR_MAX_WIDTH-4) < BAR_HEIGHT) {
+    int progressBarWidth = self.studiedRatio*(BAR_MAX_WIDTH-4);
+    if (self.studiedRatio*(BAR_MAX_WIDTH-4) < BAR_HEIGHT) {
         progressBarWidth = BAR_HEIGHT-4;
     }
     
@@ -462,8 +454,8 @@ int maxAllowedVisibleCards;
     //
     // 2. Animate correct progress bar
     //
-    int correctBarWidth = correctRatio*(BAR_MAX_WIDTH-4);
-    if (correctRatio*(BAR_MAX_WIDTH-4) < BAR_HEIGHT) {
+    int correctBarWidth = self.correctRatio*(BAR_MAX_WIDTH-4);
+    if (self.correctRatio*(BAR_MAX_WIDTH-4) < BAR_HEIGHT) {
         correctBarWidth = BAR_HEIGHT-4;
     }
     
@@ -489,18 +481,18 @@ int maxAllowedVisibleCards;
     // Initially no cards active
 //    totalCardCount = 0;
 //    activeCardCount = 0;
-    correctCardCount = 0;
-    incorrectCardCount = 0;
+    self.correctCardCount = 0;
+    self.incorrectCardCount = 0;
     
-    nextCardNo = 1;
+    self.nextCardNo = 1;
     
-    charsToStudy = [[NSMutableArray alloc] initWithArray:[deckStudying.cardsInDeck allObjects]];
-    visibleCards = [[NSMutableArray alloc] init];
+    self.charsToStudy = [[NSMutableArray alloc] initWithArray:[self.deckStudying.cardsInDeck allObjects]];
+    self.drawnCards = [[NSMutableArray alloc] init];
     
-    totalCardCount = (int)[deckStudying.cardsInDeck count];
-    activeCardCount = (int)[deckStudying.cardsInDeck count];
+    self.totalCardCount = (int)[self.deckStudying.cardsInDeck count];
+    self.activeCardCount = (int)[self.deckStudying.cardsInDeck count];
     
-    NSLog(@"[StudyView] Initially %d cards active.",activeCardCount);
+    NSLog(@"[StudyView] Initially %d cards active.",self.activeCardCount);
     
     [self maintainDeck];
     
@@ -538,7 +530,7 @@ int maxAllowedVisibleCards;
 
 -(IBAction)AddCard:(id)sender {
     
-    Card *cardView = [[Card alloc] initCard:[charsToStudy objectAtIndex:nextCardNo] fresh:YES];
+    Card *cardView = [[Card alloc] initCard:[self.charsToStudy objectAtIndex:self.nextCardNo] fresh:YES];
     
     cardView.backgroundColor = ACTIVE_CARD_COLOUR;
     cardView.layer.borderColor = BORDER_COLOUR;
@@ -548,16 +540,16 @@ int maxAllowedVisibleCards;
     
     [self.view addSubview:cardView];
     
-    totalCardCount++;
-    activeCardCount++;
-    activeCardCountLabel.text = [NSString stringWithFormat:@"%d", activeCardCount];
+    self.totalCardCount++;
+    self.activeCardCount++;
+    self.activeCardCountLabel.text = [NSString stringWithFormat:@"%d", self.activeCardCount];
     
-    [charsToStudy insertObject:[NSNumber numberWithInt:nextCardNo] atIndex:0]; // Track the card number in the deck (place on the top of the deck)
-    [visibleCards insertObject:cardView atIndex:0];
+    [self.charsToStudy insertObject:[NSNumber numberWithInt:self.nextCardNo] atIndex:0]; // Track the card number in the deck (place on the top of the deck)
+    [self.drawnCards insertObject:cardView atIndex:0];
     
     [self maintainDeck]; // Perform maintenance on visible cards
     
-    nextCardNo++;
+    self.nextCardNo++;
 }
 
 @end

@@ -295,7 +295,7 @@ bool frontShowing;
         onReadingLabel.font = [UIFont systemFontOfSize:18.0f];
         // No attributed text processing in On readings
         
-        int labelWidth = [self widthOfString:onReadingLabel.text withFont:onReadingLabel.font] + 12;
+        int labelWidth = [self widthOfString:onReadingLabel.text withFont:onReadingLabel.font] + 10;
         int newRemSpace = remainingSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
         
         if (newRemSpace < 0) {
@@ -356,7 +356,7 @@ bool frontShowing;
             [kunReadingLabel setAttributedText: attributedText];
         }
         
-        int labelWidth = [self widthOfString:kunReadingLabel.text withFont:kunReadingLabel.font] + 12;
+        int labelWidth = [self widthOfString:kunReadingLabel.text withFont:kunReadingLabel.font] + 10;
         int newRemSpace = remainingSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
         
         if (newRemSpace < 0) {
