@@ -291,13 +291,11 @@ bool frontShowing;
         
         UILabel *onReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(currPos + 5, READING_BOX_TOP + 7.5, 270, 20)];
         onReadingLabel.text = currentReading;//@"イチ, イツ";
-        [onReadingLabel setTextColor:[UIColor whiteColor]];
-        
+        onReadingLabel.textColor = [UIColor whiteColor];
+        onReadingLabel.font = [UIFont systemFontOfSize:18.0f];
         // No attributed text processing in On readings
         
-        // Rough width formula which seems to work okay
-        int labelWidth = 12 + (int)[currentReading length] * 17;
-        
+        int labelWidth = [self widthOfString:onReadingLabel.text withFont:onReadingLabel.font] + 12;
         int newRemSpace = remainingSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
         
         if (newRemSpace < 0) {
@@ -320,8 +318,6 @@ bool frontShowing;
         
         [self.readingsView.layer addSublayer:readingLayer];
         
-        //[onReadingLabel setTextColor:[UIColor colorWithRed:(120.0 / 255.0) green:(30.0 / 255.0) blue:(30.0 / 255.0) alpha: 1]];
-        [onReadingLabel setFont:[UIFont systemFontOfSize:18.0f]];
         [self addSubview:onReadingLabel];
         
         currPos = currPos + labelWidth + READING_GAP;
@@ -340,7 +336,8 @@ bool frontShowing;
             
         UILabel *kunReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(currPos + 5, READING_BOX_TOP + 40, 270, 20)];
         kunReadingLabel.text = currentReading;//@"ひと, ひと.つ";
-        [kunReadingLabel setTextColor:[UIColor whiteColor]];
+        kunReadingLabel.textColor = [UIColor whiteColor];
+        kunReadingLabel.font = [UIFont systemFontOfSize:18.0f];
         
         // Kun-readings only: format text for reading-endings
         NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc]
@@ -359,9 +356,7 @@ bool frontShowing;
             [kunReadingLabel setAttributedText: attributedText];
         }
         
-        // Rough width formula which seems to work okay
-        int labelWidth = 12 + (int)[attributedText length]*17;
-        
+        int labelWidth = [self widthOfString:kunReadingLabel.text withFont:kunReadingLabel.font] + 12;
         int newRemSpace = remainingSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
         
         if (newRemSpace < 0) {
@@ -384,8 +379,6 @@ bool frontShowing;
         
         [self.readingsView.layer addSublayer:readingLayer];
         
-        //[kunReadingLabel setTextColor:[UIColor colorWithRed:(30.0 / 255.0) green:(30.0 / 255.0) blue:(120.0 / 255.0) alpha: 1]];
-        [kunReadingLabel setFont:[UIFont systemFontOfSize:18.0f]];
         [self addSubview:kunReadingLabel];
         
         currPos = currPos + labelWidth + READING_GAP;
