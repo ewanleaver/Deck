@@ -31,6 +31,8 @@
 @property (nonatomic, assign) float studiedRatio;
 @property (nonatomic, assign) float correctRatio;
 
+@property (nonatomic, assign) BOOL progressBarHasAnimated;
+@property (nonatomic, assign) BOOL correctBarHasAnimated;
 
 @property (nonatomic, strong) UILabel *activeCardCountLabel;
 @property (nonatomic, strong) UIImageView *studyProgressBar;
@@ -85,6 +87,8 @@
     [self.activeCardCountLabel setFont:[UIFont systemFontOfSize: 25.0f]];
     [self.view addSubview:self.activeCardCountLabel];
     
+    self.progressBarHasAnimated = false;
+    self.correctBarHasAnimated = false;
     self.studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET, SCREEN_HEIGHT-37, BAR_MAX_WIDTH, BAR_HEIGHT)];
     [self.view addSubview:self.studyProgressBar];
     [self drawProgressBar];
@@ -413,6 +417,7 @@
     self.progressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET + 2, SCREEN_HEIGHT - 35, BAR_HEIGHT - 4, BAR_HEIGHT - 4)];
     self.progressBar.backgroundColor = [UIColor colorWithRed:(235.0 / 255.0) green:(45.0 / 255.0) blue:(100.0 / 255.0) alpha: 0.7];
     self.progressBar.layer.cornerRadius = self.progressBar.frame.size.height/2;
+    self.progressBar.hidden = true;
     [self.view addSubview:self.progressBar];
     
     //
@@ -421,8 +426,8 @@
     self.correctBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET + 2, SCREEN_HEIGHT - 35, BAR_HEIGHT - 4, BAR_HEIGHT - 4)];
     self.correctBar.backgroundColor = [UIColor colorWithRed:(255.0 / 255.0) green:(255.0 / 255.0) blue:(255.0 / 255.0) alpha: 0.7];
     self.correctBar.layer.cornerRadius = self.correctBar.frame.size.height/2;
+    self.correctBar.hidden = true;
     [self.view addSubview:self.correctBar];
-    NSLog(@"CORRECTBAR: %f, %f, %f, %f", self.correctBar.frame.origin.x, self.correctBar.frame.origin.y, self.correctBar.frame.size.width, self.correctBar.frame.size.height);
 }
 
 - (void)animateProgressBar {
@@ -435,6 +440,17 @@
     int progressBarWidth = self.studiedRatio*(BAR_MAX_WIDTH-4);
     if (self.studiedRatio*(BAR_MAX_WIDTH-4) < BAR_HEIGHT) {
         progressBarWidth = BAR_HEIGHT-4;
+    }
+    
+    if (!self.progressBarHasAnimated && progressBarWidth > 0) {
+        POPBasicAnimation *animBarAppear = [POPBasicAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+        animBarAppear.fromValue = [NSValue valueWithCGPoint:CGPointMake(0, 0)];
+        animBarAppear.toValue = [NSValue valueWithCGPoint:CGPointMake(1, 1)];
+        animBarAppear.name = @"animProgressBarAppear";
+        animBarAppear.delegate = self;
+        [self.progressBar pop_addAnimation:animBarAppear forKey:@"animBarAppear"];
+        
+        self.progressBarHasAnimated = true;
     }
     
     CGRect newProgressBarFrame = self.progressBar.frame;
@@ -457,6 +473,17 @@
     int correctBarWidth = self.correctRatio*(BAR_MAX_WIDTH-4);
     if (self.correctRatio*(BAR_MAX_WIDTH-4) < BAR_HEIGHT) {
         correctBarWidth = BAR_HEIGHT-4;
+    }
+    
+    if (!self.correctBarHasAnimated && correctBarWidth > 0) {
+        POPBasicAnimation *animBarAppear = [POPBasicAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+        animBarAppear.fromValue = [NSValue valueWithCGPoint:CGPointMake(0, 0)];
+        animBarAppear.toValue = [NSValue valueWithCGPoint:CGPointMake(1, 1)];
+        animBarAppear.name = @"animCorrectBarAppear";
+        animBarAppear.delegate = self;
+        [self.correctBar pop_addAnimation:animBarAppear forKey:@"animBarAppear"];
+        
+        self.correctBarHasAnimated = true;
     }
     
     CGRect newCorrectBarFrame = self.correctBar.frame;
@@ -498,12 +525,6 @@
     
 }
 
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-//{
-//    UIColor *myColor = [UIColor colorWithRed:(80.0 / 255.0) green:(80.0 / 255.0) blue:(130.0 / 255.0) alpha: 1];
-//    self.view.backgroundColor = myColor;
-//}
-
 - (void)viewDidLoad {
     
     [super viewDidLoad];
@@ -521,6 +542,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 #pragma mark - IBActions
 
@@ -552,4 +574,15 @@
     self.nextCardNo++;
 }
 
+
+#pragma mark - POP Delegate
+
+- (void)pop_animationDidStart:(POPAnimation *)anim {
+    if ([anim.name isEqualToString:@"animCorrectBarAppear"]) {
+        self.correctBar.hidden = false;
+    }
+    if ([anim.name isEqualToString:@"animProgressBarAppear"]) {
+        self.progressBar.hidden = false;
+    }
+}
 @end
