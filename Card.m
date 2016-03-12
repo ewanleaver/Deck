@@ -57,6 +57,11 @@
 
 #define MEANING_BOX_TOP READING_BOX_TOP + READING_BOX_HEIGHT + 10
 
+#define MEANING_HEIGHT 25
+#define MEANING_GAP 8
+#define MEANING_SPACING (MEANING_HEIGHT + MEANING_GAP)
+#define MEANING_BUBBLE_WIDTH 20
+
 #define JLPT_BUBBLE_SIZE 35
 #define JLPT_BUBBLE_OFFSET 9.1
 
@@ -158,17 +163,25 @@ bool frontShowing;
             
             if (i < 6) {
                 
-                UILabel *meaningLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, MEANING_BOX_TOP + i*30, 270, 25)];
-                [meaningLabel setTextColor:[UIColor darkGrayColor]];
+                // 1. Create bezier path to draw
+                UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(CONTENT_OFFSET_LEFT , MEANING_BOX_TOP + i*MEANING_SPACING, MEANING_BUBBLE_WIDTH, MEANING_HEIGHT) cornerRadius:5];
                 
-                NSMutableAttributedString *text = [[NSMutableAttributedString alloc]
-                                                   initWithString: [NSString stringWithFormat: @"%d. %@", i+1, [meanings objectAtIndex:i]]];
-                [text addAttribute:NSForegroundColorAttributeName
-                             value:[UIColor lightGrayColor]
-                             range:NSMakeRange(0, 2)];
-                [meaningLabel setAttributedText: text];
+                // 2. Create a shape layer for above created path.
+                CAShapeLayer *meaningCountBubble = [[CAShapeLayer alloc] init];
+                meaningCountBubble.fillColor = [[UIColor colorWithRed:(235.0 / 255.0) green:(235.0 / 255.0) blue:(235.0 / 255.0) alpha: 1] CGColor];
+                meaningCountBubble.path = path.CGPath;
+                [self.layer addSublayer:meaningCountBubble];
                 
-                [meaningLabel setFont:[UIFont systemFontOfSize: 20.0f]];
+                UILabel *meaningCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, MEANING_BOX_TOP + i*MEANING_SPACING, MEANING_BUBBLE_WIDTH, MEANING_HEIGHT)];
+                meaningCountLabel.text = [NSString stringWithFormat:@"%d", i+1];
+                meaningCountLabel.textAlignment = NSTextAlignmentCenter;
+                meaningCountLabel.textColor = [UIColor lightGrayColor];
+                [self addSubview:meaningCountLabel];
+                
+                UILabel *meaningLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT + MEANING_BUBBLE_WIDTH + 5, MEANING_BOX_TOP + i*MEANING_SPACING, 270, MEANING_HEIGHT)];
+                meaningLabel.text = [meanings objectAtIndex:i];
+                meaningLabel.textColor = [UIColor darkGrayColor];
+                meaningLabel.font = [UIFont systemFontOfSize: 20.0f];
                 [self addSubview:meaningLabel];
                 
                 // Add label to array
