@@ -421,7 +421,7 @@ int numPanels;
 // This is used for percent driven interactive transitions, as well as for container controllers
 // that have companion animations that might need to synchronise with the main animation.
 - (NSTimeInterval)transitionDuration:(nullable id <UIViewControllerContextTransitioning>)transitionContext {
-    return 1;
+    return 0.5;
 }
 
 // This is where we define the custom animation itself
@@ -434,19 +434,22 @@ int numPanels;
     
     CGFloat travelDistance = self.isPresenting ? -SCREEN_HEIGHT : SCREEN_HEIGHT;
     self.disappearingFromFrame = self.appearingToFrame = [UIScreen mainScreen].bounds;
-    self.disappearingToFrame = CGRectOffset ([UIScreen mainScreen].bounds, travelDistance, 0);
-    self.appearingFromFrame = CGRectOffset ([UIScreen mainScreen].bounds, -travelDistance, 0);
+    self.disappearingToFrame = CGRectOffset([UIScreen mainScreen].bounds, 0, travelDistance);
+    self.appearingFromFrame = CGRectOffset([UIScreen mainScreen].bounds, 0, -travelDistance);
     
-    //self.modalPresentedFrame = [transitionContext containerView].bounds;
+    self.modalPresentedFrame = [transitionContext containerView].bounds;
+    //self.modalHiddenFrame = CGRectOffset(self.modalPresentedFrame, 0, SCREEN_HEIGHT);
     
-    toView.alpha = 0;
+    //toView.alpha = 0;
     
     UIView *modalView;
-    CGRect destinationFrame;
+    UIView *homeView;
+    CGRect modalDestinationFrame;
+    CGRect homeDestinationFrame;
     
     if(self.isPresenting) {
         modalView = toView;
-        destinationFrame = self.appearingToFrame;
+        modalDestinationFrame = self.appearingToFrame;
         // Never need to remove this, the animator will do it for us:
         // (But we do need to remember this when presenting, otherwise no modal view will appear)
         [[transitionContext containerView] addSubview:toView];
@@ -454,10 +457,10 @@ int numPanels;
         [toView layoutIfNeeded];
     } else {
         modalView = fromView;
-        destinationFrame = self.disappearingToFrame;
+        modalDestinationFrame = self.disappearingToFrame;
     }
     
-    [self animateWithModalView:modalView destinationFrame:destinationFrame];
+    [self animateWithModalView:modalView destinationFrame:modalDestinationFrame];
 }
 
 - (void)animateWithModalView:(UIView *)view destinationFrame:(CGRect)destinationFrame {
