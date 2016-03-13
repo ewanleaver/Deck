@@ -437,10 +437,8 @@ int numPanels;
     self.disappearingToFrame = CGRectOffset([UIScreen mainScreen].bounds, 0, travelDistance);
     self.appearingFromFrame = CGRectOffset([UIScreen mainScreen].bounds, 0, -travelDistance);
     
-    self.modalPresentedFrame = [transitionContext containerView].bounds;
-    //self.modalHiddenFrame = CGRectOffset(self.modalPresentedFrame, 0, SCREEN_HEIGHT);
-    
-    //toView.alpha = 0;
+    toView.alpha = 0;
+    fromView.alpha = 1;
     
     UIView *modalView;
     UIView *homeView;
@@ -449,25 +447,38 @@ int numPanels;
     
     if(self.isPresenting) {
         modalView = toView;
+        homeView = fromView;
+        
         modalDestinationFrame = self.appearingToFrame;
+        homeDestinationFrame = self.disappearingToFrame;
+        
         // Never need to remove this, the animator will do it for us:
         // (But we do need to remember this when presenting, otherwise no modal view will appear)
         [[transitionContext containerView] addSubview:toView];
+        [[transitionContext containerView] addSubview:fromView];
         toView.frame = self.appearingFromFrame;
+        fromView.frame = self.disappearingFromFrame;
         [toView layoutIfNeeded];
+        [fromView layoutIfNeeded];
     } else {
         modalView = fromView;
+        homeView = toView;
         modalDestinationFrame = self.disappearingToFrame;
+        homeDestinationFrame = self.appearingToFrame;
     }
     
-    [self animateWithModalView:modalView destinationFrame:modalDestinationFrame];
+    [self animateWithModalView:modalView homeView:homeView modalDestinationFrame:modalDestinationFrame homeDestinationFrame:homeDestinationFrame];
 }
 
-- (void)animateWithModalView:(UIView *)view destinationFrame:(CGRect)destinationFrame {
+- (void)animateWithModalView:(UIView *)modalView homeView:(UIView *)homeView modalDestinationFrame:(CGRect)modalDestinationFrame homeDestinationFrame:(CGRect)homeDestinationFrame {
     
     [UIView animateWithDuration:[self transitionDuration:self.transitionContext] delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:0 animations:^{
-        view.frame = destinationFrame;
-        [view layoutIfNeeded];
+        modalView.frame = modalDestinationFrame;
+        modalView.alpha = 1;
+        homeView.frame = homeDestinationFrame;
+        homeView.alpha = 0;
+        [modalView layoutIfNeeded];
+        [homeView layoutIfNeeded];
     } completion:nil];
 }
 
