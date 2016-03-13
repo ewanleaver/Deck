@@ -63,6 +63,9 @@
 
 @interface ContainerViewController ()
 
+// The view hosting the child view controllers
+@property (nonatomic, strong) UIView *privateContainerView;
+
 @end
 
 @implementation ContainerViewController
@@ -75,9 +78,34 @@
     return self;
 }
 
+// Created the view that the view controller manages
+- (void)loadView {
+    UIView *rootView = [UIView new];
+    rootView.backgroundColor = [UIColor blackColor];
+    //rootView.opaque = YES;
+    
+    self.privateContainerView = [UIView new];
+    self.privateContainerView.backgroundColor = [UIColor blackColor];
+    //self.privateContainerView.opaque = YES;
+    
+    //[self.privateContainerView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [rootView addSubview:self.privateContainerView];
+    
+    // Container view fills out entire root view
+//    [rootView addConstraint:[NSLayoutConstraint constraintWithItem:self.privateContainerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:rootView attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
+//    [rootView addConstraint:[NSLayoutConstraint constraintWithItem:self.privateContainerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:rootView attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
+//    [rootView addConstraint:[NSLayoutConstraint constraintWithItem:self.privateContainerView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:rootView attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
+//    [rootView addConstraint:[NSLayoutConstraint constraintWithItem:self.privateContainerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:rootView attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
+    
+    self.view = rootView;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    // If we have a selectedViewController use it, otherwise use the first controller in our array
+    self.selectedViewController = (self.selectedViewController ?: self.viewControllers[0]);
 }
 
 - (void)didReceiveMemoryWarning {

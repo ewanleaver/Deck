@@ -421,7 +421,7 @@ int numPanels;
 // This is used for percent driven interactive transitions, as well as for container controllers
 // that have companion animations that might need to synchronise with the main animation.
 - (NSTimeInterval)transitionDuration:(nullable id <UIViewControllerContextTransitioning>)transitionContext {
-    return 0.5;
+    return 1.5;
 }
 
 // This is where we define the custom animation itself
@@ -432,13 +432,13 @@ int numPanels;
     UIView *fromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
     UIView *toView = [transitionContext viewForKey:UITransitionContextToViewKey];
     
-    CGFloat travelDistance = self.isPresenting ? -SCREEN_HEIGHT : SCREEN_HEIGHT;
+    CGFloat travelDistance = self.isPresenting ? SCREEN_HEIGHT : -SCREEN_HEIGHT;
     self.disappearingFromFrame = self.appearingToFrame = [UIScreen mainScreen].bounds;
     self.disappearingToFrame = CGRectOffset([UIScreen mainScreen].bounds, 0, travelDistance);
     self.appearingFromFrame = CGRectOffset([UIScreen mainScreen].bounds, 0, -travelDistance);
     
-    toView.alpha = 0;
-    fromView.alpha = 1;
+    //toView.alpha = 0;
+    fromView.alpha = 0;
     
     UIView *modalView;
     UIView *homeView;
@@ -467,10 +467,10 @@ int numPanels;
         homeDestinationFrame = self.appearingToFrame;
     }
     
-    [self animateWithModalView:modalView homeView:homeView modalDestinationFrame:modalDestinationFrame homeDestinationFrame:homeDestinationFrame];
+    [self animateWithModalView:modalView modalDestinationFrame:modalDestinationFrame homeView:homeView homeDestinationFrame:homeDestinationFrame];
 }
 
-- (void)animateWithModalView:(UIView *)modalView homeView:(UIView *)homeView modalDestinationFrame:(CGRect)modalDestinationFrame homeDestinationFrame:(CGRect)homeDestinationFrame {
+- (void)animateWithModalView:(UIView *)modalView modalDestinationFrame:(CGRect)modalDestinationFrame homeView:(UIView *)homeView homeDestinationFrame:(CGRect)homeDestinationFrame {
     
     [UIView animateWithDuration:[self transitionDuration:self.transitionContext] delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:0 animations:^{
         modalView.frame = modalDestinationFrame;
