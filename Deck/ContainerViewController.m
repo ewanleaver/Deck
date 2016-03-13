@@ -15,37 +15,9 @@
 //    This class will be used even if the developer provides their own transitioning objects.
 // @note The only methods that will be called on objects of this class are the ones defined in the UIViewControllerContextTransitioning protocol.
 //    The rest is our own private implementation.
-@interface PrivateTransitionContext : NSObject <UIViewControllerContextTransitioning>
+@interface PrivateTransitionContext : NSObject //<UIViewControllerContextTransitioning>
 
 - (instancetype)initWithFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController goingUp:(BOOL)goingUp; // Designated initializer.
-
-@end
-
-@interface ContainerViewController ()
-
-@end
-
-@implementation ContainerViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
 
@@ -73,7 +45,7 @@
         self.containerView = fromViewController.view.superview;
         self.viewControllers = @{
                                  UITransitionContextFromViewControllerKey:fromViewController,
-                                 UITransitionContextToViewControllerKey:toViewController,
+                                 UITransitionContextToViewControllerKey:toViewController
                                  };
         // Set the view frame properties which make sense in our specialized ContainerViewController context. Views appear from and disappear to the sides, corresponding to where the icon buttons are positioned. So tapping a button to the right of the currently selected, makes the view disappear to the left and the new view appear from the right. The animator object can choose to use this to determine whether the transition should be going left to right, or right to left, for example.
         CGFloat travelDistance = (goingUp ? -self.containerView.bounds.size.width : self.containerView.bounds.size.width);
@@ -86,3 +58,43 @@
 }
 
 @end
+
+#pragma mark - ContainerViewController
+
+@interface ContainerViewController ()
+
+@end
+
+@implementation ContainerViewController
+
+- (instancetype)initWithViewControllers:(NSArray *)viewControllers {
+    NSParameterAssert ([viewControllers count] > 0);
+    if ((self = [super init])) {
+        self.viewControllers = viewControllers;
+    }
+    return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end
+
+

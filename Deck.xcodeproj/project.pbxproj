@@ -48,6 +48,8 @@
 		40BC9E721905537100D6A792 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 40BC9E701905537100D6A792 /* InfoPlist.strings */; };
 		40BC9E741905537100D6A792 /* DeckTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E731905537100D6A792 /* DeckTests.m */; };
 		40BC9E85190554F400D6A792 /* KanjiListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BC9E84190554F400D6A792 /* KanjiListViewController.m */; };
+		40BF4CBF1C957C950070965C /* ContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BF4CBE1C957C950070965C /* ContainerViewController.m */; };
+		40BF4CC31C9593310070965C /* Animator.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BF4CC21C9593310070965C /* Animator.m */; };
 		40E9101A1A02633900ABD58F /* Character.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E910191A02633900ABD58F /* Character.m */; };
 		40E9BDF7192841A000EAFB2D /* KanjiParser.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 40E9BDF4192841A000EAFB2D /* KanjiParser.sqlite */; };
 		762D45391945877F00CE422C /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 762D45361945877F00CE422C /* Card.m */; };
@@ -176,6 +178,10 @@
 		40BC9E731905537100D6A792 /* DeckTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeckTests.m; sourceTree = "<group>"; };
 		40BC9E83190554F400D6A792 /* KanjiListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KanjiListViewController.h; path = ../KanjiListViewController.h; sourceTree = "<group>"; };
 		40BC9E84190554F400D6A792 /* KanjiListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KanjiListViewController.m; path = ../KanjiListViewController.m; sourceTree = "<group>"; };
+		40BF4CBD1C957C950070965C /* ContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContainerViewController.h; sourceTree = "<group>"; };
+		40BF4CBE1C957C950070965C /* ContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContainerViewController.m; sourceTree = "<group>"; };
+		40BF4CC11C9593310070965C /* Animator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Animator.h; sourceTree = "<group>"; };
+		40BF4CC21C9593310070965C /* Animator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Animator.m; sourceTree = "<group>"; };
 		40E910181A02633900ABD58F /* Character.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Character.h; path = Deck/Character.h; sourceTree = "<group>"; };
 		40E910191A02633900ABD58F /* Character.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Character.m; path = Deck/Character.m; sourceTree = "<group>"; };
 		40E9BDF4192841A000EAFB2D /* KanjiParser.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = KanjiParser.sqlite; path = Deck/KanjiParser.sqlite; sourceTree = "<group>"; };
@@ -271,14 +277,17 @@
 			children = (
 				40BC9E4D1905537100D6A792 /* AppDelegate.h */,
 				40BC9E4E1905537100D6A792 /* AppDelegate.m */,
+				40BF4CBD1C957C950070965C /* ContainerViewController.h */,
+				40BF4CBE1C957C950070965C /* ContainerViewController.m */,
+				40BF4CC01C9592EA0070965C /* Custom Transitions */,
 				76310F0C1946D6AD006A329C /* Home UI */,
-				76AA7EC41966888E00AB3BE0 /* Study UI */,
-				40BC9E83190554F400D6A792 /* KanjiListViewController.h */,
-				40BC9E84190554F400D6A792 /* KanjiListViewController.m */,
-				40BC9E501905537100D6A792 /* Main_iPhone.storyboard */,
-				40BC9E531905537100D6A792 /* Main_iPad.storyboard */,
 				76AA7EC31966875E00AB3BE0 /* CoreData */,
 				40BC9E5F1905537100D6A792 /* Images.xcassets */,
+				40BC9E83190554F400D6A792 /* KanjiListViewController.h */,
+				40BC9E84190554F400D6A792 /* KanjiListViewController.m */,
+				40BC9E531905537100D6A792 /* Main_iPad.storyboard */,
+				40BC9E501905537100D6A792 /* Main_iPhone.storyboard */,
+				76AA7EC41966888E00AB3BE0 /* Study UI */,
 				40BC9E451905537100D6A792 /* Supporting Files */,
 			);
 			name = DeckApp;
@@ -312,6 +321,15 @@
 				40BC9E701905537100D6A792 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		40BF4CC01C9592EA0070965C /* Custom Transitions */ = {
+			isa = PBXGroup;
+			children = (
+				40BF4CC11C9593310070965C /* Animator.h */,
+				40BF4CC21C9593310070965C /* Animator.m */,
+			);
+			name = "Custom Transitions";
 			sourceTree = "<group>";
 		};
 		76310F0C1946D6AD006A329C /* Home UI */ = {
@@ -563,6 +581,7 @@
 				40BC9E85190554F400D6A792 /* KanjiListViewController.m in Sources */,
 				40BC9E4F1905537100D6A792 /* AppDelegate.m in Sources */,
 				76310F081946CA35006A329C /* Bubble.m in Sources */,
+				40BF4CBF1C957C950070965C /* ContainerViewController.m in Sources */,
 				76AA7EBE1966868E00AB3BE0 /* CardViewController.m in Sources */,
 				402E71B119FC69E6003E4C86 /* TempStudyDetails.m in Sources */,
 				764668BE196676A30033BACF /* KanjiDB.xcdatamodeld in Sources */,
@@ -573,6 +592,7 @@
 				402047D81A0271F100C76B7B /* Home.m in Sources */,
 				402047D51A0271C900C76B7B /* Deck.m in Sources */,
 				40E9101A1A02633900ABD58F /* Character.m in Sources */,
+				40BF4CC31C9593310070965C /* Animator.m in Sources */,
 				40BC9E4B1905537100D6A792 /* main.m in Sources */,
 				4007A05B19474569003292BF /* HomePanel.m in Sources */,
 				402E71B419FC6AF7003E4C86 /* StudyDetails.m in Sources */,

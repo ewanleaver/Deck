@@ -17,10 +17,25 @@
 #import "Deck.h"
 #import "Character.h"
 
-@interface HomeViewController ()
+#define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
+
+@interface HomeViewController () <UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning>
 
 @property (nonatomic, weak) id delegate;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+
+// Want to keep a reference to the current transition context
+@property (nonatomic, strong) id <UIViewControllerContextTransitioning> transitionContext;
+// Used to determine whether the StudyViewController is being presented or is returning to home
+@property (nonatomic, assign) BOOL isPresenting;
+
+@property (nonatomic, assign) CGRect modalHiddenFrame;
+@property (nonatomic, assign) CGRect modalPresentedFrame;
+
+@property (nonatomic, assign) CGRect disappearingFromFrame;
+@property (nonatomic, assign) CGRect disappearingToFrame;
+@property (nonatomic, assign) CGRect appearingFromFrame;
+@property (nonatomic, assign) CGRect appearingToFrame;
 
 @end
 
@@ -352,21 +367,7 @@ int numPanels;
 
 #pragma mark - IBActions
 
--(IBAction)presentStudyView:(id)sender {
-    
-    // Initiate StudyViewController with the appropriate deck to study
-    StudyViewController *studyView = [[StudyViewController alloc] initWithDeck:[self.myDecksArray objectAtIndex:self.pageControl.currentPage]];
-    [self presentViewController:studyView animated:YES completion:nil];
-    
-    //        [self performSegueWithIdentifier:@"showStudyView" sender:self];
-    
-    //        UIStoryboard *storyboard = self.storyboard;
-    //        StudyViewController *controller = [storyboard
-    //                                        instantiateViewControllerWithIdentifier:@"studyViewController"];
-    //        [self.navigationController pushViewController:controller animated:YES];
-    
-}
-
+// Animate the pressing/depressing of the study button
 - (IBAction)studyButtonTouch:(id)sender {
     if (!studyComplete) {
         [UIView animateWithDuration:0.1 animations:^{
@@ -383,5 +384,88 @@ int numPanels;
     }
 }
 
+-(IBAction)presentStudyView:(id)sender {
+    
+    // Initiate StudyViewController with the appropriate deck to study
+    StudyViewController *studyViewController = [[StudyViewController alloc] initWithDeck:[self.myDecksArray objectAtIndex:self.pageControl.currentPage]];
+    studyViewController.modalPresentationStyle = UIModalPresentationCustom;
+    
+    // Tell the modal that this ViewController is going to be its transitioningDelegate
+    studyViewController.transitioningDelegate = self;
+    self.isPresenting = YES;
+    [self presentViewController:studyViewController animated:YES completion:^{
+        self.isPresenting = NO;
+    }];
+    
+    //        [self performSegueWithIdentifier:@"showStudyView" sender:self];
+    
+    //        UIStoryboard *storyboard = self.storyboard;
+    //        StudyViewController *controller = [storyboard
+    //                                        instantiateViewControllerWithIdentifier:@"studyViewController"];
+    //        [self.navigationController pushViewController:controller animated:YES];
+    
+}
+
+#pragma mark - UIViewControllerTransitioningDelegate methods 
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
+    return self;
+}
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    return self;
+}
+
+#pragma mark - UIViewControllerAnimatedTransitioning methods
+
+// This is used for percent driven interactive transitions, as well as for container controllers
+// that have companion animations that might need to synchronise with the main animation.
+- (NSTimeInterval)transitionDuration:(nullable id <UIViewControllerContextTransitioning>)transitionContext {
+    return 1;
+}
+
+// This is where we define the custom animation itself
+- (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext {
+    self.transitionContext = transitionContext;
+    
+    // References to the from/toViews
+    UIView *fromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
+    UIView *toView = [transitionContext viewForKey:UITransitionContextToViewKey];
+    
+    CGFloat travelDistance = self.isPresenting ? -SCREEN_HEIGHT : SCREEN_HEIGHT;
+    self.disappearingFromFrame = self.appearingToFrame = [UIScreen mainScreen].bounds;
+    self.disappearingToFrame = CGRectOffset ([UIScreen mainScreen].bounds, travelDistance, 0);
+    self.appearingFromFrame = CGRectOffset ([UIScreen mainScreen].bounds, -travelDistance, 0);
+    
+    //self.modalPresentedFrame = [transitionContext containerView].bounds;
+    
+    toView.alpha = 0;
+    
+    UIView *modalView;
+    CGRect destinationFrame;
+    
+    if(self.isPresenting) {
+        modalView = toView;
+        destinationFrame = self.appearingToFrame;
+        // Never need to remove this, the animator will do it for us:
+        // (But we do need to remember this when presenting, otherwise no modal view will appear)
+        [[transitionContext containerView] addSubview:toView];
+        toView.frame = self.appearingFromFrame;
+        [toView layoutIfNeeded];
+    } else {
+        modalView = fromView;
+        destinationFrame = self.disappearingToFrame;
+    }
+    
+    [self animateWithModalView:modalView destinationFrame:destinationFrame];
+}
+
+- (void)animateWithModalView:(UIView *)view destinationFrame:(CGRect)destinationFrame {
+    
+    [UIView animateWithDuration:[self transitionDuration:self.transitionContext] delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:0 animations:^{
+        view.frame = destinationFrame;
+        [view layoutIfNeeded];
+    } completion:nil];
+}
 
 @end

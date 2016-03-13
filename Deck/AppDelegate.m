@@ -19,47 +19,8 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-@synthesize decksManagedObjectContext = _decksManagedObjectContext;
-@synthesize decksManagedObjectModel = _decksManagedObjectModel;
-@synthesize decksPersistentStoreCoordinator = _decksPersistentStoreCoordinator;
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-//    NSManagedObjectContext *context = [self managedObjectContext];
-//    Character *character = [NSEntityDescription
-//                                       insertNewObjectForEntityForName:@"Character"
-//                                       inManagedObjectContext:context];
-//    [character setValue:@"机" forKey:@"literal"];
-//    [character setValue:@"キ" forKey:@"reading_on"];
-//    [character setValue:@"つくえ" forKey:@"reading_kun"];
-//    
-//    StudyDetails *studyDetails = [NSEntityDescription
-//                                          insertNewObjectForEntityForName:@"StudyDetails"
-//                                          inManagedObjectContext:context];
-//    [studyDetails setValue:[NSDate date] forKey:@"lastStudied"];
-//    [studyDetails setValue:@"N3" forKey:@"jlpt"];
-//    [studyDetails setValue:character forKey:@"character"];
-//    [character setValue:studyDetails forKey:@"studyDetails"];
-//    NSError *error;
-//    if (![context save:&error]) {
-//        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
-//    }
-    
-    // Test listing all characters from the store
-//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//    NSEntityDescription *entity = [NSEntityDescription
-//                                   entityForName:@"Character" inManagedObjectContext:context];
-//    [fetchRequest setEntity:entity];
-//    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
-//    for (Character *character in fetchedObjects) {
-//        NSLog(@"Literal: %@", [character valueForKey:@"literal"]);
-//        StudyDetails *studyDetails = [character valueForKey:@"studyDetails"];
-//        NSLog(@"JLPT: %@", [studyDetails valueForKey:@"jlpt"]);
-//    }
-    
-    
-    
-    
     
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
@@ -226,17 +187,6 @@
     
     return _persistentStoreCoordinator;
 }
-
-- (NSManagedObjectModel *)decksManagedObjectModel
-{
-    if (_decksManagedObjectModel != nil) {
-        return _decksManagedObjectModel;
-    }
-    NSURL *decksModelURL = [[NSBundle mainBundle] URLForResource:@"Decks" withExtension:@"momd"];
-    _decksManagedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:decksModelURL];
-    return _decksManagedObjectModel;
-}
-
 
 #pragma mark - Application's Documents directory
 
