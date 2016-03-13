@@ -352,15 +352,11 @@ int numPanels;
 
 #pragma mark - IBActions
 
--(IBAction)StartStudy:(id)sender {
-    
-    // Get current page
-    //CGFloat pageWidth = self.scrollView.frame.size.width;
-    //int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+-(IBAction)presentStudyView:(id)sender {
     
     // Initiate StudyViewController with the appropriate deck to study
-    StudyViewController *BackgroundView = [[StudyViewController alloc] initWithDeck:[self.myDecksArray objectAtIndex:self.pageControl.currentPage]];
-    [self presentViewController:BackgroundView animated:YES completion:nil];
+    StudyViewController *studyView = [[StudyViewController alloc] initWithDeck:[self.myDecksArray objectAtIndex:self.pageControl.currentPage]];
+    [self presentViewController:studyView animated:YES completion:nil];
     
     //        [self performSegueWithIdentifier:@"showStudyView" sender:self];
     

@@ -21,7 +21,7 @@
 @property (nonatomic, retain) IBOutlet StudyButton *studyButton;
 
 - (IBAction)changePage;
-- (IBAction)StartStudy:(id)sender;
+- (IBAction)presentStudyView:(id)sender;
 - (IBAction)studyButtonTouch:(id)sender;
 - (IBAction)studyButtonRelease:(id)sender;
 
