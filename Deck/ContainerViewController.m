@@ -7,6 +7,7 @@
 //
 
 #import "ContainerViewController.h"
+#import "Animator.h"
 
 // A private UIViewControllerContextTransitioning class to be provided transitioning delegates.
 // @discussion Because we are a custom UIViewController class, with our own containment implementation,
@@ -18,6 +19,10 @@
 @interface PrivateTransitionContext : NSObject //<UIViewControllerContextTransitioning>
 
 - (instancetype)initWithFromViewController:(UIViewController *)fromViewController toViewController:(UIViewController *)toViewController goingUp:(BOOL)goingUp; // Designated initializer.
+
+@property (nonatomic, assign, getter=isAnimated) BOOL animated; // Private setter for the animated property.
+@property (nonatomic, assign, getter=isInteractive) BOOL interactive; // Private setter for the interactive property.
+@property (nonatomic, copy) void (^completionBlock)(BOOL didComplete); // A block of code we can set to execute after having received the completeTransition: message.
 
 @end
 
@@ -50,8 +55,8 @@
         // Set the view frame properties which make sense in our specialized ContainerViewController context. Views appear from and disappear to the sides, corresponding to where the icon buttons are positioned. So tapping a button to the right of the currently selected, makes the view disappear to the left and the new view appear from the right. The animator object can choose to use this to determine whether the transition should be going left to right, or right to left, for example.
         CGFloat travelDistance = (goingUp ? -self.containerView.bounds.size.width : self.containerView.bounds.size.width);
         self.disappearingFromRect = self.appearingToRect = self.containerView.bounds;
-        self.disappearingToRect = CGRectOffset (self.containerView.bounds, travelDistance, 0);
-        self.appearingFromRect = CGRectOffset (self.containerView.bounds, -travelDistance, 0);
+        self.disappearingToRect = CGRectOffset (self.containerView.bounds, 0, travelDistance);
+        self.appearingFromRect = CGRectOffset (self.containerView.bounds, 0, -travelDistance);
     }
     
     return self;
@@ -106,6 +111,54 @@
     
     // If we have a selectedViewController use it, otherwise use the first controller in our array
     self.selectedViewController = (self.selectedViewController ?: self.viewControllers[0]);
+}
+
+- (void)_transitionToChildViewController:(UIViewController *)toViewController {
+    
+    UIViewController *fromViewController = ([self.childViewControllers count] > 0 ? self.childViewControllers[0] : nil);
+    if (toViewController == fromViewController || ![self isViewLoaded]) {
+        return;
+    }
+    
+    UIView *toView = toViewController.view;
+    [toView setTranslatesAutoresizingMaskIntoConstraints:YES];
+    toView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    toView.frame = self.privateContainerView.bounds;
+    
+    [fromViewController willMoveToParentViewController:nil];
+    [self addChildViewController:toViewController];
+    
+    // If this is the initial presentation, add the new child with no animation.
+    if (!fromViewController) {
+        [self.privateContainerView addSubview:toViewController.view];
+        [toViewController didMoveToParentViewController:self];
+        return;
+    }
+    
+    // Animate the transition by calling the animator with our private transition context.
+    
+    Animator *animator = [[Animator alloc] init];
+    
+    // Our ViewControllers are vertically aligned, so we need to determine which direction we're transitioning in
+    NSUInteger fromIndex = [self.viewControllers indexOfObject:fromViewController];
+    NSUInteger toIndex = [self.viewControllers indexOfObject:toViewController];
+    PrivateTransitionContext *transitionContext = [[PrivateTransitionContext alloc] initWithFromViewController:fromViewController toViewController:toViewController goingUp:toIndex > fromIndex];
+    
+    transitionContext.animated = YES;
+    transitionContext.interactive = NO;
+    transitionContext.completionBlock = ^(BOOL didComplete) {
+        [fromViewController.view removeFromSuperview];
+        [fromViewController removeFromParentViewController];
+        [toViewController didMoveToParentViewController:self];
+        
+        if ([animator respondsToSelector:@selector (animationEnded:)]) {
+            [animator animationEnded:didComplete];
+        }
+        //self.privateButtonsView.userInteractionEnabled = YES;
+    };
+    
+    //self.privateButtonsView.userInteractionEnabled = NO; // Prevent user tapping buttons mid-transition, messing up state
+    [animator animateTransition:transitionContext];
 }
 
 - (void)didReceiveMemoryWarning {
