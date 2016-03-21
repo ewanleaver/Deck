@@ -14,11 +14,6 @@
 
 @interface StudyViewController : UIViewController
 
-- (IBAction)StopStudy:(id)sender;
-- (IBAction)AddCard:(id)sender;
-
-
-
 - (id) initWithDeck: (NSMutableArray *)inputDeck;
 
 - (int) getActiveCardCount;
@@ -32,5 +27,8 @@
 - (void) moveCardToBack: (Card*)cardView;
 - (void) moveBackCardToFront;
 - (void) maintainDeck;
+
+- (IBAction)StopStudy:(id)sender;
+- (IBAction)AddCard:(id)sender;
 
 @end

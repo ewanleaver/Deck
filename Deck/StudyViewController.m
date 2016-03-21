@@ -62,35 +62,35 @@
 #define MAX_DRAWN_CARDS 3
 
 - (id)initWithDeck:(Deck *)d {
-    NSLog(@"[StudyView] Studying deck '%@': %@ cards.",d.name,d.numToStudy);
+    NSLog(@"[StudyView] Studying deck '%@': %@ cards.", d.name, d.numToStudy);
     
     
     self = [super initWithNibName:nil bundle:nil];
-    self.deckStudying = d;
+    _deckStudying = d;
     
     // Set background
     //UIImage *image = [UIImage imageNamed:@"Study Background.png"];
     self.view.backgroundColor = [UIColor colorWithRed:(205.0/255.0) green:(20.0/255.0) blue:(52.0/255.0) alpha:1];//[UIColor colorWithPatternImage:image];
     
     // Initially no cards active
-    self.totalCardCount = 0;
-    self.activeCardCount = 0;
-    self.correctCardCount = 0;
-    self.incorrectCardCount = 0;
+    _totalCardCount = 0;
+    _activeCardCount = 0;
+    _correctCardCount = 0;
+    _incorrectCardCount = 0;
     
     UIColor *activeCountColor = [UIColor colorWithRed:(160.0 / 255.0) green:(8.0 / 255.0) blue:(40.0 / 255.0) alpha: 1];
     
-    self.activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 40, 22, 80, 25)];
-    self.activeCardCountLabel.text = [NSString stringWithFormat:@"%d", self.activeCardCount];
-    self.activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
-    [self.activeCardCountLabel setTextColor:activeCountColor];
-    [self.activeCardCountLabel setFont:[UIFont systemFontOfSize: 25.0f]];
-    [self.view addSubview:self.activeCardCountLabel];
+    _activeCardCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 40, 22, 80, 25)];
+    _activeCardCountLabel.text = [NSString stringWithFormat:@"%d", _activeCardCount];
+    _activeCardCountLabel.textAlignment = NSTextAlignmentCenter;
+    [_activeCardCountLabel setTextColor:activeCountColor];
+    [_activeCardCountLabel setFont:[UIFont systemFontOfSize: 25.0f]];
+    [self.view addSubview:_activeCardCountLabel];
     
-    self.progressBarHasAnimated = false;
-    self.correctBarHasAnimated = false;
-    self.studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET, SCREEN_HEIGHT-37, BAR_MAX_WIDTH, BAR_HEIGHT)];
-    [self.view addSubview:self.studyProgressBar];
+    _progressBarHasAnimated = false;
+    _correctBarHasAnimated = false;
+    _studyProgressBar = [[UIImageView alloc] initWithFrame:CGRectMake(BAR_OFFSET, SCREEN_HEIGHT-37, BAR_MAX_WIDTH, BAR_HEIGHT)];
+    [self.view addSubview:_studyProgressBar];
     [self drawProgressBar];
     
     return self;

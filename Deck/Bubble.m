@@ -29,43 +29,34 @@
 
 @implementation Bubble
 
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-
-        self.colour = [UIColor redColor];
-        [self setBackgroundColor:[UIColor clearColor]];
-        
-    }
-    return self;
+- (instancetype)initWithFrame:(CGRect)frame {
+    
+    return [self initBubbleWithFrame:frame colour:[UIColor redColor] regularSize:10 inflatedSize:100];
 }
 
-- (instancetype)initBubbleWithFrame:(CGRect)frame colour:(UIColor*)colour regularSize:(int)regularSize inflatedSize:(int)inflatedSize
-{
+- (instancetype)initBubbleWithFrame:(CGRect)frame colour:(UIColor*)colour regularSize:(int)regularSize inflatedSize:(int)inflatedSize {
+    
     self = [super initWithFrame:frame];
     if (self) {
 
-        self.inputRegularSize = regularSize;
-        self.inputInflatedSize = inflatedSize;
-        self.colour = colour;
-        [self setBackgroundColor:[UIColor clearColor]];
+        _inputRegularSize = regularSize;
+        _inputInflatedSize = inflatedSize;
+        _colour = colour;
+        
+        _bubbleToggled = false;
     }
+    
+    [self setBackgroundColor:[UIColor clearColor]];
     
     // Add the tap gesture recognizer to the view
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)];
 //    NSLog(@"%f, %f, %f, %f", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);//[tapGestureRecognizer locationInView:self];
     [self addGestureRecognizer:tapGestureRecognizer];
     
-    self.bubbleToggled = false;
-    
     return self;
 }
 
 - (void)drawRect:(CGRect)rect {
-    
-    //[numToStudyLabel setFrame:CGRectMake(self.frame.size.width/2 - 25, self.frame.size.height/2 - 15, 50, 30)];
-    //[numToStudyLabel setText:@"Test Label"];
     
     // Max value to add to base value (of 100) is currently 120.
     float temp = pow(self.inputRegularSize,0.5);

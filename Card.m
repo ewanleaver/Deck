@@ -82,25 +82,25 @@
     self = [super initWithFrame:cardFrame];
     if (self) {
         
-        self.delegate = [[UIApplication sharedApplication] delegate];
-        self.managedObjectContext = [self.delegate managedObjectContext];
+        _delegate = [[UIApplication sharedApplication] delegate];
+        _managedObjectContext = [_delegate managedObjectContext];
         
-        self.controller = (StudyViewController*) [[self superview] nextResponder];
+        _controller = (StudyViewController*) [[self superview] nextResponder];
         
         // May eventually have the option of showing two sides to a card
-        self.frontShowing = true;
+        _frontShowing = true;
         
         [self setFrame:cardFrame];
         
-        self.c = inputChar;
-        self.studyDetails = self.c.studyDetails;
+        _c = inputChar;
+        _studyDetails = _c.studyDetails;
         // tempStudyDetails are the study details for the current session (yes?)
-        self.tempStudyDetails = self.studyDetails.tempStudyDetails;
+        _tempStudyDetails = _studyDetails.tempStudyDetails;
 
-        if (self.tempStudyDetails.isStudying.boolValue == false) {
-            [self.tempStudyDetails setIsStudying:[NSNumber numberWithBool:true]];
-            self.tempStudyDetails.numIncorrect = @0;
-            self.tempStudyDetails.numCorrect = @0;
+        if (_tempStudyDetails.isStudying.boolValue == false) {
+            [_tempStudyDetails setIsStudying:[NSNumber numberWithBool:true]];
+            _tempStudyDetails.numIncorrect = @0;
+            _tempStudyDetails.numCorrect = @0;
         } else {
             NSLog(@"[Card] CARD IS ALREADY BEING STUDIED");
         }
@@ -110,30 +110,30 @@
         
         // Logging
         if (VERBOSE) {
-            NSLog(@"[Card] Card Num: %@", self.c.id_num);
-            NSLog(@"[Card] Studying?: %@", self.c.studyDetails.tempStudyDetails.isStudying);
-            NSLog(@"[Card] Num Correct?: %@", self.c.studyDetails.tempStudyDetails.numCorrect);
-            NSLog(@"[Card] Num Incorrect?: %@", self.c.studyDetails.tempStudyDetails.numIncorrect);
+            NSLog(@"[Card] Card Num: %@", _c.id_num);
+            NSLog(@"[Card] Studying?: %@", _c.studyDetails.tempStudyDetails.isStudying);
+            NSLog(@"[Card] Num Correct?: %@", _c.studyDetails.tempStudyDetails.numCorrect);
+            NSLog(@"[Card] Num Incorrect?: %@", _c.studyDetails.tempStudyDetails.numIncorrect);
         }
         
         // Unpack the character's arrays
         
-        NSMutableArray *readings_pin = [NSKeyedUnarchiver unarchiveObjectWithData: self.c.reading_pin];
-        NSMutableArray *readings_kun = [NSKeyedUnarchiver unarchiveObjectWithData: self.c.reading_kun];
-        NSMutableArray *readings_on = [NSKeyedUnarchiver unarchiveObjectWithData: self.c.reading_on];
-        NSMutableArray *meanings = [NSKeyedUnarchiver unarchiveObjectWithData: self.c.meaning];
+        NSMutableArray *readings_pin = [NSKeyedUnarchiver unarchiveObjectWithData: _c.reading_pin];
+        NSMutableArray *readings_kun = [NSKeyedUnarchiver unarchiveObjectWithData: _c.reading_kun];
+        NSMutableArray *readings_on = [NSKeyedUnarchiver unarchiveObjectWithData: _c.reading_on];
+        NSMutableArray *meanings = [NSKeyedUnarchiver unarchiveObjectWithData: _c.meaning];
         
         // Init Readings View
         
-        self.readingsView = [[UIImageView alloc] initWithFrame:CGRectMake(READING_BOX_LEFT, READING_BOX_TOP, READING_BOX_WIDTH, READING_BOX_HEIGHT)];
-        [self addSubview:self.readingsView];
+        _readingsView = [[UIImageView alloc] initWithFrame:CGRectMake(READING_BOX_LEFT, READING_BOX_TOP, READING_BOX_WIDTH, READING_BOX_HEIGHT)];
+        [self addSubview:_readingsView];
         
         //
         // Prepare Card Labels
         //
         
         UILabel *kanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, CONTENT_OFFSET_TOP, KANJI_SIZE, KANJI_SIZE)];
-        kanjiLabel.text = self.c.literal;
+        kanjiLabel.text = _c.literal;
         [kanjiLabel setTextColor:[UIColor darkGrayColor]];
         [kanjiLabel setBackgroundColor:[UIColor clearColor]];
         [kanjiLabel setFont:[UIFont systemFontOfSize:KANJI_SIZE weight:UIFontWeightThin]];
@@ -162,10 +162,10 @@
         //
         // Other informative labels
         //
-        if (![self.c.jlpt isEqual: @"null"]) {
+        if (![_c.jlpt isEqual: @"null"]) {
             UILabel *jlptLabel = [[UILabel alloc] initWithFrame:CGRectMake(JLPT_BUBBLE_OFFSET, CARD_HEIGHT - 40.8, JLPT_BUBBLE_SIZE, 30)];
             
-            NSString *jlptString = jlptString = [@"N" stringByAppendingString:self.c.jlpt];
+            NSString *jlptString = jlptString = [@"N" stringByAppendingString:_c.jlpt];
             jlptLabel.text = jlptString;
             jlptLabel.textColor = [UIColor colorWithRed:(170.0 / 255.0) green:(170.0 / 255.0) blue:(170.0 / 255.0) alpha: 1];
             jlptLabel.font = [UIFont systemFontOfSize:20.0f];
@@ -175,7 +175,7 @@
 
         
         UILabel *cardNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(CARD_WIDTH - (90 + CARD_NUM_LABEL_PADDING/2), CONTENT_OFFSET_TOP - 5, 80, 25)];
-        cardNumLabel.text = [NSString stringWithFormat:@"# %@", self.c.id_num];
+        cardNumLabel.text = [NSString stringWithFormat:@"# %@", _c.id_num];
         cardNumLabel.textAlignment = NSTextAlignmentRight;
         cardNumLabel.textColor = [UIColor lightGrayColor];
         cardNumLabel.font = [UIFont systemFontOfSize:20.0f];

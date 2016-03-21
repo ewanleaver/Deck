@@ -10,18 +10,10 @@
 #import "Deck.h"
 #import "Bubble.h"
 
-@interface HomePanel : UIView {
-    
-    UIColor *bubbleColour; // Put variables here to make them INSTANCE variables!
-    bool customColour;     // Putting them in the .m file makes them class variables...
-    
-    UILabel *comment;
-    
-    bool bubbleToggled;
-}
+@interface HomePanel : UIView 
 
 - (instancetype)initWithFrame:(CGRect)frame deck:(Deck *)d;
-- (instancetype)initWithFrame:(CGRect)frame colour:(UIColor *)inputColour numUnstudied:(int)unstudiedCount numTotal:(int)totalCount;
+- (instancetype)initWithFrame:(CGRect)frame colour:(UIColor *)inputColour numUnstudied:(int)unstudiedCount numTotal:(int)totalCount NS_DESIGNATED_INITIALIZER;
 
 - (void)changeBubbleView;
 

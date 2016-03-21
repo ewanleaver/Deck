@@ -43,13 +43,6 @@ int numPanels;
     self.delegate = [[UIApplication sharedApplication] delegate];
     self.managedObjectContext = [self.delegate managedObjectContext];
     
-    // Do any additional setup after loading the view from its nib.
-    //[[segue destinationViewController] setManagedObjectContext:self.managedObjectContext];
-    
-//    ListViewController *controller;// = (MasterViewController *)navigationController.topViewController;
-//    controller.managedObjectContext = [delegate managedObjectContext];
-
-    
     [self preparePanels];
     //[self prepareSubviews];
     
