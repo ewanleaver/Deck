@@ -71,9 +71,6 @@
 
 #define VERBOSE false
 
-
-#pragma mark - Init and Drawing
-
 - (id)initCard:(Character*)inputChar fresh:(BOOL)fresh
 {
     // Card Dimensions
@@ -209,12 +206,14 @@
     return self;
 }
 
+#pragma mark - Helper Methods
+
 - (CGFloat)widthOfString:(NSString *)string withFont:(UIFont *)font {
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
     return [[[NSAttributedString alloc] initWithString:string attributes:attributes] size].width;
 }
 
-
+#pragma mark - Drawing Methods
 
 - (void) setupFrontView {
     
