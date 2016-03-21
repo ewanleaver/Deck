@@ -11,6 +11,8 @@
 
 @interface CardViewController ()
 
+@property (nonatomic, weak) NSManagedObjectContext* managedObjectContext;
+
 @end
 
 @implementation CardViewController

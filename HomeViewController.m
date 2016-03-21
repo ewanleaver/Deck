@@ -20,22 +20,18 @@
 @interface HomeViewController ()
 
 @property (nonatomic, weak) id delegate;
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, weak) NSManagedObjectContext *managedObjectContext;
+
+@property (nonatomic, strong) NSArray *panels;
+@property (nonatomic, strong) NSMutableArray *decksForPages;
+@property (nonatomic, assign) int numPanels;
+
+@property (nonatomic, assign) bool pageControlBeingUsed;
+@property (nonatomic, assign) bool studyComplete;
 
 @end
 
 @implementation HomeViewController
-
-bool pageControlBeingUsed;
-bool studyComplete;
-
-
-// These are class variables?
-// Consider making these private variables
-NSArray *panels;
-NSMutableArray *decksForPages;
-int numPanels;
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -46,9 +42,9 @@ int numPanels;
     [self preparePanels];
     //[self prepareSubviews];
     
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * numPanels, self.scrollView.frame.size.height);
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width * self.numPanels, self.scrollView.frame.size.height);
     
-    pageControlBeingUsed = NO;
+    self.pageControlBeingUsed = NO;
 }
 
 - (void)preparePanels {
@@ -82,19 +78,19 @@ int numPanels;
         [self.scrollView addSubview:panel];
     }
     
-    panels = [self.scrollView subviews];
-    numPanels = (int)[panels count];
+    self.panels = [self.scrollView subviews];
+    self.numPanels = (int)[self.panels count];
     
-    if ([self.myDecks count] != [panels count]) {
+    if ([self.myDecks count] != [self.panels count]) {
         NSLog(@"WARNING! Number of decks does not match number of panels.");
     }
     
     // Check if intial deck has no cards left to study
-    if ([[panels objectAtIndex:0] unstudiedCount] == 0) {
-        studyComplete = YES;
+    if ([[self.panels objectAtIndex:0] unstudiedCount] == 0) {
+        self.studyComplete = YES;
         self.studyButton.userInteractionEnabled = NO;
     } else {
-        studyComplete = NO;
+        self.studyComplete = NO;
         self.studyButton.userInteractionEnabled = YES;
     }
 }
@@ -102,9 +98,9 @@ int numPanels;
 - (void)prepareSubviews {
     // THIS METHOD IS OLD AND NOT USED ANYMORE
     // SEE preparePanels
-    decksForPages = [[NSMutableArray alloc] init];
+    self.decksForPages = [[NSMutableArray alloc] init];
     
-    for (int i = 0; i < numPanels; i++) {
+    for (int i = 0; i < self.numPanels; i++) {
         
         CGRect frame;
         frame.origin.x = self.scrollView.frame.size.width * i;
@@ -208,7 +204,7 @@ int numPanels;
         }
         
         // Place deck at appropriate page
-        [decksForPages insertObject:deckArray atIndex:i];
+        [self.decksForPages insertObject:deckArray atIndex:i];
         cardsTotal = (int)[deckArray count];
         NSLog(@"Deck %d: %d cards.",i,cardsTotal);
         
@@ -224,24 +220,24 @@ int numPanels;
         
     }
     
-    panels = [self.scrollView subviews];
+    self.panels = [self.scrollView subviews];
     
-    if ([decksForPages count] != [panels count]) {
+    if ([self.decksForPages count] != [self.panels count]) {
         NSLog(@"WARNING! Not enough decks for the number of present pages.");
     }
     
-    if ([[panels objectAtIndex:0] unstudiedCount] == 0) {
-        studyComplete = YES;
+    if ([[self.panels objectAtIndex:0] unstudiedCount] == 0) {
+        self.studyComplete = YES;
         self.studyButton.userInteractionEnabled = NO;
     } else {
-        studyComplete = NO;
+        self.studyComplete = NO;
         self.studyButton.userInteractionEnabled = YES;
     }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     // YAY. Now page control correctly displays available decks.
-    self.pageControl.numberOfPages = numPanels;
+    self.pageControl.numberOfPages = self.numPanels;
     
     POPSpringAnimation *scaleAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
 //    scaleAnimation.fromValue = [NSValue valueWithCGPoint:CGPointMake(0.7, 0.7)];
@@ -253,18 +249,18 @@ int numPanels;
     [currentView.bubble pop_addAnimation:scaleAnimation forKey:@"scalingUp"];
     
     // Animate a comment showing praise
-    if ([[panels objectAtIndex:0] unstudiedCount] == 0) {
+    if ([[self.panels objectAtIndex:0] unstudiedCount] == 0) {
         
         CGFloat pageWidth = self.scrollView.frame.size.width;
         int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
         
-        if ([[panels objectAtIndex:page] unstudiedCount] == 0) {
+        if ([[self.panels objectAtIndex:page] unstudiedCount] == 0) {
             [UIView animateWithDuration:0.2 animations:^{
                 [self.studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 0.2].CGColor];
             } completion:NULL];
             
             [NSThread sleepForTimeInterval:0.1f];
-            [[panels objectAtIndex:page] showComment];
+            [[self.panels objectAtIndex:page] showComment];
         }
     }
 }
@@ -277,19 +273,19 @@ int numPanels;
     
     if (page < 0) {
         page = 0;
-    } else if (page >= numPanels) {
-        page = numPanels - 1;
+    } else if (page >= self.numPanels) {
+        page = self.numPanels - 1;
     }
     
-    if ([[panels objectAtIndex:page] unstudiedCount] == 0) {
-        studyComplete = YES;
+    if ([[self.panels objectAtIndex:page] unstudiedCount] == 0) {
+        self.studyComplete = YES;
         self.studyButton.userInteractionEnabled = NO;
     } else {
-        studyComplete = NO;
+        self.studyComplete = NO;
         self.studyButton.userInteractionEnabled = YES;
     }
     
-    if (studyComplete) {
+    if (self.studyComplete) {
         [UIView animateWithDuration:0.2 animations:^{
             [self.studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 0.2].CGColor];
         } completion:NULL];
@@ -300,30 +296,30 @@ int numPanels;
     }
     
     // Fade out any comments
-    if ([[panels objectAtIndex:page] unstudiedCount] == 0) {
-        [[panels objectAtIndex:page] hideComment];
+    if ([[self.panels objectAtIndex:page] unstudiedCount] == 0) {
+        [[self.panels objectAtIndex:page] hideComment];
     }
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    pageControlBeingUsed = NO;
+    self.pageControlBeingUsed = NO;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    pageControlBeingUsed = NO;
+    self.pageControlBeingUsed = NO;
     
     CGFloat pageWidth = scrollView.frame.size.width;
     int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     
     if (page < 0) {
         page = 0;
-    } else if (page > numPanels) {
-        page = numPanels - 1;
+    } else if (page > self.numPanels) {
+        page = self.numPanels - 1;
     }
     
     // Animate a comment showing praise
-    if ([[panels objectAtIndex:page] unstudiedCount] == 0) {
-        [[panels objectAtIndex:page] showComment];
+    if ([[self.panels objectAtIndex:page] unstudiedCount] == 0) {
+        [[self.panels objectAtIndex:page] showComment];
     }
 }
 
@@ -335,7 +331,7 @@ int numPanels;
     frame.size = self.scrollView.frame.size;
     [self.scrollView scrollRectToVisible:frame animated:YES];
     
-    pageControlBeingUsed = YES; // To prevent flashing
+    self.pageControlBeingUsed = YES; // To prevent flashing
 }
 
 - (void)didReceiveMemoryWarning {
@@ -365,7 +361,7 @@ int numPanels;
 }
 
 - (IBAction)studyButtonTouch:(id)sender {
-    if (!studyComplete) {
+    if (!self.studyComplete) {
         [UIView animateWithDuration:0.1 animations:^{
             [self.studyButton.layer setBackgroundColor:[UIColor colorWithRed:(20.0 / 255.0) green:(150.0 / 255.0) blue:(80.0 / 255.0) alpha: 1.0].CGColor];
         } completion:NULL];
@@ -373,7 +369,7 @@ int numPanels;
 }
 
 - (IBAction)studyButtonRelease:(id)sender {
-    if (!studyComplete) {
+    if (!self.studyComplete) {
         [UIView animateWithDuration:0.1 animations:^{
             [self.studyButton.layer setBackgroundColor:[UIColor colorWithRed:(35.0 / 255.0) green:(220.0 / 255.0) blue:(120.0 / 255.0) alpha: 1.0].CGColor];
         } completion:NULL];

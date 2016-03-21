@@ -17,7 +17,7 @@
 @interface Card ()
 
 @property (nonatomic, weak) id delegate;
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, weak) NSManagedObjectContext *managedObjectContext;
 
 @property (nonatomic, weak) StudyViewController *controller;
 
@@ -215,54 +215,6 @@
 }
 
 
-
-//- (id)initWithFrame:(CGRect)frame
-//{
-//    self = [super initWithFrame:frame];
-//    if (self) {
-//        // Initialization code
-//
-//        CGRect newFrame = self.frame;
-//
-//        newFrame.size.width = 290;
-//        newFrame.size.height = 400;
-//        [self setFrame:newFrame];
-//
-//        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(85, 20, 150, 30)];
-//        title.text = @"Sample Card";
-//        [title setTextColor:[UIColor darkGrayColor]];
-//        [title setBackgroundColor:[UIColor clearColor]];
-//        [title setFont:[UIFont fontWithName: @"Trebuchet MS" size: 22.0f]];
-//        [self addSubview:title];
-//
-//
-//        UIButton *dismissButton = [[UIButton alloc] initWithFrame:CGRectMake(200, 5, 100, 30)];
-//        [dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
-//        [dismissButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-//        [dismissButton.titleLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 14.0f]];
-//        [dismissButton addTarget:self
-//                          action: @selector(buttonClicked:)
-//                forControlEvents: UIControlEventTouchDown];
-//        [self addSubview:dismissButton];
-//
-//        UILabel *countLabel = [[UILabel alloc] initWithFrame:CGRectMake(102, 180, 100, 50)];
-//        countLabel.text = [NSString stringWithFormat:@"#%d", cardNum];
-//        [countLabel setTextColor:[UIColor lightGrayColor]];
-//        [countLabel setBackgroundColor:[UIColor clearColor]];
-//        [countLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 48.0f]];
-//        [self addSubview:countLabel];
-//
-//
-//        [UIView animateWithDuration:0.22f
-//                              delay:0
-//                            options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-//                         animations:^{[self setCenter:CGPointMake(160, 260)]; }
-//                         completion:^(BOOL fin) {NSLog(@"[Card] done");}   ];
-//
-//        //[UIView animateWithDuration:0.7f animations:^{[self setCenter:CGPointMake(160, -200)]; }];
-//    }
-//    return self;
-//}
 
 - (void) setupFrontView {
     
