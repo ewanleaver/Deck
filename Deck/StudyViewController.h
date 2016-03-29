@@ -14,15 +14,6 @@
 
 @interface StudyViewController : UIViewController
 
-- (IBAction)StopStudy:(id)sender;
-- (IBAction)AddCard:(id)sender;
-
-@property (weak, nonatomic) IBOutlet UILabel *deckEmptyLabel;
-@property (weak, nonatomic) IBOutlet UIButton *keepStudyingButton;
-
-@property (nonatomic) Deck *deckStudying;
-@property (nonatomic) int nextCardNo;
-
 - (id) initWithDeck: (NSMutableArray *)inputDeck;
 
 - (int) getActiveCardCount;
@@ -36,5 +27,8 @@
 - (void) moveCardToBack: (Card*)cardView;
 - (void) moveBackCardToFront;
 - (void) maintainDeck;
+
+- (IBAction)StopStudy:(id)sender;
+- (IBAction)AddCard:(id)sender;
 
 @end

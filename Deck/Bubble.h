@@ -15,7 +15,7 @@
 @property (nonatomic, strong) UILabel *numToStudyLabel;
 @property (nonatomic, assign) bool bubbleToggled;
 
-- (instancetype)initBubbleWithFrame:(CGRect)frame colour:(UIColor*)colour regularSize:(int)regularSize inflatedSize:(int)inflatedSize;
+- (instancetype)initBubbleWithFrame:(CGRect)frame colour:(UIColor*)colour regularSize:(int)regularSize inflatedSize:(int)inflatedSize NS_DESIGNATED_INITIALIZER;
 
 - (void)handleTapFrom:(UIGestureRecognizer*)recognizer;
 

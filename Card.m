@@ -17,9 +17,11 @@
 @interface Card ()
 
 @property (nonatomic, weak) id delegate;
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, weak) NSManagedObjectContext *managedObjectContext;
 
 @property (nonatomic, weak) StudyViewController *controller;
+
+@property (nonatomic, assign) bool frontShowing;
 
 @end
 
@@ -57,11 +59,17 @@
 
 #define MEANING_BOX_TOP READING_BOX_TOP + READING_BOX_HEIGHT + 10
 
-#define VERBOSE 0
+#define MEANING_HEIGHT 25
+#define MEANING_GAP 8
+#define MEANING_SPACING (MEANING_HEIGHT + MEANING_GAP)
+#define MEANING_BUBBLE_WIDTH 20
 
-bool frontShowing;
+#define JLPT_BUBBLE_SIZE 35
+#define JLPT_BUBBLE_OFFSET 9.1
 
-#pragma mark - Init and Drawing
+#define CARD_NUM_LABEL_PADDING 15
+
+#define VERBOSE false
 
 - (id)initCard:(Character*)inputChar fresh:(BOOL)fresh
 {
@@ -71,25 +79,25 @@ bool frontShowing;
     self = [super initWithFrame:cardFrame];
     if (self) {
         
-        self.delegate = [[UIApplication sharedApplication] delegate];
-        self.managedObjectContext = [self.delegate managedObjectContext];
+        _delegate = [[UIApplication sharedApplication] delegate];
+        _managedObjectContext = [_delegate managedObjectContext];
         
-        self.controller = (StudyViewController*) [[self superview] nextResponder];
+        _controller = (StudyViewController*) [[self superview] nextResponder];
         
         // May eventually have the option of showing two sides to a card
-        frontShowing = true;
+        _frontShowing = true;
         
         [self setFrame:cardFrame];
         
-        self.c = inputChar;
-        self.studyDetails = self.c.studyDetails;
+        _c = inputChar;
+        _studyDetails = _c.studyDetails;
         // tempStudyDetails are the study details for the current session (yes?)
-        self.tempStudyDetails = self.studyDetails.tempStudyDetails;
+        _tempStudyDetails = _studyDetails.tempStudyDetails;
 
-        if (self.tempStudyDetails.isStudying.boolValue == false) {
-            [self.tempStudyDetails setIsStudying:[NSNumber numberWithBool:true]];
-            self.tempStudyDetails.numIncorrect = @0;
-            self.tempStudyDetails.numCorrect = @0;
+        if (_tempStudyDetails.isStudying.boolValue == false) {
+            [_tempStudyDetails setIsStudying:[NSNumber numberWithBool:true]];
+            _tempStudyDetails.numIncorrect = @0;
+            _tempStudyDetails.numCorrect = @0;
         } else {
             NSLog(@"[Card] CARD IS ALREADY BEING STUDIED");
         }
@@ -99,30 +107,30 @@ bool frontShowing;
         
         // Logging
         if (VERBOSE) {
-            NSLog(@"[Card] Card Num: %@", self.c.id_num);
-            NSLog(@"[Card] Studying?: %@", self.c.studyDetails.tempStudyDetails.isStudying);
-            NSLog(@"[Card] Num Correct?: %@", self.c.studyDetails.tempStudyDetails.numCorrect);
-            NSLog(@"[Card] Num Incorrect?: %@", self.c.studyDetails.tempStudyDetails.numIncorrect);
+            NSLog(@"[Card] Card Num: %@", _c.id_num);
+            NSLog(@"[Card] Studying?: %@", _c.studyDetails.tempStudyDetails.isStudying);
+            NSLog(@"[Card] Num Correct?: %@", _c.studyDetails.tempStudyDetails.numCorrect);
+            NSLog(@"[Card] Num Incorrect?: %@", _c.studyDetails.tempStudyDetails.numIncorrect);
         }
         
         // Unpack the character's arrays
         
-        NSMutableArray *readings_pin = [NSKeyedUnarchiver unarchiveObjectWithData: self.c.reading_pin];
-        NSMutableArray *readings_kun = [NSKeyedUnarchiver unarchiveObjectWithData: self.c.reading_kun];
-        NSMutableArray *readings_on = [NSKeyedUnarchiver unarchiveObjectWithData: self.c.reading_on];
-        NSMutableArray *meanings = [NSKeyedUnarchiver unarchiveObjectWithData: self.c.meaning];
+        NSMutableArray *readings_pin = [NSKeyedUnarchiver unarchiveObjectWithData: _c.reading_pin];
+        NSMutableArray *readings_kun = [NSKeyedUnarchiver unarchiveObjectWithData: _c.reading_kun];
+        NSMutableArray *readings_on = [NSKeyedUnarchiver unarchiveObjectWithData: _c.reading_on];
+        NSMutableArray *meanings = [NSKeyedUnarchiver unarchiveObjectWithData: _c.meaning];
         
         // Init Readings View
         
-        self.readingsView = [[UIImageView alloc] initWithFrame:CGRectMake(READING_BOX_LEFT, READING_BOX_TOP, READING_BOX_WIDTH, READING_BOX_HEIGHT)];
-        [self addSubview:self.readingsView];
+        _readingsView = [[UIImageView alloc] initWithFrame:CGRectMake(READING_BOX_LEFT, READING_BOX_TOP, READING_BOX_WIDTH, READING_BOX_HEIGHT)];
+        [self addSubview:_readingsView];
         
         //
         // Prepare Card Labels
         //
         
         UILabel *kanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, CONTENT_OFFSET_TOP, KANJI_SIZE, KANJI_SIZE)];
-        kanjiLabel.text = self.c.literal;
+        kanjiLabel.text = _c.literal;
         [kanjiLabel setTextColor:[UIColor darkGrayColor]];
         [kanjiLabel setBackgroundColor:[UIColor clearColor]];
         [kanjiLabel setFont:[UIFont systemFontOfSize:KANJI_SIZE weight:UIFontWeightThin]];
@@ -144,59 +152,42 @@ bool frontShowing;
         [self drawOnReadingLabels:readings_on];
         [self drawKunReadingLabels:readings_kun];
         
-        
-        //
-        // Array to contain all meaning labels
-        //
-        
-        NSMutableArray *meaningLabels = [[NSMutableArray alloc] init];
-        
-        for (int i = 0; i < [meanings count]; i++) {
-            
-            if (i < 6) {
-                
-                UILabel *meaningLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, MEANING_BOX_TOP + i*30, 270, 25)];
-                [meaningLabel setTextColor:[UIColor darkGrayColor]];
-                
-                NSMutableAttributedString *text = [[NSMutableAttributedString alloc]
-                                                   initWithString: [NSString stringWithFormat: @"%d. %@", i+1, [meanings objectAtIndex:i]]];
-                [text addAttribute:NSForegroundColorAttributeName
-                             value:[UIColor lightGrayColor]
-                             range:NSMakeRange(0, 2)];
-                [meaningLabel setAttributedText: text];
-                
-                [meaningLabel setFont:[UIFont systemFontOfSize: 20.0f]];
-                [self addSubview:meaningLabel];
-                
-                // Add label to array
-                [meaningLabels addObject:meaningLabel];
-            }
-        }
+        [self drawMeaningLabels:meanings];
+
 
         
         //
         // Other informative labels
         //
-
-        UILabel *jlptLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT + 0.4, CARD_HEIGHT - 40.8, 60, 30)];
-        
-        if (![self.c.jlpt  isEqual: @"null"]) {
-            NSString *jlptString = jlptString = [@"N" stringByAppendingString:self.c.jlpt];
+        if (![_c.jlpt isEqual: @"null"]) {
+            UILabel *jlptLabel = [[UILabel alloc] initWithFrame:CGRectMake(JLPT_BUBBLE_OFFSET, CARD_HEIGHT - 40.8, JLPT_BUBBLE_SIZE, 30)];
+            
+            NSString *jlptString = jlptString = [@"N" stringByAppendingString:_c.jlpt];
             jlptLabel.text = jlptString;
+            jlptLabel.textColor = [UIColor colorWithRed:(170.0 / 255.0) green:(170.0 / 255.0) blue:(170.0 / 255.0) alpha: 1];
+            jlptLabel.font = [UIFont systemFontOfSize:20.0f];
+            jlptLabel.textAlignment = NSTextAlignmentCenter;
+            [self addSubview:jlptLabel];
         };
-        [jlptLabel setTextColor:[UIColor colorWithRed:(170.0 / 255.0) green:(170.0 / 255.0) blue:(170.0 / 255.0) alpha: 1]];
-        [jlptLabel setBackgroundColor:[UIColor clearColor]];
-        [jlptLabel setFont:[UIFont systemFontOfSize:20.0f]];
-        [self addSubview:jlptLabel];
+
         
-        
-        UILabel *cardNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(CARD_WIDTH - 80, CONTENT_OFFSET_TOP, 60, 25)];
-        cardNumLabel.text = [NSString stringWithFormat:@"# %@", self.c.id_num];
+        UILabel *cardNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(CARD_WIDTH - (90 + CARD_NUM_LABEL_PADDING/2), CONTENT_OFFSET_TOP - 5, 80, 25)];
+        cardNumLabel.text = [NSString stringWithFormat:@"# %@", _c.id_num];
         cardNumLabel.textAlignment = NSTextAlignmentRight;
-        [cardNumLabel setTextColor:[UIColor lightGrayColor]];
-        [cardNumLabel setBackgroundColor:[UIColor clearColor]];
-        [cardNumLabel setFont:[UIFont systemFontOfSize:20.0f]];
+        cardNumLabel.textColor = [UIColor lightGrayColor];
+        cardNumLabel.font = [UIFont systemFontOfSize:20.0f];
+        
+        // 1. Create bezier path to draw
+        int width = [self widthOfString:cardNumLabel.text withFont:cardNumLabel.font] + CARD_NUM_LABEL_PADDING;
+        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(CARD_WIDTH - (width + 10), CONTENT_OFFSET_TOP - 5, width, 25) cornerRadius:12.5];
+        
+        // 2. Create a shape layer for above created path.
+        CAShapeLayer *cardNumBubble = [[CAShapeLayer alloc] init];
+        cardNumBubble.fillColor = [[UIColor colorWithRed:(235.0 / 255.0) green:(235.0 / 255.0) blue:(235.0 / 255.0) alpha: 1] CGColor];
+        cardNumBubble.path = path.CGPath;
+        [self.layer addSublayer:cardNumBubble];
         [self addSubview:cardNumLabel];
+
         
         [self setupFrontView];
         
@@ -215,56 +206,14 @@ bool frontShowing;
     return self;
 }
 
+#pragma mark - Helper Methods
 
+- (CGFloat)widthOfString:(NSString *)string withFont:(UIFont *)font {
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
+    return [[[NSAttributedString alloc] initWithString:string attributes:attributes] size].width;
+}
 
-
-//- (id)initWithFrame:(CGRect)frame
-//{
-//    self = [super initWithFrame:frame];
-//    if (self) {
-//        // Initialization code
-//
-//        CGRect newFrame = self.frame;
-//
-//        newFrame.size.width = 290;
-//        newFrame.size.height = 400;
-//        [self setFrame:newFrame];
-//
-//        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(85, 20, 150, 30)];
-//        title.text = @"Sample Card";
-//        [title setTextColor:[UIColor darkGrayColor]];
-//        [title setBackgroundColor:[UIColor clearColor]];
-//        [title setFont:[UIFont fontWithName: @"Trebuchet MS" size: 22.0f]];
-//        [self addSubview:title];
-//
-//
-//        UIButton *dismissButton = [[UIButton alloc] initWithFrame:CGRectMake(200, 5, 100, 30)];
-//        [dismissButton setTitle:@"Dismiss" forState:UIControlStateNormal];
-//        [dismissButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-//        [dismissButton.titleLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 14.0f]];
-//        [dismissButton addTarget:self
-//                          action: @selector(buttonClicked:)
-//                forControlEvents: UIControlEventTouchDown];
-//        [self addSubview:dismissButton];
-//
-//        UILabel *countLabel = [[UILabel alloc] initWithFrame:CGRectMake(102, 180, 100, 50)];
-//        countLabel.text = [NSString stringWithFormat:@"#%d", cardNum];
-//        [countLabel setTextColor:[UIColor lightGrayColor]];
-//        [countLabel setBackgroundColor:[UIColor clearColor]];
-//        [countLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 48.0f]];
-//        [self addSubview:countLabel];
-//
-//
-//        [UIView animateWithDuration:0.22f
-//                              delay:0
-//                            options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-//                         animations:^{[self setCenter:CGPointMake(160, 260)]; }
-//                         completion:^(BOOL fin) {NSLog(@"[Card] done");}   ];
-//
-//        //[UIView animateWithDuration:0.7f animations:^{[self setCenter:CGPointMake(160, -200)]; }];
-//    }
-//    return self;
-//}
+#pragma mark - Drawing Methods
 
 - (void) setupFrontView {
     
@@ -282,7 +231,7 @@ bool frontShowing;
     [self addSubview:self.frontView];
 }
 
-- (void) drawOnReadingLabels:(NSMutableArray*)readings_on {
+- (void) drawOnReadingLabels:(NSMutableArray *)readings_on {
     
     // Calc remaining space left to draw within:
     int currPos = READING_BOX_LEFT + READING_OFFSET_LEFT;
@@ -294,13 +243,11 @@ bool frontShowing;
         
         UILabel *onReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(currPos + 5, READING_BOX_TOP + 7.5, 270, 20)];
         onReadingLabel.text = currentReading;//@"イチ, イツ";
-        [onReadingLabel setTextColor:[UIColor whiteColor]];
-        
+        onReadingLabel.textColor = [UIColor whiteColor];
+        onReadingLabel.font = [UIFont systemFontOfSize:18.0f];
         // No attributed text processing in On readings
         
-        // Rough width formula which seems to work okay
-        int labelWidth = 12 + (int)[currentReading length] * 17;
-        
+        int labelWidth = [self widthOfString:onReadingLabel.text withFont:onReadingLabel.font] + 10;
         int newRemSpace = remainingSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
         
         if (newRemSpace < 0) {
@@ -323,15 +270,13 @@ bool frontShowing;
         
         [self.readingsView.layer addSublayer:readingLayer];
         
-        //[onReadingLabel setTextColor:[UIColor colorWithRed:(120.0 / 255.0) green:(30.0 / 255.0) blue:(30.0 / 255.0) alpha: 1]];
-        [onReadingLabel setFont:[UIFont systemFontOfSize:18.0f]];
         [self addSubview:onReadingLabel];
         
         currPos = currPos + labelWidth + READING_GAP;
     }
 }
 
-- (void) drawKunReadingLabels:(NSMutableArray*)readings_kun {
+- (void) drawKunReadingLabels:(NSMutableArray *)readings_kun {
     
     // Calc remaining space left to draw within:
     int currPos = READING_BOX_LEFT + READING_OFFSET_LEFT;
@@ -343,7 +288,8 @@ bool frontShowing;
             
         UILabel *kunReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(currPos + 5, READING_BOX_TOP + 40, 270, 20)];
         kunReadingLabel.text = currentReading;//@"ひと, ひと.つ";
-        [kunReadingLabel setTextColor:[UIColor whiteColor]];
+        kunReadingLabel.textColor = [UIColor whiteColor];
+        kunReadingLabel.font = [UIFont systemFontOfSize:18.0f];
         
         // Kun-readings only: format text for reading-endings
         NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc]
@@ -362,9 +308,7 @@ bool frontShowing;
             [kunReadingLabel setAttributedText: attributedText];
         }
         
-        // Rough width formula which seems to work okay
-        int labelWidth = 12 + (int)[attributedText length]*17;
-        
+        int labelWidth = [self widthOfString:kunReadingLabel.text withFont:kunReadingLabel.font] + 10;
         int newRemSpace = remainingSpace - (labelWidth + READING_GAP); // Calc how much drawing space is still available
         
         if (newRemSpace < 0) {
@@ -387,11 +331,39 @@ bool frontShowing;
         
         [self.readingsView.layer addSublayer:readingLayer];
         
-        //[kunReadingLabel setTextColor:[UIColor colorWithRed:(30.0 / 255.0) green:(30.0 / 255.0) blue:(120.0 / 255.0) alpha: 1]];
-        [kunReadingLabel setFont:[UIFont systemFontOfSize:18.0f]];
         [self addSubview:kunReadingLabel];
         
         currPos = currPos + labelWidth + READING_GAP;
+    }
+}
+
+- (void)drawMeaningLabels:(NSMutableArray *)meanings {
+    
+    for (int i = 0; i < [meanings count]; i++) {
+        
+        if (i < 6) {
+            
+            // 1. Create bezier path to draw
+            UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(CONTENT_OFFSET_LEFT , MEANING_BOX_TOP + i*MEANING_SPACING, MEANING_BUBBLE_WIDTH, MEANING_HEIGHT) cornerRadius:5];
+            
+            // 2. Create a shape layer for above created path.
+            CAShapeLayer *meaningCountBubble = [[CAShapeLayer alloc] init];
+            meaningCountBubble.fillColor = [[UIColor colorWithRed:(235.0 / 255.0) green:(235.0 / 255.0) blue:(235.0 / 255.0) alpha: 1] CGColor];
+            meaningCountBubble.path = path.CGPath;
+            [self.layer addSublayer:meaningCountBubble];
+            
+            UILabel *meaningCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, MEANING_BOX_TOP + i*MEANING_SPACING, MEANING_BUBBLE_WIDTH, MEANING_HEIGHT)];
+            meaningCountLabel.text = [NSString stringWithFormat:@"%d", i+1];
+            meaningCountLabel.textAlignment = NSTextAlignmentCenter;
+            meaningCountLabel.textColor = [UIColor lightGrayColor];
+            [self addSubview:meaningCountLabel];
+            
+            UILabel *meaningLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT + MEANING_BUBBLE_WIDTH + 5, MEANING_BOX_TOP + i*MEANING_SPACING, 270, MEANING_HEIGHT)];
+            meaningLabel.text = [meanings objectAtIndex:i];
+            meaningLabel.textColor = [UIColor darkGrayColor];
+            meaningLabel.font = [UIFont systemFontOfSize: 20.0f];
+            [self addSubview:meaningLabel];
+        }
     }
 }
 
@@ -418,7 +390,7 @@ bool frontShowing;
     
     CGContextSetLineWidth(context, 2.0);
     self.transform = CGAffineTransformIdentity;
-    rectangle = CGRectMake(9.1, CARD_HEIGHT - 43.2, 35, 35);
+    rectangle = CGRectMake(JLPT_BUBBLE_OFFSET, CARD_HEIGHT - (JLPT_BUBBLE_OFFSET + 34.1), JLPT_BUBBLE_SIZE, JLPT_BUBBLE_SIZE);
     CGContextAddEllipseInRect(context, rectangle);
     //CGContextStrokePath(context);
     
@@ -428,19 +400,6 @@ bool frontShowing;
 }
 
 
-//- (void) buttonClicked: (id)sender
-//{
-//    [UIView animateWithDuration:0.25f
-//                          delay:0
-//                        options:(UIViewAnimationOptions) UIViewAnimationCurveEaseInOut
-//                     animations:^{[self setCenter:CGPointMake(160, -200)]; }
-//                     completion:^(BOOL fin) { [self removeFromSuperview]; }  ];
-//    
-//    // Decrease the number of tracked active cards
-//    StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
-//    [controller decActiveCardCount];
-//    
-//}
 
 //// Respond to a swipe gesture
 //- (IBAction)showGestureForSwipeRecognizer:(UISwipeGestureRecognizer *)recognizer {
@@ -678,13 +637,13 @@ bool frontShowing;
 
 - (void)handleTap:(UIGestureRecognizer*)recognizer {
     
-    if (frontShowing) {
+    if (self.frontShowing) {
         [self.frontView setHidden:YES];
     } else {
         [self.frontView setHidden:NO];
     };
     
-    frontShowing = !frontShowing;
+    self.frontShowing = !self.frontShowing;
     
 }
 

@@ -14,7 +14,6 @@
 
 //- (id)initCard:(CGRect)frame cardNum:(int)inputCardNum isFresh:(BOOL)fresh;
 
-@property (nonatomic,strong) NSManagedObjectContext* managedObjectContext;
 @property (nonatomic, strong) Character *character;
 
 @property int selfCardNum;

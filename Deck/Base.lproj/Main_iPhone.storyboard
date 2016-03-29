@@ -49,8 +49,28 @@
                                     <action selector="changePage" destination="CXL-m2-xk0" eventType="valueChanged" id="QPA-ud-bnJ"/>
                                 </connections>
                             </pageControl>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cIg-Wf-T3C">
+                                <rect key="frame" x="93" y="144" width="414" height="500"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="cIg-Wf-T3C" secondAttribute="height" multiplier="75:68" id="4m6-05-dnH"/>
+                                    <constraint firstAttribute="height" constant="500" id="HaL-z0-3Rh"/>
+                                    <constraint firstAttribute="width" constant="600" id="cAk-Gg-NI3"/>
+                                    <constraint firstAttribute="width" constant="375" id="hIr-l7-ThA"/>
+                                    <constraint firstAttribute="width" constant="414" id="poz-yg-1rq"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="4m6-05-dnH"/>
+                                        <exclude reference="cAk-Gg-NI3"/>
+                                        <exclude reference="hIr-l7-ThA"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <outlet property="delegate" destination="CXL-m2-xk0" id="W25-8d-fgq"/>
+                                </connections>
+                            </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MS7-Gk-BVm" customClass="StudyButton">
-                                <rect key="frame" x="240" y="501" width="120" height="42"/>
+                                <rect key="frame" x="240" y="445" width="120" height="42"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="42" id="8QO-Fp-O3j"/>
                                     <constraint firstAttribute="width" constant="120" id="caZ-ap-e9w"/>
@@ -67,30 +87,11 @@
                                     <segue destination="dyL-SP-w0G" kind="presentation" identifier="showStudyView" id="4t2-uF-CjC"/>
                                 </connections>
                             </button>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cIg-Wf-T3C">
-                                <rect key="frame" x="93" y="144" width="414" height="340"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="cIg-Wf-T3C" secondAttribute="height" multiplier="75:68" id="4m6-05-dnH"/>
-                                    <constraint firstAttribute="height" constant="340" id="HaL-z0-3Rh"/>
-                                    <constraint firstAttribute="width" constant="600" id="cAk-Gg-NI3"/>
-                                    <constraint firstAttribute="width" constant="375" id="hIr-l7-ThA"/>
-                                    <constraint firstAttribute="width" constant="414" id="poz-yg-1rq"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="4m6-05-dnH"/>
-                                        <exclude reference="cAk-Gg-NI3"/>
-                                        <exclude reference="hIr-l7-ThA"/>
-                                    </mask>
-                                </variation>
-                                <connections>
-                                    <outlet property="delegate" destination="CXL-m2-xk0" id="W25-8d-fgq"/>
-                                </connections>
-                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="gyl-FW-aRX" firstAttribute="top" secondItem="cxv-br-hlh" secondAttribute="bottom" constant="16" id="0OL-FE-fXv"/>
+                            <constraint firstItem="cxv-br-hlh" firstAttribute="top" secondItem="MS7-Gk-BVm" secondAttribute="bottom" constant="60" id="46W-cP-Tpa"/>
                             <constraint firstItem="cxv-br-hlh" firstAttribute="top" secondItem="MS7-Gk-BVm" secondAttribute="bottom" constant="55" id="5Ea-IX-Lap"/>
                             <constraint firstAttribute="trailing" secondItem="cIg-Wf-T3C" secondAttribute="trailing" id="8Kt-JV-0KD"/>
                             <constraint firstItem="cIg-Wf-T3C" firstAttribute="leading" secondItem="aAG-rK-qG6" secondAttribute="leading" id="B3d-sj-ojR"/>
@@ -126,6 +127,7 @@
                                 <exclude reference="l3Z-uv-jwQ"/>
                                 <exclude reference="tdf-8V-UQT"/>
                                 <exclude reference="w0J-c0-Brv"/>
+                                <exclude reference="kfM-hO-Csn"/>
                                 <exclude reference="kvF-fL-RBo"/>
                                 <exclude reference="xvL-Qh-YkV"/>
                                 <exclude reference="5Ea-IX-Lap"/>
@@ -198,7 +200,7 @@
                                             <rect key="frame" x="15" y="5" width="35.5" height="21.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="SGH-d7-c4R">
