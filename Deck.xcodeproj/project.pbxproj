@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		762FC13C1CAB615F00A514C6 /* OCLint */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 762FC13F1CAB615F00A514C6 /* Build configuration list for PBXAggregateTarget "OCLint" */;
+			buildPhases = (
+				762FC1401CAB617200A514C6 /* Run Script */,
+			);
+			dependencies = (
+			);
+			name = OCLint;
+			productName = OCLint;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		4001D13A19EB5D9500C5B688 /* Study Background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4001D13919EB5D9500C5B688 /* Study Background@2x.png */; };
 		4001D13C19EB62B000C5B688 /* Study Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 4001D13B19EB62B000C5B688 /* Study Background.png */; };
@@ -357,6 +371,10 @@
 					40BC9E641905537100D6A792 = {
 						TestTargetID = 40BC9E381905537100D6A792;
 					};
+					762FC13C1CAB615F00A514C6 = {
+						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 2V85H35D54;
+					};
 				};
 			};
 			buildConfigurationList = 40BC9E341905537100D6A792 /* Build configuration list for PBXProject "Deck" */;
@@ -374,6 +392,7 @@
 			targets = (
 				40BC9E381905537100D6A792 /* Deck */,
 				40BC9E641905537100D6A792 /* DeckTests */,
+				762FC13C1CAB615F00A514C6 /* OCLint */,
 			);
 		};
 /* End PBXProject section */
@@ -434,6 +453,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Deck/Pods-Deck-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		762FC1401CAB617200A514C6 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "source ~/.bash_profile\n\n\nhash oclint &> /dev/null\nif [ $? -eq 1 ]; then\necho >&2 \"oclint not found, analyzing stopped\"\nexit 1\nfi\n\ncd ${TARGET_TEMP_DIR}\n\nif [ ! -f compile_commands.json ]; then\necho \"[*] compile_commands.json not found, possibly clean was performed\"\necho \"[*] starting xcodebuild to rebuild the project..\"\n# clean previous output\nif [ -f xcodebuild.log ]; then\nrm xcodebuild.log\nfi\n\ncd ${SRCROOT}\n\nxcodebuild clean\n\n#build xcodebuild.log\nxcodebuild | tee ${TARGET_TEMP_DIR}/xcodebuild.log\n\necho \"[*] transforming xcodebuild.log into compile_commands.json...\"\ncd ${TARGET_TEMP_DIR}\n#transform it into compile_commands.json\noclint-xcodebuild\n\nfi\n\n#if [-d report.html]; then\n#rm report.html\n#fi\n\n\n#run static analyzer\n#oclint-json-compilation-database -- -o=./report.html -html\n\necho \"[*] starting analyzing\"\ncd ${TARGET_TEMP_DIR}\noclint-json-compilation-database oclint_args \"-rc LONG_LINE=150\" | sed 's/\\(.*\\.\\m\\{1,2\\}:[0-9]*:[0-9]*:\\)/\\1 warning:/'";
 		};
 		DCC2D2DA43D042D388571A23 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -684,6 +717,20 @@
 			};
 			name = Release;
 		};
+		762FC13D1CAB615F00A514C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		762FC13E1CAB615F00A514C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -713,6 +760,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		762FC13F1CAB615F00A514C6 /* Build configuration list for PBXAggregateTarget "OCLint" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				762FC13D1CAB615F00A514C6 /* Debug */,
+				762FC13E1CAB615F00A514C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 
