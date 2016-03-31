@@ -131,21 +131,21 @@
         
         UILabel *kanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, CONTENT_OFFSET_TOP, KANJI_SIZE, KANJI_SIZE)];
         kanjiLabel.text = _c.literal;
-        [kanjiLabel setTextColor:[UIColor darkGrayColor]];
-        [kanjiLabel setBackgroundColor:[UIColor clearColor]];
-        [kanjiLabel setFont:[UIFont systemFontOfSize:KANJI_SIZE weight:UIFontWeightThin]];
+        kanjiLabel.textColor = [UIColor darkGrayColor];
+        kanjiLabel.backgroundColor = [UIColor clearColor];
+        kanjiLabel.font = [UIFont systemFontOfSize:KANJI_SIZE weight:UIFontWeightThin];
         [self addSubview:kanjiLabel];
         
         UILabel *pinyinLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT, CONTENT_OFFSET_TOP + 175, 100, 20)];
         pinyinLabel.text = @"Pinyin:";
-        [pinyinLabel setTextColor:[UIColor lightGrayColor]];
-        [pinyinLabel setFont:[UIFont systemFontOfSize:15.0f]];
+        pinyinLabel.textColor = [UIColor lightGrayColor];
+        pinyinLabel.font = [UIFont systemFontOfSize:15.0f];
         [self addSubview:pinyinLabel];
         
         UILabel *pinyinReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONTENT_OFFSET_LEFT + 55, CONTENT_OFFSET_TOP + 175, 215, 20)];
         pinyinReadingLabel.text = [readings_pin firstObject];//@"yi1";
-        [pinyinReadingLabel setTextColor:[UIColor darkGrayColor]];
-        [pinyinReadingLabel setFont:[UIFont systemFontOfSize:17.0f]];
+        pinyinReadingLabel.textColor = [UIColor darkGrayColor];
+        pinyinReadingLabel.font = [UIFont systemFontOfSize:17.0f];
         [self addSubview:pinyinReadingLabel];
         
         
@@ -223,9 +223,9 @@
     
     UILabel *frontKanjiLabel = [[UILabel alloc] initWithFrame:CGRectMake((CARD_WIDTH - FRONT_KANJI_SIZE)/2, (CARD_HEIGHT - FRONT_KANJI_SIZE)/2, FRONT_KANJI_SIZE, FRONT_KANJI_SIZE)];
     frontKanjiLabel.text = self.c.literal;
-    [frontKanjiLabel setTextColor:[UIColor darkGrayColor]];
-    [frontKanjiLabel setBackgroundColor:[UIColor clearColor]];
-    [frontKanjiLabel setFont:[UIFont systemFontOfSize:FRONT_KANJI_SIZE weight:UIFontWeightThin]];
+    frontKanjiLabel.textColor = [UIColor darkGrayColor];
+    frontKanjiLabel.backgroundColor = [UIColor clearColor];
+    frontKanjiLabel.font = [UIFont systemFontOfSize:FRONT_KANJI_SIZE weight:UIFontWeightThin];
     [self.frontView addSubview:frontKanjiLabel];
     
     [self addSubview:self.frontView];
@@ -373,27 +373,23 @@
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
+    // Draw card border
     CGContextSetLineWidth(context, 4.0);
     CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:(225.0 / 255.0) green:(225.0 / 255.0) blue:(225.0 / 255.0) alpha: 1].CGColor);
-    
     CGRect rectangle = CGRectMake(READING_BOX_LEFT, READING_BOX_TOP, READING_BOX_WIDTH, READING_BOX_HEIGHT);
     CGContextAddRect(context, rectangle);
-    
     CGContextStrokePath(context);
     
+    // Draw card background
     CGContextAddRect(context, rectangle);
-    
     CGContextSetFillColorWithColor(context, [UIColor colorWithRed:(245.0 / 255.0) green:(245.0 / 255.0) blue:(245.0 / 255.0) alpha: 1].CGColor);
     CGContextFillPath(context);
     
     // Draw bubble for JLPT level
-    
     CGContextSetLineWidth(context, 2.0);
     self.transform = CGAffineTransformIdentity;
     rectangle = CGRectMake(JLPT_BUBBLE_OFFSET, CARD_HEIGHT - (JLPT_BUBBLE_OFFSET + 34.1), JLPT_BUBBLE_SIZE, JLPT_BUBBLE_SIZE);
     CGContextAddEllipseInRect(context, rectangle);
-    //CGContextStrokePath(context);
-    
     CGContextSetFillColorWithColor(context, [UIColor colorWithRed:(230.0 / 255.0) green:(230.0 / 255.0) blue:(230.0 / 255.0) alpha: 1].CGColor);
     CGContextFillPath(context);
     
