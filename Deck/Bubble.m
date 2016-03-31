@@ -117,7 +117,24 @@
         HomePanel* controller = (HomePanel*) [self superview];
         [controller changeBubbleView];
     
-        if (!self.bubbleToggled) {
+        if (self.bubbleToggled) {
+
+            // Shrink
+            
+            POPSpringAnimation *scaleAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
+            scaleAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(1, 1)];
+            scaleAnimation.velocity = [NSValue valueWithCGPoint:CGPointMake(BUBBLE_ANIMATION_VELOCITY, BUBBLE_ANIMATION_VELOCITY)];
+            scaleAnimation.springBounciness = BUBBLE_ANIMATION_BOUNCINESS;
+            scaleAnimation.dynamicsTension = BUBBLE_ANIMATION_TENSION;
+            [self pop_addAnimation:scaleAnimation forKey:@"scalingDown"];
+            
+            POPSpringAnimation *fadeAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewAlpha];
+            fadeAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(1, 1)];
+            fadeAnimation.velocity = [NSValue valueWithCGPoint:CGPointMake(BUBBLE_ANIMATION_VELOCITY, BUBBLE_ANIMATION_VELOCITY)];
+            fadeAnimation.springBounciness = BUBBLE_ANIMATION_BOUNCINESS;
+            fadeAnimation.dynamicsTension = BUBBLE_ANIMATION_TENSION;
+            [self pop_addAnimation:fadeAnimation forKey:@"scalingDownAlpha"];
+        } else {
             
             // Grow
             
@@ -134,23 +151,6 @@
             fadeAnimation.springBounciness = BUBBLE_ANIMATION_BOUNCINESS;
             fadeAnimation.dynamicsTension = BUBBLE_ANIMATION_TENSION;
             [self pop_addAnimation:fadeAnimation forKey:@"scalingUpAlpha"];
-        } else {
-            
-            // Shrink
-            
-            POPSpringAnimation *scaleAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewScaleXY];
-            scaleAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(1, 1)];
-            scaleAnimation.velocity = [NSValue valueWithCGPoint:CGPointMake(BUBBLE_ANIMATION_VELOCITY, BUBBLE_ANIMATION_VELOCITY)];
-            scaleAnimation.springBounciness = BUBBLE_ANIMATION_BOUNCINESS;
-            scaleAnimation.dynamicsTension = BUBBLE_ANIMATION_TENSION;
-            [self pop_addAnimation:scaleAnimation forKey:@"scalingDown"];
-            
-            POPSpringAnimation *fadeAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewAlpha];
-            fadeAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(1, 1)];
-            fadeAnimation.velocity = [NSValue valueWithCGPoint:CGPointMake(BUBBLE_ANIMATION_VELOCITY, BUBBLE_ANIMATION_VELOCITY)];
-            fadeAnimation.springBounciness = BUBBLE_ANIMATION_BOUNCINESS;
-            fadeAnimation.dynamicsTension = BUBBLE_ANIMATION_TENSION;
-            [self pop_addAnimation:fadeAnimation forKey:@"scalingDownAlpha"];
         }
         
         // Flip the toggle

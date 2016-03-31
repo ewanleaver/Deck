@@ -263,10 +263,10 @@
         // 2. Create a shape layer for above created path.
         CAShapeLayer *readingLayer = [[CAShapeLayer alloc] init];
         readingLayer.strokeColor = [[UIColor colorWithRed:(75.0 / 255.0) green:(135.0 / 255.0) blue:(245.0 / 255.0) alpha: 1] CGColor];
-        readingLayer.lineWidth = 2.0;
-        readingLayer.fillColor = [[UIColor colorWithRed:(25.0 / 255.0) green:(95.0 / 255.0) blue:(235.0 / 255.0) alpha: 1] CGColor];
-        readingLayer.lineJoin = kCALineJoinBevel;
-        readingLayer.path = path.CGPath;
+        readingLayer.lineWidth   = 2.0;
+        readingLayer.fillColor   = [[UIColor colorWithRed:(25.0 / 255.0) green:(95.0 / 255.0) blue:(235.0 / 255.0) alpha: 1] CGColor];
+        readingLayer.lineJoin    = kCALineJoinBevel;
+        readingLayer.path        = path.CGPath;
         
         [self.readingsView.layer addSublayer:readingLayer];
         
@@ -287,9 +287,9 @@
         NSString *currentReading = [readings_kun objectAtIndex:i];
             
         UILabel *kunReadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(currPos + 5, READING_BOX_TOP + 40, 270, 20)];
-        kunReadingLabel.text = currentReading;//@"ひと, ひと.つ";
+        kunReadingLabel.text      = currentReading;//@"ひと, ひと.つ";
         kunReadingLabel.textColor = [UIColor whiteColor];
-        kunReadingLabel.font = [UIFont systemFontOfSize:18.0f];
+        kunReadingLabel.font      = [UIFont systemFontOfSize:18.0f];
         
         // Kun-readings only: format text for reading-endings
         NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc]
@@ -324,10 +324,10 @@
         // 2. Create a shape layer for above created path.
         CAShapeLayer *readingLayer = [[CAShapeLayer alloc] init];
         readingLayer.strokeColor = [[UIColor colorWithRed:(250.0 / 255.0) green:(90.0 / 255.0) blue:(160.0 / 255.0) alpha: 1] CGColor];
-        readingLayer.lineWidth = 2.0;
-        readingLayer.fillColor = [[UIColor colorWithRed:(235.0 / 255.0) green:(25.0 / 255.0) blue:(95.0 / 255.0) alpha: 1] CGColor];
-        readingLayer.lineJoin = kCALineJoinBevel;
-        readingLayer.path = path.CGPath;
+        readingLayer.lineWidth   = 2.0;
+        readingLayer.fillColor   = [[UIColor colorWithRed:(235.0 / 255.0) green:(25.0 / 255.0) blue:(95.0 / 255.0) alpha: 1] CGColor];
+        readingLayer.lineJoin    = kCALineJoinBevel;
+        readingLayer.path        = path.CGPath;
         
         [self.readingsView.layer addSublayer:readingLayer];
         
@@ -399,32 +399,6 @@
     
 }
 
-
-
-//// Respond to a swipe gesture
-//- (IBAction)showGestureForSwipeRecognizer:(UISwipeGestureRecognizer *)recognizer {
-//    // Get the location of the gesture
-//    CGPoint location = [recognizer locationInView:self];
-//    
-//    // Display an image view at that location
-//    [self drawImageForGestureRecognizer:recognizer atPoint:location];
-//    
-//    // If gesture is a left swipe, specify an end location
-//    // to the left of the current location
-//    if (recognizer.direction == UISwipeGestureRecognizerDirectionUp) {
-//        location.y -= 220.0;
-//    } else {
-//        location.y += 220.0;
-//    }
-//    
-//    // Animate the image view in the direction of the swipe as it fades out
-//    [UIView animateWithDuration:0.5 animations:^{
-//        self.imageView.alpha = 0.0;
-//        self.imageView.center = location;
-//    }];
-//}
-
-
 #pragma mark - SRS Logic
 
 // Calc time until next repetition, attempt to exit card from deck
@@ -438,9 +412,9 @@
     
     // Calc inter-repetition interval after the n-th repetition (in days)
     if ([self.studyDetails.intervalNum intValue] == 1) {
-        self.studyDetails.interval = [NSNumber numberWithInt:1];
+        self.studyDetails.interval = @1;
     } else if ([self.studyDetails.intervalNum intValue] == 2) {
-        self.studyDetails.interval = [NSNumber numberWithInt:6];
+        self.studyDetails.interval = @6;
     } else {
         // Rounding up any fractions
         self.studyDetails.interval = [NSNumber numberWithInt:ceil([self.studyDetails.interval intValue] * [self.studyDetails.eFactor intValue])];
@@ -464,14 +438,13 @@
         self.studyDetails.intervalNum = 0;
         self.studyDetails.interval = 0;
         self.studyDetails.quality = nil;
-        self.studyDetails.eFactor = [NSNumber numberWithDouble:2.5]; // Default value
+        self.studyDetails.eFactor = @2.5; // Default value
     }
 
     
     // Save all new values to context
     NSError *error = nil;
     [self.managedObjectContext save:&error];
-    
 }
 
 - (void)gradeCard:(BOOL)isCorrect {
@@ -490,7 +463,7 @@
             animName = @"popCorrectCard";
             autoReverses = true;
             
-            self.tempStudyDetails.numCorrect = [NSNumber numberWithInt:([self.tempStudyDetails.numCorrect intValue] + 1)];
+            self.tempStudyDetails.numCorrect = @([self.tempStudyDetails.numCorrect intValue] + 1);
             
         } else {
             // Third correct call, can attempt to exit card
@@ -549,7 +522,7 @@
     } else {
         // Card was marked incorrect
         
-        self.tempStudyDetails.numIncorrect = [NSNumber numberWithInt:([self.tempStudyDetails.numIncorrect intValue] + 1)];
+        self.tempStudyDetails.numIncorrect = @([self.tempStudyDetails.numIncorrect intValue] + 1);
         
         // SENDING TO BACK DOESN'T CORRECTLY UPDATE DECK TRACKERS!!!
         
@@ -561,12 +534,12 @@
     
     // Create and perform animation
     POPBasicAnimation *popMoveCard = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionY];
-    popMoveCard.toValue = [NSValue valueWithCGPoint:destPoint];
-    popMoveCard.autoreverses = autoReverses;
+    popMoveCard.toValue        = [NSValue valueWithCGPoint:destPoint];
+    popMoveCard.autoreverses   = autoReverses;
     popMoveCard.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    popMoveCard.delegate = self;
-    popMoveCard.name = animName;
-    popMoveCard.duration = CARD_ANIMATION_DURATION/2;
+    popMoveCard.delegate       = self;
+    popMoveCard.name           = animName;
+    popMoveCard.duration       = CARD_ANIMATION_DURATION/2;
     [self pop_addAnimation:popMoveCard forKey:animName];
     
     NSError *error = nil;
@@ -578,21 +551,21 @@
 
 #pragma mark - Gesture Recognisers
 
-- (void)handleSwipeUpFrom:(UIGestureRecognizer*)recognizer {
+- (void)handleCardSwipeUp {
     
     // Card is marked as correct
     [self gradeCard:true];
 
 }
 
-- (void)handleSwipeDownFrom:(UIGestureRecognizer*)recognizer {
+- (void)handleCardSwipeDown {
     
     // Card is marked as incorrect
     [self gradeCard:false];
     
 }
 
-- (void)handleSwipeRightFrom:(UIGestureRecognizer*)recognizer {
+- (void)handleCardSwipeRight {
     
     StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
     
@@ -608,10 +581,9 @@
                                                                                                              animations:^{[self setCenter:CGPointMake(160, CARD_HEIGHT/2 + 55)]; }
                                                                                                              completion:^(BOOL fin) { [controller moveCardToBack:self]; }  ]; }  ];
     };
-    
 }
 
-- (void)handleSwipeLeftFrom:(UIGestureRecognizer*)recognizer {
+- (void)handleSwipeCardLeft {
     
     StudyViewController* controller = (StudyViewController*) [[self superview] nextResponder];
     
@@ -632,10 +604,9 @@
 //                                                                                                             animations:^{[self setCenter:CGPointMake(160, self.frame.size.height/2 + 58)]; }
 //                                                                                                             completion:^(BOOL fin) { [controller shuffleCard:self]; }  ]; }  ];
 //    };
-    
 }
 
-- (void)handleTap:(UIGestureRecognizer*)recognizer {
+- (void)handleCardTap {
     
     if (self.frontShowing) {
         [self.frontView setHidden:YES];
@@ -747,32 +718,19 @@
 
     // Create and initialize recognisers for tap and drag gestures
 
-    //UIPanGestureRecognizer* panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(dragged:)];
+    UISwipeGestureRecognizer* swipeUpRecogniser = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleCardSwipeUp)];
+    swipeUpRecogniser.direction = UISwipeGestureRecognizerDirectionUp;
     
-    UISwipeGestureRecognizer* swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeUpFrom:)];
-    swipeUpGestureRecognizer.direction = UISwipeGestureRecognizerDirectionUp;
+    UISwipeGestureRecognizer* swipeDownRecogniser = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleCardSwipeDown)];
+    swipeDownRecogniser.direction = UISwipeGestureRecognizerDirectionDown;
     
-    UISwipeGestureRecognizer* swipeDownGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeDownFrom:)];
-    swipeDownGestureRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
-    
-//    UISwipeGestureRecognizer* swipeRightGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeRightFrom:)];
-//    swipeRightGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-//    
-//    UISwipeGestureRecognizer* swipeLeftGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeLeftFrom:)];
-//    swipeLeftGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
-    
-    UITapGestureRecognizer* tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    UITapGestureRecognizer* tapRecogniser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleCardTap)];
     
     // Add the tap gesture recognizer to the view
-//    [self addGestureRecognizer:panGestureRecognizer];
+    [self addGestureRecognizer:swipeUpRecogniser];
+    [self addGestureRecognizer:swipeDownRecogniser];
     
-    [self addGestureRecognizer:swipeUpGestureRecognizer];
-    [self addGestureRecognizer:swipeDownGestureRecognizer];
-//    [self addGestureRecognizer:swipeRightGestureRecognizer];
-//    [self addGestureRecognizer:swipeLeftGestureRecognizer];
-    
-    [self addGestureRecognizer:tapGestureRecognizer];
-    
+    [self addGestureRecognizer:tapRecogniser];
 }
 
 #pragma mark - POP Delegate
