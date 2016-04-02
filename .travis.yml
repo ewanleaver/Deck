@@ -1,2 +1,2 @@
 language: objective-c
-script: xcodebuild -workspace Deck.xcworkspace -scheme Deck -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+script: xcodebuild -workspace Deck.xcworkspace -scheme Deck ONLY_ACTIVE_ARCH=NO
